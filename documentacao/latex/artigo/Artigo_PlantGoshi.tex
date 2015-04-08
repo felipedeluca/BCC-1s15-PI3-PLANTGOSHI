@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+
+\usepackage{graphicx,url}
+
+%\usepackage[brazil]{babel}   
+\usepackage[latin1]{inputenc}  
+
+     
+\sloppy
+
+\title{PlantGoshi\\ Projeto Integrador III - Sistema Aut\^onomo}
+
+\author{Anderson J. Silva, Felipe R. de Luca, Nelson J. Dressler }
+
+
+\address{Bacharelado em Ci\^encia da Computa\c c\~ao -- Centro Universit\'ario Senac - Santo Amaro \\
+  S\~ao Paulo - SP - Brasil \\ 2015
+}
+\begin{document} 
+
+\maketitle
+     
+\begin{resumo} 
+\textbf{
+Jogo de simula\c c\~ao que permite o jogador cuidar de uma \'arvore desde o seu crescimento at\'e
+o amadurecimento dos frutos e colheita. A intera\c c\~ao do jogador com os elementos do jogo
+se d\'a atrav\'es de uma varinha m\'agica com um emissor de luz de multiplas cores acoplado na ponta.
+O jogo reconhece a luz e o movimento permitindo assim, que o jogador manipule os elementos do jogo.}
+\end{resumo}
+
+\section{Introdu\c c\~ao}
+
+ O Projeto consiste num jogo de simula\c c\~ao de cria\c c\~ao
+ de plantas e do seu cuidado contra a presen\c ca de invasores e/ou criaturas nocivas \`a sua
+ sobreviv\^encia no seu habitat natural, a terra.
+ Gra\c cas a sua simula\c c\~ao a vida real e ao cuidado especial que o usu\'ario deve ter
+ com a planta, o jogo foi denominado de PlantGoshi, alus\~ao ao famoso jogo TamaGoshi.
+ O jogador ter\'a poderes por interm\'edio de uma varinha constitu\'ida de material
+ pl\'astico ou madeira, com um LED do tipo RGB na ponta e conectada a uma placa
+ controladora (Arduino) e, ao longo do jogo, poder\'a utiliz\'a-los para alimentar,
+ aprimorar a planta ou a \'arvore e tamb\'em combater as pragas aparentes atrav\'es
+ de intera\c c\~ao com diferentes cores emitidas pelo LED.
+ 
+\section{Estrutura principal do jogo}
+\subsection{Layout}
+Na parte inferior, aparecem os \'icones com os poderes dispon\'iveis, cada uma com uma cor diferente
+(azul: hidratar, vermelho: combater, verde: tocar a m\'usica); na parte superior esquerda,
+uma barra de progresso do crescimento da \'arvore (branco, verde claro, verde escuro);
+na parte superior central, uma barra de progresso da qualidade dos frutos; superior direita,
+uma barra de progresso da sa\'ude da planta; esquerdo central, um painel de controle entre o calor,
+a hidrata\c c\~ao da \'arvore e ocorr\^encia de pragas.
+
+\subsection{Componentes de Tela}
+\begin{itemize}
+\item Barras de progresso de crescimento da \'arvore, amadurecimento dos frutos e de sa\'ude da planta;
+\item Painel de Controle com 3 dire\c c\~oes (\'agua, calor e praga);
+\item \'Icones de poderes; \'Arvore (tronco central, galhos, ra\'izes, folhas, frutos), Pragas (ervas daninhas e larvas) e Cesta;
+\item Ferramentas de intera\c c\~ao (m\~aozinha, nota musical e gota d'agua).
+\end{itemize}
+
+\subsection{Jogabilidade}
+o jogador acessa os poderes com a sua varinha conectada ao Arduino encostando
+o objeto na tela e poder\'a aplicar o poder selecionado em qualquer parte da tela,
+encostando novamente. Para isso, estar\~ao presentes duas c\^ameras: uma frontal
+apontado para o jogador (altura e largura) e outra lateral (profundidade).
+Para representar os poderes selecionados no momento, a varinha ter\'a um LED
+correspondente a cor do poder (branco: nada selecionado, azul, vermelho e verde).
+
+\subsection{Etapas}
+\begin{enumerate}
+\item \textbf{Nascimento e Crescimento da \'Arvore:} \'e contemplado pelo processo desde o plantio
+ da semente at\'e a \'arvore crescer e brotar atingindo um tamanho razo\'avel e que j\'a det\'em a
+ capacidade de criar galhos e plantas;
+\item \textbf{Amadurecimento dos Frutos:} \'e composto pelo momento onde a planta j\'a
+ começa a dar seus primeiros frutos;
+\item \textbf{Colhimento dos Frutos:} \'e o momento no qual os frutos cresceram e amadureceram
+ o suficiente para serem recolhidos e depositados numa cesta.
+\end{enumerate}
+
+\subsection{Simula\c c\~ao}
+Iniciando o jogo, a \'arvore est\'a com suas ra\'izes dentro do solo e um pequeno e fino caule
+ brotando. Nesse momento, 2 poderes aparecem na tela: azul (lado esquerdo) e vermelho (centro)
+ (O poder da nota musical fica desabilitado). Passa um pequeno per\'iodo de tempo e o painel
+ de controle come\c ca a tender para a cor azul, indicando a necessidade de regar planta.
+ O jogador seleciona com a varinha a gota d'agua (encostando na tela), o LED da varinha
+ troca de cor (de branco para azul) e come\c ca a aplicar a \'agua na planta para que cres\c ca
+ verticalmente (encostando na tela). A c\^amera lateral detecta a sele\c c\~ao da varinha e
+ a aplica\c c\~ao. A c\^amera frontal detecta a posi\c c\~ao (coordenada x, y) que a varinha
+ tocou \`a tela. Ap\'os alguns segundos (10 segundos) o poder de \'agua termina e os \'icones
+ ficam travados por um tempo (dependendo do n\'ivel) para recarregar e novamente estar
+ habilitado na tela. A barra de progresso do crescimento da \'arvore avança um pouco
+ (ainda permanecendo na cor branca) e a barra de controle centraliza novamente, indicando
+ equil\'ibrio das for\c cas. Ao mesmo tempo, a barra de sa\'ude tamb\'em avan\c ca um pouco.
+
+ Ao mesmo tempo, aparecem ervas daninhas crescendo junto a planta. O painel de controle indica
+ a necessidade de aplicar fogo nas mesmas, tendendo para a cor amarela. Nesse momento, o jogador
+ seleciona a m\~aozinha e aplica o fogo para queimar as ervas. Ap\'os alguns segundos (10 segundos),
+ o poder termina e novamente todos ficam travados por um tempo (dependendo do n\'ivel) desabilitado.
+ Ao final, o painel de controle \'e centralizado novamente.
+ 
+ Deve se ter o cuidado para n\~ao usar excessivamente o poder do fogo para n\~ao queimar a planta tamb\'em.
+ Isso ser\'a indicado no painel de controle com o indicador tendendo para a cor vermelha.
+ 
+ Assim que a \'arvore estiver crescido consideravelmente (a definir), os poderes ficam dispostos na parte
+ inferior da tela da seguinte maneira: azul (lado esquerdo), verde (direito) e vermelho (centro).
+
+ Al\'em disso, a medida que o jogo segue come\c cam a aparecer algumas notas musicais flutuando na tela.
+ O jogador seleciona a nota musical e aplica na planta para melhorar o crescimento e florescimento da \'arvore
+ (espessura) e o crescimento qualitativo dos frutos. Novamente, o poder dura quest\~ao de segundos
+ (10 segundos) at\'e que termina e, logo em seguida, todos ficam travados por algum tempo (dependendo do n\'ivel).
+
+ Ao mesmo tempo, o jogador deve regar a \'arvore (azul) para que continue crescendo (verticalmente) e combater
+ as pragas que começam a aparecer nas folhas e flores (vermelho).
+ 
+ Nesse momento, come\c cam a crescer os primeiros frutos e, para isso, \'e necess\'ario continuar regando
+ a planta, combatendo as pragas e tocando as notas musicais (crescimento dos frutos).
+
+ Finalmente, o jogador atinge a \'ultima parte do jogo que \'e constituída pela colheita dos frutos,
+ j\'a em sua condi\c c~ao ideal para tal a\c c\~ao.
+
+ Nessa \'ultima etapa o jogador deve ser r\'apido para colher os frutos sem que apodre\c cam (azul, lado direito)
+ e, ao mesmo tempo, combater as pragas que crescem e progridem a cada instante (vermelho, lado esquerdo).
+ Essas dever\~ao ser realizadas atendendo ao tempo limite imposto sobre aquela etapa (f\'acil: 2 min; m\'edio:
+ 1 min; difícil: 30 segs).
+ 
+ Novos frutos v\~ao nascendo ao mesmo tempo que outros v\~ao amadurecendo at\'e apodrecer. Ent\~ao, \'e
+ necess\'aria a percep\c c\~ao de tudo o que ocorre naquele instante, para saber qual for\c ca selecionar
+ e qual jogada escolher, visando a sa\'ude da \'arvore e a qualidade dos frutos.
+ 
+ Ao fim dessa etapa, \'e atribuída uma pontua\c c\~ao ao jogador pela atua\c c\~ao completa e o jogo se d\'a por encerrado.
+
+\section{Bibliotecas}
+\subsection{OpenCV}
+\subsection{Allegro}
+\subsection{Arduino-Serial \cite{arduino:serial}}
+
+\section{Equipamentos}
+\begin{itemize}
+\item C\^amera de captura de v\'ideo
+\item Placa controladora ARduino Uno
+\item LED RGB
+\item Computador (desktop ou notebook)
+\end{itemize}
+
+\section{Bibliografia}
+
+%\bibliographystyle{sbc}
+\bibliography{plantgoshi}
+
+\end{document}
