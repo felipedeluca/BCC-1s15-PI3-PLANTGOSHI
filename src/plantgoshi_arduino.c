@@ -28,11 +28,16 @@ void arduino_LED( ArduinoComm* comm ){
         return;
     }
 
+    serialport_flush( comm->fd );
+
     comm->rc = serialport_write( comm->fd, comm->buffer );
         if( comm->rc == -1 )
             printf( "error writing to Arduino\n" );
 
-    serialport_flush( comm->fd );
+    printf( "%s\n", comm->buffer );
+    printf( "%s\n", comm->serialPort );
+    printf( "%d\n", comm->fd );
+
 
     return;
 }

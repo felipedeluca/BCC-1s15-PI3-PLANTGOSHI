@@ -7,10 +7,10 @@
 
 ArduinoComm arduinoComm;
 //------------------------------------------------------------------------------
-void setupArduino {
+void setupArduino( void ) {
 
     // Configura a comunicação com o Arduino
-    strcpy( arduinoComm.serialPort, "/dev/cu.usbmodem1411" );
+    strcpy( arduinoComm.serialPort, "/dev/cu.usbmodem1421" );
     arduinoComm.fd         = -1;
     arduinoComm.baudRate   = 9600;
     arduinoComm.timeOut    = 5000;
@@ -19,8 +19,9 @@ void setupArduino {
 //------------------------------------------------------------------------------
 int main( int argc, char* argv[] ){
 
+    setupArduino();
 
-    strcpy( arduinoComm.buffer, "abracadabra!" );
+    strcpy( arduinoComm.buffer, "zaz" );
 
     arduino_LED( &arduinoComm );
 
