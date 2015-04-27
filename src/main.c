@@ -4,6 +4,7 @@
 #include <getopt.h>
 
 #include "plantgoshi_arduino.h"
+#include "arvore.h"
 
 ArduinoComm arduinoComm;
 //------------------------------------------------------------------------------
@@ -19,11 +20,30 @@ void setupArduino( void ) {
 //------------------------------------------------------------------------------
 int main( int argc, char* argv[] ){
 
-    setupArduino();
+    arvore_inicializar( 100 );
+    arvore_imprime();
 
-    strcpy( arduinoComm.buffer, "zaz" );
-
-    arduino_LED( &arduinoComm );
+//     setupArduino();
+//
+//     int r, g, b;
+//
+//     printf( "R: " );
+//     scanf( "%d", &r );
+//
+//     printf( "G: " );
+//     scanf( "%d", &g );
+//
+//     printf( "B: " );
+//     scanf( "%d", &b );
+//
+//     arduinoComm.buffer[ 0 ] = (char)r;
+//     arduinoComm.buffer[ 1 ] = (char)g;
+//     arduinoComm.buffer[ 2 ] = (char)b;
+//     arduinoComm.buffer[ 3 ] = '\0';
+//
+// //    strcpy( arduinoComm.buffer, "zaz" );
+//
+//     arduino_LED( &arduinoComm );
 
     exit( EXIT_SUCCESS );
 }

@@ -1,4 +1,4 @@
-char inData[4]; // Allocate some space for the string
+char inData[4]; // Allocate some space for the string (signed char)
 char inChar=-1; // Where to store the character read
 byte index = 0; // Index into array; where to store the character
 
@@ -21,7 +21,7 @@ void readSerialData() {
         {
             inChar = Serial.read(); // Read a character
 
-            inData[index] = inChar; // Store it
+            inData[index] = inChar; // Armazena o valor e forca valores entre 0 - 255
             index++; // Increment where to write next
             inData[index] = '\0'; // Null terminate the string            
         }
@@ -43,13 +43,14 @@ void setColor(int red, int green, int blue)
 void loop()
 {
   readSerialData();
+  delay(10);
 //  if (Comp("m1 on")==0) {
 //        Serial.write("Motor 1 -> Online\n");
           setColor( int(inData[0]), int(inData[1]), int(inData[2]) );
 //          setColor( 255, 0, 0 );
 //        delay( 1000 );
 //  
-//        setColor( 0, 255, 0 );
+//        setColor( 0, 0, 50 );
 //        delay( 1000 );
 //  
 //        setColor( 0, 0, 255 );
