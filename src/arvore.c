@@ -1,13 +1,21 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "variaveis_arvore.h"
 
 typedef struct _galho {
-    float energiaRecebida; // Energia passada (herdada) para o galho
-    float energiaLimite;   // limite de energia a ser gasta. Se a energia recebida for abaixo do valor especificado,
-                           // então o galho para de crescer e passa a produzir folhas e frutos.
-                           // Caso o valor seja maior, o excedente será distribuido para os galhos filhos
+    // Cálculo da posição Yf (y) da árvore:
+    // Energia = hipotenusa (h)
+    // Xf = cateto adjascente (x)
+    // (h)^2 = (x)^2 + (y)^2  =>  (y)^2 = (h)^2 - (x)^2
+    //
+    // Ou: sen(a) = h/y, com a = ângulo de crescimento
+
+    int energiaRecebida; // Energia passada (herdada) para o galho
+
+    int energiaAtual;    // Quanto da energia de crescimento total está sendo utilizada no momento.
+                           // Tem relação direta com o tamanho do galho no momento.
 
     float xi, yi;          // Coordenadas onde o galho começa o crescimento.
                            // Essas mesmas coordenadas são IGUAIS às coordenadas
@@ -15,29 +23,40 @@ typedef struct _galho {
 
     float xf, yf;          // Coordenadas do final do galho. Também define o início do próximo galho
 
-    float velocidadeCrescimento;
-    float anguloCrescimento;
+    float proporcaoCrescimentoX;
+    float proporcaoCrescimentoY;
+
     int   id;
     posicao_t posicao;
+    bool_t crescer;
 
 
     struct _galho *direita;
     struct _galho *meio;
     struct _galho *esquerda;
     struct _galho *pai;
+
 } Galho;
 
 
 typedef struct {
-    float energiaTotal; // Energia total de crescimento da árvore
+    int energiaLimite;   // limite de energia a ser gasta ( em % ). Se a energia recebida for abaixo do valor especificado,
+                           // então o galho para de crescer e passa a produzir folhas e frutos.
+                           // Caso o valor seja maior, o excedente será distribuido para os galhos filhos
+
+    int energiaAtivacao; // Calculada em %. Ativa o crescimento dos galhos filhos, mesmo que o galho não terminou de crescer.
+                           // Isso possibilita diversos galhos crescerem ao mesmo tempo, dando aspecto mais natural.
+
+    int energiaTotal; // Energia total de crescimento da árvore
+    float velocidadeCrescimento;
     Galho *raiz;
     int id; // Contador para gerar id único para cada galho
 } Arvore;
 
 Arvore arvore;
 
-int arvore_adicionaGalho( float, float, posicao_t, float, float, Galho* );
-
+int arvore_adicionaGalho( int, posicao_t, Galho*, float, float, float, float );
+void arvore_imprime( void );
 //------------------------------------------------------------------------------
 // #ifndef _ARVORE_INICIALIZADA_
 // #define _ARVORE_INICIALIZADA_
@@ -47,24 +66,65 @@ int arvore_adicionaGalho( float, float, posicao_t, float, float, Galho* );
 //
 // #endif
 //------------------------------------------------------------------------------
-void arvore_inicializar( float energiaTotal ){
+void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeCrescimento, float proporcaoX, float proporcaoY ){
 
     arvore.raiz         = NULL;//malloc( sizeof(Galho) );
     arvore.energiaTotal = energiaTotal;
-    arvore.id           = 0;
-    arvore_adicionaGalho( 100.0, 50.0, RAIZ, 90.0, 1.0, arvore.raiz );
+    arvore.energiaAtivacao = 25;
+    arvore.energiaLimite   = 40;
+    arvore.id              = 0;
+    arvore.velocidadeCrescimento = velocidadeCrescimento;
+    arvore_adicionaGalho( energiaTotal, RAIZ, arvore.raiz, proporcaoX, proporcaoY, xi, yi );
+
+    arvore.raiz->xi = xi;
+    arvore.raiz->yi = yi;
+    arvore.raiz->crescer = SIM;
+    arvore.raiz->energiaRecebida = energiaTotal;
+
+    return;
 
 }
 //------------------------------------------------------------------------------
-int arvore_adicionaGalho( float energiaRecebida, float energiaLimite, posicao_t posicao,
-                           float anguloCrescimento, float velocidadeCrescimento, Galho* galhoPai ){
+void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
+
+    g->crescer = NAO;
+
+    if ( g->energiaAtual < ((g->energiaRecebida * arvore.energiaLimite) / 100) ){
+        g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento );
+        g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+        g->crescer = SIM;
+    }
+
+    return;
+}
+//------------------------------------------------------------------------------
+void arvore_atualizaGalhos( Galho *g ){
+
+    return;
+}
+//------------------------------------------------------------------------------
+void arvore_simulaArvore(){
+
+    for ( int i = 0; i <= arvore.energiaTotal; i += arvore.velocidadeCrescimento ){
+        if ( arvore.raiz->crescer ){
+            arvore.raiz->energiaAtual += arvore.velocidadeCrescimento;
+            arvore_cresceGalho( arvore.raiz, arvore.velocidadeCrescimento );
+            arvore_imprime();
+        }
+    }
+
+    return;
+}
+//------------------------------------------------------------------------------
+int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
+                          Galho* galhoPai, float proporcaoX, float proporcaoY, float xi, float yi ){
 
     Galho *novoGalho = malloc( sizeof(Galho) );
 
-    novoGalho->velocidadeCrescimento = velocidadeCrescimento;
-    novoGalho->energiaRecebida   = energiaRecebida;
-    novoGalho->energiaLimite     = energiaLimite;
-    novoGalho->anguloCrescimento = anguloCrescimento;
+    novoGalho->energiaRecebida       = energiaRecebida;
+    novoGalho->proporcaoCrescimentoX = proporcaoX;
+    novoGalho->proporcaoCrescimentoY = proporcaoY;
+    novoGalho->energiaAtual = 0;
     novoGalho->direita  = NULL;
     novoGalho->meio     = NULL;
     novoGalho->direita  = NULL;
@@ -75,8 +135,8 @@ int arvore_adicionaGalho( float energiaRecebida, float energiaLimite, posicao_t 
     arvore.id += 1;
 
     if ( galhoPai == NULL ) {
-        novoGalho->xi = 100; // ** Mudar para valores-padrão
-        novoGalho->yi = 100; // ** Mudar para valores-padrão
+        novoGalho->xi = xi; // ** Mudar para valores-padrão
+        novoGalho->yi = yi; // ** Mudar para valores-padrão
         novoGalho->xf = novoGalho->xi;
         novoGalho->yf = novoGalho->yi;
         arvore.raiz = novoGalho;
@@ -163,35 +223,22 @@ int imprime( Galho *g ){
         break;
     }
 
-    printf( "\nProfundidade esquerda : %d\n", profundidadeEsquerda );
-    printf( "Profundidade meio     : %d\n", profundidadeMeio );
-    printf( "Profundidade direita  : %d\n", profundidadeDireita );
-    printf( "Energia de crescimento: %.2f\n", g->energiaRecebida );
-    printf( "Energia limite: %.2f\n", g->energiaLimite );
-    printf( "Xi: %.2f  Yi: %.2f\nXf: %.2f  Yf: %.2f\n", g->xi, g->yi, g->xf, g->yf );
-    printf( "Angulo de crescimento: %.2f\n", g->anguloCrescimento );
+    // printf( "\nProfundidade esquerda : %d\n", profundidadeEsquerda );
+    // printf( "Profundidade meio     : %d\n", profundidadeMeio );
+    // printf( "Profundidade direita  : %d\n", profundidadeDireita );
+    printf( "Energia atual: %d\n", g->energiaAtual );
+    printf( "Energia de crescimento: %d\n", g->energiaRecebida );
+    printf( "Xi: %.2f  Yi: %.2f \nXf: %.2f  Yf: %.2f\n", g->xi, g->yi, g->xf, g->yf );
+    printf( "Proporção de crescimento X: %.2f\n", g->proporcaoCrescimentoX );
+    printf( "Proporção de crescimento Y: %.2f\n", g->proporcaoCrescimentoY );
     printf( "----------------------------------------\n" );
 
     return 0;
 }
 //------------------------------------------------------------------------------
 void arvore_imprime( void ){
-    //TESTES SIMULANDO A ARVORE CRESCENDO
-    arvore.raiz->xf = 110;
-    arvore.raiz->yf = 230;
-
-    arvore_adicionaGalho( 100.0, 50.0, DIREITA, 10.0, 1.0, arvore.raiz );
-    int id = arvore.id; // O id vai incrementando a cada adição de um novo galho
-
-    arvore_adicionaGalho( 50.0, 10.0, ESQUERDA, 270.0, 1.0, arvore.raiz );
-    id = arvore.id;
-
-    arvore_adicionaGalho( 40.0, 5.0, ESQUERDA, 350.0, 1.0, arvore_procuraGalhoPeloID( arvore.raiz, id - 1 ) );
-    id = arvore.id;
-
-    arvore_adicionaGalho( 35.0, 5.0, MEIO, 0.0, 1.0, arvore_procuraGalhoPeloID( arvore.raiz, id - 1 ) );
-    arvore_adicionaGalho( 30.0, 20.0, MEIO, 12.0, 1.0, arvore.raiz );
 
     imprime( arvore.raiz );
+    return;
 }
 //------------------------------------------------------------------------------

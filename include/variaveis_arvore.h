@@ -8,4 +8,15 @@ typedef enum _posicaoGalho {
     RAIZ     = 3
 } posicao_t;
 
+typedef enum {
+    NAO = 0,
+    SIM = 1
+} bool_t;
+
+typedef struct {
+    float x;
+    float y;
+    int id;
+} Ponto;
+
 #endif
