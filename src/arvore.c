@@ -3,6 +3,7 @@
 #include <math.h>
 
 #include "variaveis_arvore.h"
+#include "random.h"
 
 typedef struct _galho {
     // Cálculo da posição Yf (y) da árvore:
@@ -100,19 +101,48 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
 //------------------------------------------------------------------------------
 void arvore_atualizaGalhos( Galho *g ){
 
+    if ( g == NULL)
+        return;
+
+    if ( g->pai != NULL){
+        g->xi = g->pai->xf;
+        g->yi = g->pai->yf;
+    }
+
+    // Pre-order
+    arvore_cresceGalho( g, arvore.velocidadeCrescimento );
+
+    if ( g->crescer )
+        g->energiaAtual += arvore.velocidadeCrescimento;
+
+    arvore_atualizaGalhos( g->esquerda );
+    arvore_atualizaGalhos( g->meio );
+    arvore_atualizaGalhos( g->direita );
+
+    // Post-order
+    if ( g->crescer == NAO ){ // Galho cresceu tudo o que podia
+        int transferirEnergia = g->energiaRecebida - g->energiaAtual;
+        float proporcaoX = randomFloat( 0.5, 1.2 );
+        float proporcaoY = randomFloat( 0.5, 1.2 );
+
+        arvore_adicionaGalho( transferirEnergia, randomInt(0, 2), g->pai, proporcaoX, proporcaoY, g->xi, g->yi );
+    }
+
     return;
 }
 //------------------------------------------------------------------------------
 void arvore_simulaArvore(){
 
     for ( int i = 0; i <= arvore.energiaTotal; i += arvore.velocidadeCrescimento ){
-        if ( arvore.raiz->crescer ){
-            arvore.raiz->energiaAtual += arvore.velocidadeCrescimento;
-            arvore_cresceGalho( arvore.raiz, arvore.velocidadeCrescimento );
-            arvore_imprime();
-        }
+        // if ( arvore.raiz->crescer ){
+        //     arvore.raiz->energiaAtual += arvore.velocidadeCrescimento;
+        //     arvore_cresceGalho( arvore.raiz, arvore.velocidadeCrescimento );
+            arvore_atualizaGalhos( arvore.raiz );
+//            arvore_imprime();
+//        }
     }
-
+    
+    arvore_imprime();
     return;
 }
 //------------------------------------------------------------------------------
