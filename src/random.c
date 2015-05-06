@@ -1,18 +1,20 @@
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 
 //------------------------------------------------------------------------------
 int randomInt( int min, int max ){
 
-    srand( time(NULL) );
-    return ( (rand() / ( int ) RAND_MAX) * ( max - min ) ) + min;
-    
+//    printf("\n-------RAND(): %d", (rand() % max) + 1 );
+//    return ((rand() / (RAND_MAX * 1.00)) * 10 * ( max - min )) + min;
+//    printf("\nMIN: %d   MAX: %d", min, max);
+    return( (rand() % max) + 1);
+
 }
 //------------------------------------------------------------------------------
-int randomFloat( float min, float max ){
+float randomFloat( float min, float max ){
 
-    srand( time(NULL) );
-    return ( (rand() / (float) RAND_MAX) * (max - min) + min );
+    return ( ( rand() % (int)max) + 1 );
 
 }
 //------------------------------------------------------------------------------

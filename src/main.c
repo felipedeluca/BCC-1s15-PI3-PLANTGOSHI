@@ -22,7 +22,7 @@ int main( int argc, char* argv[] ){
 
 //    float xi, float xi, float energiaTotal, float velocidadeCrescimento
 
-    arvore_inicializar( 100, 100, 20, 1.0, 0.0, 1.0);
+    arvore_inicializar( 100, 100, 10, 1.0, 0.0, 1.0);
 
     arvore_simulaArvore();
 //    arvore_imprime();
