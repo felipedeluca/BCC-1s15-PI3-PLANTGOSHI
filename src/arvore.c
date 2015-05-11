@@ -1,12 +1,20 @@
+#include <allegro5/allegro.h>
+// #include <allegro5/allegro_font.h>
+// #include <allegro5/allegro_ttf.h>
+// #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
 
+//#include <allegro5/allegro.h>
+//#include <allegro5/allegro_primitives.h>
+
 #include "variaveis_arvore.h"
 #include "random.h"
 
-typedef struct _galho {
+typedef struct galho {
     // Cálculo da posição Yf (y) da árvore:
     // Energia = hipotenusa (h)
     // Xf = cateto adjascente (x)
@@ -29,14 +37,15 @@ typedef struct _galho {
     float proporcaoCrescimentoY;
 
     int   id;
+    int   temFilhos;
     posicao_t posicao;
     bool_t crescer;
 
 
-    struct _galho *direita;
-    struct _galho *meio;
-    struct _galho *esquerda;
-    struct _galho *pai;
+    struct galho *direita;
+    struct galho *meio;
+    struct galho *esquerda;
+    struct galho *pai;
 
 } Galho;
 
@@ -58,6 +67,21 @@ typedef struct {
 Arvore arvore;
 
 int arvore_adicionaGalho( int, posicao_t, Galho*, float, float, float, float );
+Galho *arvore_procuraGalhoPeloID( Galho *g, int id );
+//------------------------------------------------------------------------------
+int arvore_profundidadeGalho( Galho *g ){
+
+    int contador = 0;
+    Galho *galho = g;
+
+    while ( galho != NULL ){
+        galho = galho->pai;
+        contador++;
+    }
+
+    return contador;
+}
+//------------------------------------------------------------------------------
 void arvore_imprime( void );
 //------------------------------------------------------------------------------
 // #ifndef _ARVORE_INICIALIZADA_
@@ -68,12 +92,19 @@ void arvore_imprime( void );
 //
 // #endif
 //------------------------------------------------------------------------------
+void arvore_calculaProporcaoXY( Ponto *p ){
+
+    p->x = randomFloat( 1.0, 3.0 );
+    p->y = randomFloat( 1.0, 2.0 );
+
+}
+//------------------------------------------------------------------------------
 void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeCrescimento, float proporcaoX, float proporcaoY ){
 
     arvore.raiz         = NULL;//malloc( sizeof(Galho) );
     arvore.energiaTotal = energiaTotal;
     arvore.energiaAtivacao = 25;
-    arvore.energiaLimite   = 40;
+    arvore.energiaLimite   = 30; // limite de crescimento em % da energia total
     arvore.id              = 0;
     arvore.velocidadeCrescimento = velocidadeCrescimento;
     arvore_adicionaGalho( energiaTotal, RAIZ, arvore.raiz, proporcaoX, proporcaoY, xi, yi );
@@ -82,6 +113,8 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
     arvore.raiz->yi = yi;
     arvore.raiz->crescer = SIM;
     arvore.raiz->energiaRecebida = energiaTotal;
+
+    arvore.raiz->temFilhos = NAO;
 
     srand( time(NULL) );
 
@@ -92,10 +125,26 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
 void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
 
     g->crescer = NAO;
+    int profundidadeGalhos = arvore_profundidadeGalho( g );
 
-    if ( g->energiaConsumida < ((g->energiaRecebida * arvore.energiaLimite) / 100) ){
-        g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento );
-        g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+    if ( g->energiaConsumida <= (g->energiaRecebida * (arvore.energiaLimite + profundidadeGalhos) / 100) && g->energiaRecebida > 0 ){
+        switch ( g->posicao ) {
+            case RAIZ:
+                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+            break;
+            case ESQUERDA:
+                g->xf -= ( g->proporcaoCrescimentoX * velocidadeCrescimento );
+                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+            break;
+            case MEIO:
+                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+            break;
+            case DIREITA:
+                g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento );
+                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+            break;
+        }
+
         g->crescer = SIM;
     }
 
@@ -103,70 +152,142 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
 }
 //------------------------------------------------------------------------------
 void arvore_atualizaGalhos( Galho *g ){
-
+//    printf("\nATUALIZA GALHOS: INICIO\n");
     if ( g == NULL)
         return;
+return;
+//    printf("\nATUALIZA GALHOS: 0\n");
 
-    if ( g->pai != NULL){
+    if ( g->pai != NULL){ // Não é a raiz
+//        printf("\nATUALIZA GALHOS: pai != NULL\n");
         g->xi = g->pai->xf;
         g->yi = g->pai->yf;
     }
 
-    // Pre-order
-    if ( g->crescer )
+//    printf("\nATUALIZA GALHOS: 1\n");
+
+    if ( g->crescer == SIM )
         g->energiaConsumida += arvore.velocidadeCrescimento;
 
     arvore_cresceGalho( g, arvore.velocidadeCrescimento );
 
+//    printf("\nATUALIZA GALHOS: 2\n");
+    // Adiciona novos galhos
+    if ( g->crescer == NAO && g->energiaRecebida > 0 && g->temFilhos == NAO ){ // Galho cresceu tudo o que podia
+
+        int quantosGalhos;
+        int profundidadeGalhos = arvore_profundidadeGalho( g );
+
+        if ( profundidadeGalhos <= 2 )
+            quantosGalhos = 3;
+        else
+            quantosGalhos  = randomInt( 0, 3 );
+
+//        printf("\nQUANTIDADE DE GALHOS A SEREM CRIADOS: %d\n", quantosGalhos);
+        int primeiroGalho, segundoGalho, terceiroGalho;
+        int energiaRecebida = g->energiaRecebida - g->energiaConsumida;
+        int primeiroGalhoEnergia, segundoGalhoEnergia, terceiroGalhoEnergia; // transfere a energia excedente depois que o galho cresceu tudo que podia
+
+        Ponto proporcao;
+
+        arvore_calculaProporcaoXY( &proporcao );
+        g->temFilhos = SIM;
+
+//        printf("\nATUALIZA GALHOS: 3\n");
+        // Força para que as primeiras ramificações da árvore sejam sempre 3
+
+//        printf( "\nquantosGalhos: %d", quantosGalhos );
+        switch ( quantosGalhos ){
+            case 1:
+                primeiroGalhoEnergia = g->energiaRecebida - g->energiaConsumida;
+                primeiroGalho = randomInt( 0, 3 ) - 1; // 0 = direita,  1 = meio,  2 = esquerda
+                if ( primeiroGalhoEnergia > 1 )
+                    arvore_adicionaGalho( primeiroGalhoEnergia, primeiroGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
+            break;
+            case 2:
+                primeiroGalho = randomInt( 0, 3 ) - 1; // 0 = direita,  1 = meio,  2 = esquerda
+                segundoGalho = primeiroGalho; // Valor inicial para disparar o looping abaixo
+
+                primeiroGalhoEnergia = energiaRecebida / randomInt( 0, 3 ) - 1;
+                segundoGalhoEnergia  = energiaRecebida - primeiroGalhoEnergia;
+
+                do { // repete enquanto o número é igual a 1
+                    segundoGalho = randomInt( 0, 3 ) - 1;
+                } while ( segundoGalho == primeiroGalho );
+
+                if ( primeiroGalhoEnergia > 1 ){
+                    arvore_calculaProporcaoXY( &proporcao );
+                    arvore_adicionaGalho( primeiroGalhoEnergia, primeiroGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
+                }
+
+                if ( segundoGalhoEnergia > 1 ){
+                    arvore_calculaProporcaoXY( &proporcao );
+                    arvore_adicionaGalho( segundoGalhoEnergia, segundoGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
+                }
+            break;
+            case 3: // cria três galhos
+                primeiroGalho = randomInt( 0, 3 ) - 1; // 0 = direita,  1 = meio,  2 = esquerda
+                segundoGalho = primeiroGalho; // Valor inicial para disparar o looping abaixo
+                terceiroGalho = primeiroGalho; // Valor inicial para disparar o looping abaixo
+
+                if ( profundidadeGalhos <= 2 ) { // Energia distribuida igualmente para as primeiras ramificações
+                    primeiroGalhoEnergia = energiaRecebida / 3;
+                    segundoGalhoEnergia  = primeiroGalhoEnergia;
+                    terceiroGalhoEnergia = primeiroGalhoEnergia;
+                }
+                else {
+                    primeiroGalhoEnergia = energiaRecebida / randomInt( 0, 3 ) - 1;
+                    segundoGalhoEnergia  = energiaRecebida - primeiroGalhoEnergia;
+                    terceiroGalhoEnergia = energiaRecebida - ( primeiroGalhoEnergia + segundoGalhoEnergia );
+                }
+
+                do { // segundo galho precisa ser diferente do primeiro galho
+                    segundoGalho = randomInt( 0, 3 ) - 1;
+                } while ( segundoGalho == primeiroGalho );
+
+                int flag = 1;
+
+                do { // terceiro galho precisa ser diferente dos primeiro e segundo galhos
+                    terceiroGalho = randomInt( 0, 3 ) - 1;
+                    if ( terceiroGalho != primeiroGalho && terceiroGalho != segundoGalho )
+                        flag = 0;
+//                    printf("\nlooping..... terceiro galho: %d\n", terceiroGalho );
+                } while ( flag );
+
+//                printf("\nCriando 3 galhos...\n");
+
+                if ( primeiroGalhoEnergia > 1 ){
+                    arvore_calculaProporcaoXY( &proporcao );
+                    arvore_adicionaGalho( primeiroGalhoEnergia, primeiroGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
+                }
+
+                if ( segundoGalhoEnergia > 1 ){
+                    arvore_calculaProporcaoXY( &proporcao );
+                    arvore_adicionaGalho( segundoGalhoEnergia, segundoGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
+                }
+
+                if ( terceiroGalhoEnergia > 1 ){
+                    arvore_calculaProporcaoXY( &proporcao );
+                    arvore_adicionaGalho( terceiroGalhoEnergia, terceiroGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
+                }
+            break;
+            // default:
+            //     return;
+        }
+    }
 
     arvore_atualizaGalhos( g->esquerda );
     arvore_atualizaGalhos( g->meio );
     arvore_atualizaGalhos( g->direita );
 
-    // Post-order
-    if ( g->crescer == NAO ){ // Galho cresceu tudo o que podia
-        int quantosGalhos = randomInt( 1, 3 );
-        //printf("\nQUANTIDADE DE GALHOS A SEREM CRIADOS: %d", quantosGalhos);
-
-        switch ( quantosGalhos ){
-            case 1:
-                int primeiroGalho = randomInt( 0, 2 );
-                arvore_adicionaGalho( transferirEnergia, primeiroGalho, g, proporcaoX, proporcaoY, g->xi, g->yi );
-            break;
-            case 2:
-                int primeiroGalho = randomInt( 0, 2 );
-                int segundoGalho;
-
-                if ( primeiroGalho = 2 )
-                    segundoGalho = randomInt( 0, 1 );
-                else if ( primeiroGalho = 1 )
-                    segundoGalho = randomInt( 4, 5 ) % 2; // direita =
-            break;
-            case 3:
-            break;
-        }
-
-        int energiaE, energiaM, energiaD; // quantidade de energia repassada para a esquerda, meio e direita
-
-        int transferirEnergia = g->energiaRecebida - g->energiaConsumida;
-
-        float proporcaoX = randomFloat( 0.5, 1.2 );
-        float proporcaoY = randomFloat( 0.5, 1.2 );
-
-    }
-
+//    printf("\nATUALIZA GALHOS: FIM\n");
     return;
 }
 //------------------------------------------------------------------------------
-void arvore_simulaArvore(){
-
-    for ( int i = 0; i <= arvore.energiaTotal; i += arvore.velocidadeCrescimento ){
-        // if ( arvore.raiz->crescer ){
-        //     arvore.raiz->energiaConsumida += arvore.velocidadeCrescimento;
-        //     arvore_cresceGalho( arvore.raiz, arvore.velocidadeCrescimento );
+void arvore_simulaArvore( void ){
+//    printf("\nSIMULA ARVORE\n");
+    for ( int i = 0; i <= arvore.energiaTotal; i += 1 /*arvore.velocidadeCrescimento*/ ){
             arvore_atualizaGalhos( arvore.raiz );
-//            arvore_imprime();
-//        }
     }
 
     arvore_imprime();
@@ -176,18 +297,21 @@ void arvore_simulaArvore(){
 int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
                           Galho* galhoPai, float proporcaoX, float proporcaoY, float xi, float yi ){
 
+
     Galho *novoGalho = malloc( sizeof(Galho) );
 
     novoGalho->energiaRecebida       = energiaRecebida;
     novoGalho->proporcaoCrescimentoX = proporcaoX;
     novoGalho->proporcaoCrescimentoY = proporcaoY;
     novoGalho->energiaConsumida = 0;
-    novoGalho->direita  = NULL;
-    novoGalho->meio     = NULL;
-    novoGalho->direita  = NULL;
-    novoGalho->pai      = galhoPai;
-    novoGalho->id       = arvore.id;
-    novoGalho->posicao  = posicao;
+    novoGalho->direita   = NULL;
+    novoGalho->meio      = NULL;
+    novoGalho->direita   = NULL;
+    novoGalho->pai       = galhoPai;
+    novoGalho->id        = arvore.id;
+    novoGalho->posicao   = posicao;
+    novoGalho->temFilhos = NAO;
+    novoGalho->crescer   = SIM;
 
     arvore.id += 1;
 
@@ -222,6 +346,7 @@ int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
         break;
     }
 
+    printf( "**Galho criado. ID: %d\n", novoGalho->id );
     return novoGalho->id;
 }
 //------------------------------------------------------------------------------
@@ -254,16 +379,33 @@ int imprime( Galho *g ){
     if ( g == NULL )
         return -1;
 
-    int profundidadeEsquerda = 0;
-    int profundidadeMeio     = 0;
-    int profundidadeDireita  = 0;
+    int quantidadeGalhos = 0;
+    int quantidadeFilhos = 0;
 
-    profundidadeEsquerda += 1 + imprime( g->esquerda );
-    profundidadeMeio     += 1 + imprime( g->meio );
-    profundidadeDireita  += 1 + imprime( g->direita );
+    // int profundidadeEsquerda = 0;
+    // int profundidadeMeio     = 0;
+    // int profundidadeDireita  = 0;
+
+    quantidadeGalhos += 1 + imprime( g->esquerda );
+    quantidadeGalhos += 1 + imprime( g->meio );
+    quantidadeGalhos += 1 + imprime( g->direita );
 
     printf( "\n----------------------------------------\n" );
     printf( "ID: %d\n", g->id );
+
+    if ( g->pai != NULL )
+        printf( "ID Pai: %d\n", g->pai->id );
+
+    printf( "Nível: %d\n", arvore_profundidadeGalho(g) );
+
+    if ( g->esquerda != NULL)
+        quantidadeFilhos++;
+
+    if ( g->meio != NULL)
+        quantidadeFilhos++;
+
+    if ( g->direita != NULL)
+        quantidadeFilhos++;
 
     switch ( g->posicao ){
         case RAIZ:
@@ -280,22 +422,35 @@ int imprime( Galho *g ){
         break;
     }
 
+    switch ( g->crescer ){
+        case SIM:
+            printf( "Crescer: SIM\n");
+        break;
+        default:
+            printf( "Crescer: NAO\n" );
+    }
+
     // printf( "\nProfundidade esquerda : %d\n", profundidadeEsquerda );
     // printf( "Profundidade meio     : %d\n", profundidadeMeio );
     // printf( "Profundidade direita  : %d\n", profundidadeDireita );
-    printf( "Energia atual: %d\n", g->energiaConsumida );
-    printf( "Energia de crescimento: %d\n", g->energiaRecebida );
+    printf( "Quantidade de filhos: %d\n", quantidadeFilhos );
+    printf( "Energia consumida: %d\n", g->energiaConsumida );
+    printf( "Energia recebida: %d\n", g->energiaRecebida );
     printf( "Xi: %.2f  Yi: %.2f \nXf: %.2f  Yf: %.2f\n", g->xi, g->yi, g->xf, g->yf );
     printf( "Proporção de crescimento X: %.2f\n", g->proporcaoCrescimentoX );
     printf( "Proporção de crescimento Y: %.2f\n", g->proporcaoCrescimentoY );
     printf( "----------------------------------------\n" );
 
-    return 0;
+    return quantidadeGalhos;
 }
 //------------------------------------------------------------------------------
 void arvore_imprime( void ){
+    printf("\nIMPRIME ARVORE\n");
 
-    imprime( arvore.raiz );
+    int quantidadeGalhos = imprime( arvore.raiz );
+
+    printf( "\nQuantidade de galhos: %d\n", quantidadeGalhos );
+
     return;
 }
 //------------------------------------------------------------------------------
