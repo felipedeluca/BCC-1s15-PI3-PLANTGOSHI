@@ -2,7 +2,7 @@
 // #include <allegro5/allegro_font.h>
 // #include <allegro5/allegro_ttf.h>
 // #include <allegro5/allegro_image.h>
-//#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_primitives.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -23,7 +23,6 @@ typedef struct galho {
     // Ou: sen(a) = h/y, com a = ângulo de crescimento
 
     int energiaRecebida; // Energia passada (herdada) para o galho
-
     int energiaConsumida;    // Quanto da energia de crescimento total está sendo utilizada no momento.
                            // Tem relação direta com o tamanho do galho no momento.
 
@@ -40,7 +39,6 @@ typedef struct galho {
     int   temFilhos;
     posicao_t posicao;
     bool_t crescer;
-
 
     struct galho *direita;
     struct galho *meio;
@@ -62,6 +60,8 @@ typedef struct {
     float velocidadeCrescimento;
     Galho *raiz;
     int id; // Contador para gerar id único para cada galho
+    int offsetX;
+    int offsetY;
 } Arvore;
 
 Arvore arvore;
@@ -94,17 +94,18 @@ void arvore_imprime( void );
 //------------------------------------------------------------------------------
 void arvore_calculaProporcaoXY( Ponto *p ){
 
-    p->x = randomFloat( 1.0, 3.0 );
-    p->y = randomFloat( 1.0, 2.0 );
+    p->x = randomFloat( 3.0, 6.0 );
+    p->y = randomFloat( 1.0, 3.0 );
 
 }
 //------------------------------------------------------------------------------
-void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeCrescimento, float proporcaoX, float proporcaoY ){
+void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeCrescimento, float proporcaoX, float proporcaoY,
+                         int offsetX, int offsetY ){
 
     arvore.raiz         = NULL;//malloc( sizeof(Galho) );
     arvore.energiaTotal = energiaTotal;
-    arvore.energiaAtivacao = 25;
-    arvore.energiaLimite   = 30; // limite de crescimento em % da energia total
+    arvore.energiaAtivacao = 15;
+    arvore.energiaLimite   = 20; // limite de crescimento em % da energia total
     arvore.id              = 0;
     arvore.velocidadeCrescimento = velocidadeCrescimento;
     arvore_adicionaGalho( energiaTotal, RAIZ, arvore.raiz, proporcaoX, proporcaoY, xi, yi );
@@ -115,6 +116,8 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
     arvore.raiz->energiaRecebida = energiaTotal;
 
     arvore.raiz->temFilhos = NAO;
+    arvore.offsetX = offsetX;
+    arvore.offsetY = offsetY;
 
     srand( time(NULL) );
 
@@ -131,21 +134,21 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
     g->crescer = NAO;
 
     int profundidadeGalhos = arvore_profundidadeGalho( g );
-    if ( g->energiaConsumida <= (g->energiaRecebida * (arvore.energiaLimite + profundidadeGalhos) / 100) && g->energiaRecebida > 0 ){
+    if ( g->energiaConsumida <= (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100) && g->energiaRecebida > 0 ){
         switch ( g->posicao ) {
             case RAIZ:
-                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
             break;
             case ESQUERDA:
                 g->xf -= ( g->proporcaoCrescimentoX * velocidadeCrescimento );
-                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
             break;
             case MEIO:
-                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
             break;
             case DIREITA:
                 g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento );
-                g->yf += ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
             break;
         }
 
@@ -180,7 +183,7 @@ void arvore_atualizaGalhos( Galho *g ){
 
 //    printf("\nATUALIZA GALHOS: 2\n");
     // Adiciona novos galhos
-    if ( g->crescer == NAO && g->energiaRecebida > 0 && g->temFilhos == NAO ){ // Galho cresceu tudo o que podia
+    if ( g->crescer == NAO && g->energiaRecebida > 0 && g->temFilhos == NAO && g->energiaConsumida >= 5 ){ // Galho cresceu tudo o que podia
 
         int quantosGalhos;
         int profundidadeGalhos = arvore_profundidadeGalho( g );
@@ -466,5 +469,29 @@ void arvore_imprime( void ){
     printf( "\nQuantidade de galhos: %d\n", quantidadeGalhos );
 
     return;
+}
+//------------------------------------------------------------------------------
+void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
+    if ( g == NULL )
+        return;
+
+    ALLEGRO_COLOR black = al_map_rgb( 0, 0, 0 );
+    float larguraGalho =  ( 1.0 / arvore_profundidadeGalho(g) ) * 30.0;
+
+    al_set_target_bitmap( bmp );
+    al_draw_line( g->xi + arvore.offsetX, g->yi + arvore.offsetY, g->xf + arvore.offsetX, g->yf + arvore.offsetY, black, larguraGalho );
+
+    desenha( g->esquerda, bmp );
+    desenha( g->meio, bmp );
+    desenha( g->direita, bmp );
+
+    return;
+}
+//------------------------------------------------------------------------------
+void arvore_desenha( ALLEGRO_BITMAP *bmp ){
+
+    desenha( arvore.raiz, bmp );
+    return;
+
 }
 //------------------------------------------------------------------------------

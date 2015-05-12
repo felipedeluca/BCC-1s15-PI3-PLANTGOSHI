@@ -2,7 +2,7 @@
 // #include <allegro5/allegro_font.h>
 // #include <allegro5/allegro_ttf.h>
 // #include <allegro5/allegro_image.h>
-//#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_primitives.h>
 // #include <allegro5/allegro_audio.h>
 // #include <allegro5/allegro_acodec.h>
 
@@ -37,7 +37,7 @@ void erro(char *mensagem) {
 //------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 
-    arvore_inicializar( 0, 0, 100, 1.0, 0.0, 3.0);
+    arvore_inicializar( 0, 0, 1100, 1.0, 0.0, 1.5, 600, 700);
 
     int largura = 1280;
     int altura = 720;
@@ -51,9 +51,9 @@ int main( int argc, char **argv ){
     // //
     if(!display)
         erro("nao foi possivel criar janela");
-    //
-    // if(!al_init_primitives_addon())
-    //   erro("nao foi possivel inicializar adicional de primitivas");
+
+    if(!al_init_primitives_addon())
+      erro("nao foi possivel inicializar adicional de primitivas");
 
     // ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
     // if(!queue)
@@ -69,12 +69,16 @@ int main( int argc, char **argv ){
 
    ALLEGRO_BITMAP *buffer = al_get_backbuffer(display);
 //
-    al_clear_to_color(al_map_rgb(0,0,0));
+    al_set_target_bitmap( buffer );
+    al_clear_to_color(al_map_rgb(255,255,255));
 
     arvore_simulaArvore();
+    arvore_desenha( buffer );
 // //    al_register_event_source(queue, al_get_timer_event_source(timer));
 //
 // printf( "al_flip_display()\n" );
+
+//    al_set_target_bitmap( buffer );
     al_flip_display();
 
 //    arvore_imprime();
@@ -101,7 +105,7 @@ int main( int argc, char **argv ){
 //
 //     arduino_LED( &arduinoComm );
 // printf( "al_rest( 2.0 )\n" );
-    al_rest( 2.0 );
+    al_rest( 10.0 );
     //
     al_destroy_display(display);
 // //    al_destroy_bitmap(buffer);
