@@ -41,14 +41,14 @@ int main( int argc, char **argv ){
 
     int largura = 1280;
     int altura = 720;
-    //
-     ALLEGRO_DISPLAY *display = NULL;
+    // //
     //
     if(!al_init())
       erro("nao foi possivel inicializar allegro");
-    //
-    display = al_create_display(largura, altura);
-    //
+
+     ALLEGRO_DISPLAY *display = NULL;
+     display = al_create_display(largura, altura);
+    // //
     if(!display)
         erro("nao foi possivel criar janela");
     //
@@ -67,12 +67,14 @@ int main( int argc, char **argv ){
     //   erro("nao foi possivel criar relogio");
 
 
-    ALLEGRO_BITMAP *buffer = al_get_backbuffer(display);
-    //
+   ALLEGRO_BITMAP *buffer = al_get_backbuffer(display);
+//
     al_clear_to_color(al_map_rgb(0,0,0));
-    arvore_simulaArvore();
-//    al_register_event_source(queue, al_get_timer_event_source(timer));
 
+    arvore_simulaArvore();
+// //    al_register_event_source(queue, al_get_timer_event_source(timer));
+//
+// printf( "al_flip_display()\n" );
     al_flip_display();
 
 //    arvore_imprime();
@@ -98,14 +100,15 @@ int main( int argc, char **argv ){
 // //    strcpy( arduinoComm.buffer, "zaz" );
 //
 //     arduino_LED( &arduinoComm );
-    al_rest( 3.0 );
+// printf( "al_rest( 2.0 )\n" );
+    al_rest( 2.0 );
     //
     al_destroy_display(display);
-//    al_destroy_bitmap(buffer);
-
-//    al_shutdown_primitives_addon();
-//    al_uninstall_system();
-
+// //    al_destroy_bitmap(buffer);
+//
+// //    al_shutdown_primitives_addon();
+//     al_uninstall_system();
+    printf( "\nFIM\n" );
     exit( EXIT_SUCCESS );
 }
 //------------------------------------------------------------------------------

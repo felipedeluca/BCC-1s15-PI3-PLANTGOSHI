@@ -2,7 +2,7 @@
 // #include <allegro5/allegro_font.h>
 // #include <allegro5/allegro_ttf.h>
 // #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_primitives.h>
+//#include <allegro5/allegro_primitives.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -124,9 +124,13 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
 //------------------------------------------------------------------------------
 void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
 
-    g->crescer = NAO;
-    int profundidadeGalhos = arvore_profundidadeGalho( g );
+//    printf( "velocidadeCrescimento: %d\n", velocidadeCrescimento );
+    if ( g == NULL )
+        return;
 
+    g->crescer = NAO;
+
+    int profundidadeGalhos = arvore_profundidadeGalho( g );
     if ( g->energiaConsumida <= (g->energiaRecebida * (arvore.energiaLimite + profundidadeGalhos) / 100) && g->energiaRecebida > 0 ){
         switch ( g->posicao ) {
             case RAIZ:
@@ -152,19 +156,22 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
 }
 //------------------------------------------------------------------------------
 void arvore_atualizaGalhos( Galho *g ){
+
 //    printf("\nATUALIZA GALHOS: INICIO\n");
     if ( g == NULL)
         return;
-return;
-//    printf("\nATUALIZA GALHOS: 0\n");
+//    printf("ATUALIZA GALHOS: 0\n");
+//   printf( "g->id: %d\n", g->id );
 
     if ( g->pai != NULL){ // Não é a raiz
-//        printf("\nATUALIZA GALHOS: pai != NULL\n");
+//        printf("ATUALIZA GALHOS: pai != NULL\n");
         g->xi = g->pai->xf;
+//        printf("OK: g->xi = g->pai->xf\n");
         g->yi = g->pai->yf;
+//        printf("OK: g->yf = g->pai->yf\n");
     }
 
-//    printf("\nATUALIZA GALHOS: 1\n");
+//    printf("ATUALIZA GALHOS: 1\n");
 
     if ( g->crescer == SIM )
         g->energiaConsumida += arvore.velocidadeCrescimento;
@@ -196,7 +203,7 @@ return;
 //        printf("\nATUALIZA GALHOS: 3\n");
         // Força para que as primeiras ramificações da árvore sejam sempre 3
 
-//        printf( "\nquantosGalhos: %d", quantosGalhos );
+//       printf( "\nquantosGalhos: %d", quantosGalhos );
         switch ( quantosGalhos ){
             case 1:
                 primeiroGalhoEnergia = g->energiaRecebida - g->energiaConsumida;
@@ -257,16 +264,19 @@ return;
 //                printf("\nCriando 3 galhos...\n");
 
                 if ( primeiroGalhoEnergia > 1 ){
+//                    printf("\nCriando 3 galhos: 1\n");
                     arvore_calculaProporcaoXY( &proporcao );
                     arvore_adicionaGalho( primeiroGalhoEnergia, primeiroGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
                 }
 
                 if ( segundoGalhoEnergia > 1 ){
+//                    printf("\nCriando 3 galhos: 2\n");
                     arvore_calculaProporcaoXY( &proporcao );
                     arvore_adicionaGalho( segundoGalhoEnergia, segundoGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
                 }
 
                 if ( terceiroGalhoEnergia > 1 ){
+//                    printf("\nCriando 3 galhos: 3\n");
                     arvore_calculaProporcaoXY( &proporcao );
                     arvore_adicionaGalho( terceiroGalhoEnergia, terceiroGalho, g, proporcao.x, proporcao.y, g->xi, g->yi );
                 }
@@ -276,6 +286,8 @@ return;
         }
     }
 
+//    printf("\nATUALIZA GALHOS: QUASE FIM\n");
+//    return;
     arvore_atualizaGalhos( g->esquerda );
     arvore_atualizaGalhos( g->meio );
     arvore_atualizaGalhos( g->direita );
@@ -286,9 +298,11 @@ return;
 //------------------------------------------------------------------------------
 void arvore_simulaArvore( void ){
 //    printf("\nSIMULA ARVORE\n");
-    for ( int i = 0; i <= arvore.energiaTotal; i += 1 /*arvore.velocidadeCrescimento*/ ){
-            arvore_atualizaGalhos( arvore.raiz );
-    }
+   for ( int i = 0; i <= arvore.energiaTotal; i += 1 /*arvore.velocidadeCrescimento*/ ){
+//        printf( "Contador simulacao: %d\n", i );
+//        printf( "\nID RAIZ: %d", arvore.raiz->id );
+        arvore_atualizaGalhos( arvore.raiz );
+   }
 
     arvore_imprime();
     return;
@@ -297,14 +311,13 @@ void arvore_simulaArvore( void ){
 int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
                           Galho* galhoPai, float proporcaoX, float proporcaoY, float xi, float yi ){
 
-
     Galho *novoGalho = malloc( sizeof(Galho) );
 
     novoGalho->energiaRecebida       = energiaRecebida;
     novoGalho->proporcaoCrescimentoX = proporcaoX;
     novoGalho->proporcaoCrescimentoY = proporcaoY;
     novoGalho->energiaConsumida = 0;
-    novoGalho->direita   = NULL;
+    novoGalho->esquerda  = NULL;
     novoGalho->meio      = NULL;
     novoGalho->direita   = NULL;
     novoGalho->pai       = galhoPai;
@@ -321,7 +334,7 @@ int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
         novoGalho->xf = novoGalho->xi;
         novoGalho->yf = novoGalho->yi;
         arvore.raiz = novoGalho;
-        //printf( "RAIZ | Angulo: %.2f\n", novoGalho->anguloCrescimento );
+        printf( "**Galho PAI criado. ID: %d\n", novoGalho->id );
         return novoGalho->id;
     }
 
@@ -333,6 +346,7 @@ int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
 
     switch ( posicao ){
         case RAIZ:
+//            printf("Posicao: RAIZ\n");
             // Nao faz nada. A raiz já foi incluída
         break;
         case DIREITA:
