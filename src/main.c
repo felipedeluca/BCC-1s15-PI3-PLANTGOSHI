@@ -37,7 +37,7 @@ void erro(char *mensagem) {
 //------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 
-    arvore_inicializar( 0, 0, 1100, 1.0, 0.0, 1.5, 600, 700);
+    arvore_inicializar( 0, 0, 800, 1.0, 0.0, 1.5, 600, 600);
 
     int largura = 1280;
     int altura = 720;

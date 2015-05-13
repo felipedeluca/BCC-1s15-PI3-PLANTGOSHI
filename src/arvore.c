@@ -94,8 +94,8 @@ void arvore_imprime( void );
 //------------------------------------------------------------------------------
 void arvore_calculaProporcaoXY( Ponto *p ){
 
-    p->x = randomFloat( 3.0, 6.0 );
-    p->y = randomFloat( 1.0, 3.0 );
+    p->x = randomFloat( 2.5, 3.0 );
+    p->y = randomFloat( 1.0, 2.5 );
 
 }
 //------------------------------------------------------------------------------
@@ -134,21 +134,22 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
     g->crescer = NAO;
 
     int profundidadeGalhos = arvore_profundidadeGalho( g );
+
     if ( g->energiaConsumida <= (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100) && g->energiaRecebida > 0 ){
         switch ( g->posicao ) {
             case RAIZ:
-                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
             break;
             case ESQUERDA:
-                g->xf -= ( g->proporcaoCrescimentoX * velocidadeCrescimento );
-                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->xf -= ( g->proporcaoCrescimentoX * velocidadeCrescimento ) * profundidadeGalhos;
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
             break;
             case MEIO:
-                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
             break;
             case DIREITA:
-                g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento );
-                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento );
+                g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento ) * profundidadeGalhos;
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
             break;
         }
 
@@ -183,7 +184,7 @@ void arvore_atualizaGalhos( Galho *g ){
 
 //    printf("\nATUALIZA GALHOS: 2\n");
     // Adiciona novos galhos
-    if ( g->crescer == NAO && g->energiaRecebida > 0 && g->temFilhos == NAO && g->energiaConsumida >= 5 ){ // Galho cresceu tudo o que podia
+    if ( g->crescer == NAO && g->energiaRecebida > 0 && g->temFilhos == NAO && g->energiaConsumida >= 10 ){ // Galho cresceu tudo o que podia
 
         int quantosGalhos;
         int profundidadeGalhos = arvore_profundidadeGalho( g );
