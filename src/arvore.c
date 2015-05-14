@@ -114,10 +114,11 @@ void arvore_proximoPontoCrescimento( int *x, int *y, int *id ){
     }
 
     if ( pontoAtual == NULL ){  // chegou ao fim da lista ligada
-        pontosCrescimentoFrutos.indiceAtual = 0;
-        *id = pontosCrescimentoFrutos.inicio->galho->id;
-        *x  = pontosCrescimentoFrutos.inicio->galho->xf;
-        *y  = pontosCrescimentoFrutos.inicio->galho->yf;
+         pontosCrescimentoFrutos.indiceAtual = 0;
+        // *id = pontosCrescimentoFrutos.inicio->galho->id;
+        // *x  = pontosCrescimentoFrutos.inicio->galho->xf + arvore.offsetX;
+        // *y  = pontosCrescimentoFrutos.inicio->galho->yf + arvore.offsetY;
+        return;
     }
     else {
         pontosCrescimentoFrutos.indiceAtual = i + 1;
