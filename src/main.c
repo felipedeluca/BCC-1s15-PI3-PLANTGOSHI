@@ -112,7 +112,7 @@ int main( int argc, char **argv ){
 //
 //     arduino_LED( &arduinoComm );
 // printf( "al_rest( 2.0 )\n" );
-    al_rest( 10.0 );
+    al_rest( 5.0 );
     //
     al_destroy_display(display);
 // //    al_destroy_bitmap(buffer);

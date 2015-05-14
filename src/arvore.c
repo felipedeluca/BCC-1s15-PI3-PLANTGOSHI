@@ -14,6 +14,8 @@
 #include "variaveis_arvore.h"
 #include "random.h"
 
+#define MIN_ENERGIA_CRESCIMENTO 2
+
 typedef struct _galho {
     // Cálculo da posição Yf (y) da árvore:
     // Energia = hipotenusa (h)
@@ -89,6 +91,7 @@ PontosCrescimentoFrutos pontosCrescimentoFrutos;
 
 int arvore_adicionaGalho( int, posicao_t, Galho*, float, float, float, float );
 Galho *arvore_procuraGalhoPeloID( Galho *g, int id );
+int arvore_profundidadeGalho( Galho *g );
 //------------------------------------------------------------------------------
 void arvore_proximoPontoCrescimento( int *x, int *y, int *id ){
     // retorna id = -1 se não houver pontos
@@ -115,9 +118,6 @@ void arvore_proximoPontoCrescimento( int *x, int *y, int *id ){
 
     if ( pontoAtual == NULL ){  // chegou ao fim da lista ligada
          pontosCrescimentoFrutos.indiceAtual = 0;
-        // *id = pontosCrescimentoFrutos.inicio->galho->id;
-        // *x  = pontosCrescimentoFrutos.inicio->galho->xf + arvore.offsetX;
-        // *y  = pontosCrescimentoFrutos.inicio->galho->yf + arvore.offsetY;
         return;
     }
     else {
@@ -171,10 +171,11 @@ void atualizaPontosCrescimento( Galho *g ){
 
     if ( g == NULL )
         return;
+//printf("ENERGIA RECEBIDA: %d\n", g->energiaRecebida);
+//    int profundidadeGalhos = arvore_profundidadeGalho( g );
 
-    if ( /* g->crescer == NAO && */ g->esquerda == NULL && g->meio == NULL && g->direita == NULL ) {
+    if ( g->crescer == NAO && g->temFilhos == NAO && g->energiaConsumida < 10)
         adicionaPontoCrescimento( g );
-    }
 
     return;
 }
@@ -248,7 +249,7 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
 
     int profundidadeGalhos = arvore_profundidadeGalho( g );
 
-    if ( g->energiaConsumida <= (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100) && g->energiaRecebida > 0 ){
+    if ( g->energiaConsumida < (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100) && g->energiaRecebida > 0 ){
         switch ( g->posicao ) {
             case RAIZ:
                 g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
@@ -287,11 +288,10 @@ void arvore_atualizaGalhos( Galho *g ){
 
     arvore_cresceGalho( g, arvore.velocidadeCrescimento );
 
-    if ( g->crescer == NAO )
-        atualizaPontosCrescimento( g );
+    atualizaPontosCrescimento( g );
 
     // Adiciona novos galhos
-    if ( g->crescer == NAO && g->energiaRecebida > 0 && g->temFilhos == NAO && g->energiaConsumida >= 10 ){ // Galho cresceu tudo o que podia
+    if ( g->crescer == NAO && g->energiaRecebida >= MIN_ENERGIA_CRESCIMENTO && g->temFilhos == NAO && g->energiaConsumida >= 10 ){ // Galho cresceu tudo o que podia
 
         int quantosGalhos;
         int profundidadeGalhos = arvore_profundidadeGalho( g );
@@ -424,7 +424,11 @@ int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
 
     Galho *novoGalho = malloc( sizeof(Galho) );
 
-    novoGalho->energiaRecebida       = energiaRecebida;
+    if ( energiaRecebida < MIN_ENERGIA_CRESCIMENTO )
+        novoGalho->energiaRecebida = 0;
+    else
+        novoGalho->energiaRecebida = energiaRecebida;
+
     novoGalho->proporcaoCrescimentoX = proporcaoX;
     novoGalho->proporcaoCrescimentoY = proporcaoY;
     novoGalho->energiaConsumida = 0;
