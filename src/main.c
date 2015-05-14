@@ -81,6 +81,13 @@ int main( int argc, char **argv ){
 //    al_set_target_bitmap( buffer );
     al_flip_display();
 
+    int x1, y1, id;
+
+    for ( int i = 0; i <= 20; i++ ){
+        arvore_proximoPontoCrescimento( &x1, &y1, &id );
+        printf( "Proximo ponto x: %d  y: %d  id: %d\n", x1, y1, id );
+    }
+
 //    arvore_imprime();
 
 //     setupArduino();

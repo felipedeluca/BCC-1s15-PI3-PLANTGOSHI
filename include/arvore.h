@@ -7,5 +7,6 @@ void arvore_imprime( void );
 void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeCrescimento, float proporcaoX, float proporcaoY, int offsetX, int offsetY );
 void arvore_simulaArvore();
 void arvore_desenha( ALLEGRO_BITMAP *bmp );
+void arvore_proximoPontoCrescimento( int *x, int *y, int *id );
 
 #endif
