@@ -55,38 +55,52 @@ int main( int argc, char **argv ){
     if(!al_init_primitives_addon())
       erro("nao foi possivel inicializar adicional de primitivas");
 
-    // ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
-    // if(!queue)
-    //   erro("nao foi possivel criar fila de eventos");
+    ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();
+    if(!event_queue)
+      erro("nao foi possivel criar fila de eventos");
+
+    al_register_event_source(event_queue, al_get_display_event_source(display));
+
+    ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
+    if(!timer)
+      erro("nao foi possivel criar relogio");
 
 
-    // al_register_event_source(queue, al_get_display_event_source(display));
-
-    // ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
-    // if(!timer)
-    //   erro("nao foi possivel criar relogio");
-
-
-   ALLEGRO_BITMAP *buffer = al_get_backbuffer(display);
+   ALLEGRO_BITMAP *bitmap = al_get_backbuffer(display);
 //
     al_set_target_bitmap( buffer );
-    al_clear_to_color(al_map_rgb(255,255,255));
 
-    arvore_simulaArvore();
-    arvore_desenha( buffer );
-// //    al_register_event_source(queue, al_get_timer_event_source(timer));
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));
 //
 // printf( "al_flip_display()\n" );
 
 //    al_set_target_bitmap( buffer );
-    al_flip_display();
+    while( 1 ){
 
-    int x1, y1, id;
+        ALLEGRO_EVENT event;
+        ALLEGRO_TIMEOUT timeout;
+        al_init_timeout( &timeout, 0.06 );
 
-    for ( int i = 0; i <= 20; i++ ){
+        bool get_event = al_wait_for_event_until( event_queue, &event, &timeout );
+
+        if ( get_event && event.type == ALLEGRO_EVENT_DISPLAY_CLOSE ){
+            break;
+        }
+
+        al_clear_to_color(al_map_rgb(255,255,255));
+
+        arvore_simulaArvore();
+        arvore_desenha( bitmap );
+
+        int x1, y1, id;
+
         arvore_proximoPontoCrescimento( &x1, &y1, &id );
         printf( "Proximo ponto x: %d  y: %d  id: %d\n", x1, y1, id );
+
+
+        al_flip_display();
     }
+
 
 //    arvore_imprime();
 
@@ -112,9 +126,12 @@ int main( int argc, char **argv ){
 //
 //     arduino_LED( &arduinoComm );
 // printf( "al_rest( 2.0 )\n" );
-    al_rest( 5.0 );
+
+
+    al_rest( 0.1 );
     //
-    al_destroy_display(display);
+    al_destroy_display( display );
+    al_destroy_event_queue( event_queue );
 // //    al_destroy_bitmap(buffer);
 //
 // //    al_shutdown_primitives_addon();

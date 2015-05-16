@@ -409,13 +409,13 @@ void arvore_atualizaGalhos( Galho *g ){
 //------------------------------------------------------------------------------
 void arvore_simulaArvore( void ){
 //    printf("\nSIMULA ARVORE\n");
-   for ( int i = 0; i <= arvore.energiaTotal; i += 1 /*arvore.velocidadeCrescimento*/ ){
+//   for ( int i = 0; i <= arvore.energiaTotal; i += 1 /*arvore.velocidadeCrescimento*/ ){
 //        printf( "Contador simulacao: %d\n", i );
 //        printf( "\nID RAIZ: %d", arvore.raiz->id );
         arvore_atualizaGalhos( arvore.raiz );
-   }
+//   }
 
-    arvore_imprime();
+//    arvore_imprime();
     return;
 }
 //------------------------------------------------------------------------------
