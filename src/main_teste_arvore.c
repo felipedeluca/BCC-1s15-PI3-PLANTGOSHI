@@ -37,7 +37,7 @@ void erro(char *mensagem) {
 //------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 
-    arvore_inicializar( 0, 0, 800, 1.0, 0.0, 1.5, 600, 600);
+    arvore_inicializar( 0, 0, 2000, 1.0, 0.0, 1.5, 600, 600);
 
     int largura = 1280;
     int altura = 720;
@@ -66,15 +66,18 @@ int main( int argc, char **argv ){
       erro("nao foi possivel criar relogio");
 
 
-   ALLEGRO_BITMAP *bitmap = al_get_backbuffer(display);
+   ALLEGRO_BITMAP *bitmap = al_get_backbuffer( display );
 //
-    al_set_target_bitmap( buffer );
+    al_set_target_bitmap( bitmap );
 
     al_register_event_source(event_queue, al_get_timer_event_source(timer));
 //
 // printf( "al_flip_display()\n" );
 
 //    al_set_target_bitmap( buffer );
+/* POSIÇÃO ONDE CRESCER OS FRUTOS */
+    int x1, y1, id;
+
     while( 1 ){
 
         ALLEGRO_EVENT event;
@@ -92,10 +95,9 @@ int main( int argc, char **argv ){
         arvore_simulaArvore();
         arvore_desenha( bitmap );
 
-        int x1, y1, id;
-
+        /* Retorna os pontos onde os frutos podem crescer */
         arvore_proximoPontoCrescimento( &x1, &y1, &id );
-        printf( "Proximo ponto x: %d  y: %d  id: %d\n", x1, y1, id );
+        //printf( "Proximo ponto x: %d  y: %d  id: %d\n", x1, y1, id );
 
 
         al_flip_display();
