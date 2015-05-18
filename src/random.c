@@ -13,7 +13,7 @@ int randomInt( int min, int max ){
 //------------------------------------------------------------------------------
 float randomFloat( float min, float max ){
 
-    return ( ( rand() % (int)max) + min ) + 1.00;
+    return ( ( rand() % (int)max ) + min ) + 1.00;
 
 }
 //------------------------------------------------------------------------------

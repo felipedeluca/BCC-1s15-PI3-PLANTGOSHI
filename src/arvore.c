@@ -206,8 +206,8 @@ void arvore_imprime( void );
 //------------------------------------------------------------------------------
 void arvore_calculaProporcaoXY( Ponto *p ){
 
-    p->x = 1.0;//randomFloat( 1.0, 1.0 );
-    p->y = 0.5;//randomFloat( 1.0, 1.0 );
+    p->x = ( randomInt( 40, 90 ) * 1.00 ) / 100;
+    p->y = ( randomInt( 30, 80 ) * 1.00 ) / 100;
 
 }
 //------------------------------------------------------------------------------
@@ -319,8 +319,7 @@ void arvore_atualizaGalhos( Galho *g ){
     if ( g->crescer == SIM )
         g->energiaConsumida += sqrt( ( g->proporcaoCrescimentoX * g->proporcaoCrescimentoX ) + ( g->proporcaoCrescimentoY * g->proporcaoCrescimentoY ) );// * arvore.velocidadeCrescimento;
 
-
-    printf( "** Energia: %.4f\n", g->energiaConsumida);
+    //printf( "** Energia: %.4f\n", g->energiaConsumida);
 
     arvore_cresceGalho( g, arvore.velocidadeCrescimento );
     atualizaPontosCrescimento( g );
