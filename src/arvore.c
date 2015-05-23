@@ -17,12 +17,6 @@
 #define MIN_ENERGIA_CRESCIMENTO 2
 
 typedef struct _galho {
-    // Cálculo da posição Yf (y) da árvore:
-    // Energia = hipotenusa (h)
-    // Xf = cateto adjascente (x)
-    // (h)^2 = (x)^2 + (y)^2  =>  (y)^2 = (h)^2 - (x)^2
-    //
-    // Ou: sen(a) = h/y, com a = ângulo de crescimento
 
     float energiaRecebida; // Energia passada (herdada) para o galho
     float energiaConsumida;    // Quanto da energia de crescimento total está sendo utilizada no momento.
@@ -39,6 +33,9 @@ typedef struct _galho {
 
     int   id;
     int   temFilhos;
+
+    float tamanhoFolhas;
+
     posicao_t posicao;
     bool_t crescer;
     bool_t criarFilhos;
@@ -175,7 +172,7 @@ void atualizaPontosCrescimento( Galho *g ){
 //printf("ENERGIA RECEBIDA: %d\n", g->energiaRecebida);
 //    int profundidadeGalhos = arvore_profundidadeGalho( g );
 
-    if ( g->crescer == NAO && g->temFilhos == NAO && g->energiaConsumida < 10)
+    if ( g->crescer == NAO && g->temFilhos == NAO )
         adicionaPontoCrescimento( g );
 
     return;
@@ -467,6 +464,7 @@ int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
 
     novoGalho->proporcaoCrescimentoX = proporcaoX;
     novoGalho->proporcaoCrescimentoY = proporcaoY;
+    novoGalho->tamanhoFolhas    = 0.0;
     novoGalho->energiaConsumida = 0;
     novoGalho->esquerda  = NULL;
     novoGalho->meio      = NULL;
@@ -620,15 +618,43 @@ void arvore_imprime( void ){
     return;
 }
 //------------------------------------------------------------------------------
+void desenhaFolhas( float cx, float cy, float radius ){
+    ALLEGRO_COLOR green = al_map_rgb( 0, 200, 0 );
+
+    al_draw_filled_circle( cx, cy, radius, green );
+}
+//------------------------------------------------------------------------------
 void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
+
     if ( g == NULL )
         return;
 
     ALLEGRO_COLOR black = al_map_rgb( 0, 0, 0 );
+
     float larguraGalho =  ( 1.0 / arvore_profundidadeGalho(g) ) * 30.0;
 
     //al_set_target_bitmap( bmp );
     al_draw_line( g->xi + arvore.offsetX, g->yi + arvore.offsetY, g->xf + arvore.offsetX, g->yf + arvore.offsetY, black, larguraGalho );
+
+    int id = 0;
+    int x, y;
+
+    arvore_proximoPontoCrescimento( &x, &y, &id );
+
+    while ( id > -1 ){
+        Galho *ponta = arvore_procuraGalhoPeloID( arvore.raiz, id );
+
+        if ( ponta->tamanhoFolhas < 80 )
+            ponta->tamanhoFolhas += 0.2;
+
+        desenhaFolhas( x, y, ponta->tamanhoFolhas );
+        desenhaFolhas( x + ponta->tamanhoFolhas / 2.0, y, ponta->tamanhoFolhas );
+        desenhaFolhas( x - ponta->tamanhoFolhas / 2.0, y, ponta->tamanhoFolhas );
+        desenhaFolhas( x, y + ponta->tamanhoFolhas / 2.0, ponta->tamanhoFolhas );
+        desenhaFolhas( x, y - ponta->tamanhoFolhas / 2.0, ponta->tamanhoFolhas );
+
+        arvore_proximoPontoCrescimento( &x, &y, &id );
+    }
 
     desenha( g->esquerda, bmp );
     desenha( g->meio, bmp );
