@@ -96,7 +96,7 @@ int main( int argc, char **argv ){
         arvore_desenha( bitmap );
 
         /* Retorna os pontos onde os frutos podem crescer */
-        arvore_proximoPontoCrescimento( &x1, &y1, &id );
+        arvore_proximoPontoCrescimentoFrutas( &x1, &y1, &id );
         //printf( "Proximo ponto x: %d  y: %d  id: %d\n", x1, y1, id );
 
 

@@ -60,7 +60,7 @@ typedef struct _pontoCrescimento {
 typedef struct {
     PontoCrescimento *inicio;
     int indiceAtual; // ultimo elemento acessado
-} PontosCrescimentoFrutos;
+} PontosCrescimento;
 
 
 
@@ -83,7 +83,8 @@ typedef struct {
 
 
 Arvore arvore;
-PontosCrescimentoFrutos pontosCrescimentoFrutos;
+PontosCrescimento pontosCrescimentoFrutas;
+PontosCrescimento pontosCrescimentoFolhas;
 
 
 
@@ -91,9 +92,9 @@ int arvore_adicionaGalho( int, posicao_t, Galho*, float, float, float, float );
 Galho *arvore_procuraGalhoPeloID( Galho *g, int id );
 int arvore_profundidadeGalho( Galho *g );
 //------------------------------------------------------------------------------
-void arvore_proximoPontoCrescimento( int *x, int *y, int *id ){
+void arvore_proximoPontoCrescimentoFrutas( int *x, int *y, int *id ){
     // retorna id = -1 se não houver pontos
-    PontoCrescimento *pontoAtual    = pontosCrescimentoFrutos.inicio;
+    PontoCrescimento *pontoAtual    = pontosCrescimentoFrutas.inicio;
     PontoCrescimento *pontoAnterior = pontoAtual;
 
     *id = -1;
@@ -106,8 +107,8 @@ void arvore_proximoPontoCrescimento( int *x, int *y, int *id ){
     int i = 0;
     while ( pontoAtual != NULL ){
         pontoAnterior = pontoAtual;
-//        printf( "i: %d  indiceAtual: %d\n", i, pontosCrescimentoFrutos.indiceAtual );
-        if ( pontosCrescimentoFrutos.indiceAtual == i )
+//        printf( "i: %d  indiceAtual: %d\n", i, pontosCrescimentoFrutas.indiceAtual );
+        if ( pontosCrescimentoFrutas.indiceAtual == i )
             break;
 
         pontoAtual = pontoAtual->proximo;
@@ -115,11 +116,50 @@ void arvore_proximoPontoCrescimento( int *x, int *y, int *id ){
     }
 
     if ( pontoAtual == NULL ){  // chegou ao fim da lista ligada
-         pontosCrescimentoFrutos.indiceAtual = 0;
+         pontosCrescimentoFrutas.indiceAtual = 0;
         return;
     }
     else {
-        pontosCrescimentoFrutos.indiceAtual = i + 1;
+        pontosCrescimentoFrutas.indiceAtual = i + 1;
+        *id = pontoAtual->galho->id;
+        *x  = pontoAtual->galho->xf + arvore.offsetX;
+        *y  = pontoAtual->galho->yf + arvore.offsetY;
+   }
+
+    return;
+}
+//------------------------------------------------------------------------------
+void arvore_proximoPontoCrescimentoFolhas( int *x, int *y, int *id ){
+    // retorna id = -1 se não houver pontos
+    pontosCrescimentoFolhas.inicio  = pontosCrescimentoFrutas.inicio;
+
+    PontoCrescimento *pontoAtual    = pontosCrescimentoFolhas.inicio;
+    PontoCrescimento *pontoAnterior = pontoAtual;
+
+    *id = -1;
+    *x  = 0;
+    *y  = 0;
+
+    if ( pontoAtual == NULL )
+        return;
+
+    int i = 0;
+    while ( pontoAtual != NULL ){
+        pontoAnterior = pontoAtual;
+//        printf( "i: %d  indiceAtual: %d\n", i, pontosCrescimentoFrutas.indiceAtual );
+        if ( pontosCrescimentoFolhas.indiceAtual == i )
+            break;
+
+        pontoAtual = pontoAtual->proximo;
+        i++;
+    }
+
+    if ( pontoAtual == NULL ){  // chegou ao fim da lista ligada
+        pontosCrescimentoFolhas.indiceAtual = 0;
+        return;
+    }
+    else {
+        pontosCrescimentoFolhas.indiceAtual = i + 1;
         *id = pontoAtual->galho->id;
         *x  = pontoAtual->galho->xf + arvore.offsetX;
         *y  = pontoAtual->galho->yf + arvore.offsetY;
@@ -133,7 +173,7 @@ void adicionaPontoCrescimento( Galho *g ){
     if ( g == NULL )
         return;
 
-    PontoCrescimento *pontoAtual    = pontosCrescimentoFrutos.inicio;
+    PontoCrescimento *pontoAtual    = pontosCrescimentoFrutas.inicio;
     PontoCrescimento *pontoAnterior = pontoAtual;
 
     while ( pontoAtual != NULL ){
@@ -151,8 +191,8 @@ void adicionaPontoCrescimento( Galho *g ){
     novoPonto->anterior = NULL;
     novoPonto->galho    = g;
 
-    if ( pontosCrescimentoFrutos.inicio == NULL ){
-        pontosCrescimentoFrutos.inicio = novoPonto;
+    if ( pontosCrescimentoFrutas.inicio == NULL ){
+        pontosCrescimentoFrutas.inicio = novoPonto;
     }
     else {
         pontoAtual = novoPonto;
@@ -229,8 +269,8 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
     arvore.offsetX = offsetX;
     arvore.offsetY = offsetY;
 
-    pontosCrescimentoFrutos.inicio      = NULL;
-    pontosCrescimentoFrutos.indiceAtual = 0;
+    pontosCrescimentoFrutas.inicio      = NULL;
+    pontosCrescimentoFrutas.indiceAtual = 0;
 
     srand( time(NULL) );
 
@@ -537,6 +577,14 @@ Galho *arvore_procuraGalhoPeloID( Galho *g, int id ){
     return galho;
 }
 //------------------------------------------------------------------------------
+void arvore_atualizaXYGalho( float *x, float *y, int id ){
+
+    Galho *g = arvore_procuraGalhoPeloID( arvore.raiz, id );
+    *x = g->xf;
+    *y = g->yf;
+
+}
+//------------------------------------------------------------------------------
 int imprime( Galho *g ){
     // Imprime em pós-ordem
 
@@ -639,7 +687,7 @@ void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
     int id = 0;
     int x, y;
 
-    arvore_proximoPontoCrescimento( &x, &y, &id );
+    arvore_proximoPontoCrescimentoFolhas( &x, &y, &id );
 
     while ( id > -1 ){
         Galho *ponta = arvore_procuraGalhoPeloID( arvore.raiz, id );
@@ -653,7 +701,7 @@ void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
         desenhaFolhas( x, y + ponta->tamanhoFolhas / 2.0, ponta->tamanhoFolhas );
         desenhaFolhas( x, y - ponta->tamanhoFolhas / 2.0, ponta->tamanhoFolhas );
 
-        arvore_proximoPontoCrescimento( &x, &y, &id );
+        arvore_proximoPontoCrescimentoFolhas( &x, &y, &id );
     }
 
     desenha( g->esquerda, bmp );
