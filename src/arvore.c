@@ -252,7 +252,7 @@ void arvore_calculaProporcaoXY( Ponto *p ){
 }
 //------------------------------------------------------------------------------
 void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeCrescimento, float proporcaoX, float proporcaoY,
-                         int offsetX, int offsetY, ALLEGRO_BITMAP *bmp ){
+                         int offsetX, int offsetY ){
 
     arvore.raiz         = NULL;//malloc( sizeof(Galho) );
     arvore.energiaTotal = energiaTotal;
@@ -277,7 +277,6 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
 
     srand( time(NULL) );
 
-//    arvore.bmp = al_create_sub_bitmap( bmp, 0, 0, 1280, 720 );
     arvore.bmp = al_create_bitmap( 1280, 720 );
     arvore.crescer = SIM;
 
