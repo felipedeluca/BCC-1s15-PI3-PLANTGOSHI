@@ -11,7 +11,6 @@
 #include <string.h>
 #include <getopt.h>
 
-
 #include "plantgoshi_arduino.h"
 #include "arvore.h"
 
@@ -37,14 +36,13 @@ void erro(char *mensagem) {
 //------------------------------------------------------------------------------
 int main( int argc, char **argv ){
 
-    arvore_inicializar( 0, 0, 1700, 1.0, 0.0, 1.5, 600, 600);
+    if(!al_init())
+      erro("nao foi possivel inicializar allegro");
 
     int largura = 1280;
     int altura = 720;
     // //
     //
-    if(!al_init())
-      erro("nao foi possivel inicializar allegro");
 
      ALLEGRO_DISPLAY *display = NULL;
      display = al_create_display(largura, altura);
@@ -77,6 +75,8 @@ int main( int argc, char **argv ){
 //    al_set_target_bitmap( buffer );
 /* POSIÇÃO ONDE CRESCER OS FRUTOS */
     int x1, y1, id;
+
+    arvore_inicializar( 0, 0, 1700, 1.0, 0.0, 1.5, 600, 600, bitmap );
 
     while( 1 ){
 

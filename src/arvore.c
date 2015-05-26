@@ -1,7 +1,7 @@
 #include <allegro5/allegro.h>
 // #include <allegro5/allegro_font.h>
 // #include <allegro5/allegro_ttf.h>
-// #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -33,11 +33,11 @@ typedef struct _galho {
 
     int   id;
     int   temFilhos;
+    int   crescer;
 
     float tamanhoFolhas;
 
     posicao_t posicao;
-    bool_t crescer;
     bool_t criarFilhos;
 
     struct _galho *direita;
@@ -78,6 +78,10 @@ typedef struct {
     int id; // Contador para gerar id único para cada galho
     int offsetX;
     int offsetY;
+
+    bool_t crescer;
+
+    ALLEGRO_BITMAP *bmp;
 } Arvore;
 
 
@@ -85,7 +89,6 @@ typedef struct {
 Arvore arvore;
 PontosCrescimento pontosCrescimentoFrutas;
 PontosCrescimento pontosCrescimentoFolhas;
-
 
 
 int arvore_adicionaGalho( int, posicao_t, Galho*, float, float, float, float );
@@ -249,7 +252,7 @@ void arvore_calculaProporcaoXY( Ponto *p ){
 }
 //------------------------------------------------------------------------------
 void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeCrescimento, float proporcaoX, float proporcaoY,
-                         int offsetX, int offsetY ){
+                         int offsetX, int offsetY, ALLEGRO_BITMAP *bmp ){
 
     arvore.raiz         = NULL;//malloc( sizeof(Galho) );
     arvore.energiaTotal = energiaTotal;
@@ -274,6 +277,10 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
 
     srand( time(NULL) );
 
+//    arvore.bmp = al_create_sub_bitmap( bmp, 0, 0, 1280, 720 );
+    arvore.bmp = al_create_bitmap( 1280, 720 );
+    arvore.crescer = SIM;
+
     return;
 
 }
@@ -292,7 +299,8 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
     if ( g == NULL )
         return;
 
-    g->crescer = NAO;
+    g->crescer     = NAO;
+    arvore.crescer = NAO;
 
     float offsetY = 0;
     float offsetX = 0;
@@ -307,11 +315,13 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
          g->yi = g->pai->yf;
     }
 
-//    if ( offsetX < 0 )
-        g->xf += offsetX;
+    g->xf += offsetX;
+    g->yf += offsetY;
 
-//m    if ( offsetY < 0 )
-        g->yf += offsetY;
+    if ( offsetX == 0 && offsetY == 0 )
+        arvore.crescer = NAO;
+    else
+        arvore.crescer = SIM;
 
     int profundidadeGalhos = arvore_profundidadeGalho( g );
     int energiaLimite = (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100);
@@ -334,7 +344,8 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
             break;
         }
 
-        g->crescer = SIM;
+        g->crescer     = SIM;
+        arvore.crescer = SIM;
     }
 
     if ( ( (int)(g->energiaConsumida) == (int)((energiaLimite * 50) / 100) ) && !galhoTemFilhos( g ) )
@@ -352,9 +363,11 @@ void arvore_atualizaGalhos( Galho *g ){
         //g->xi = g->pai->xf;
         //g->yi = g->pai->yf;
 //    }
+    arvore.crescer = NAO;
 
-    if ( g->crescer == SIM )
+    if ( g->crescer == SIM ){
         g->energiaConsumida += sqrt( ( g->proporcaoCrescimentoX * g->proporcaoCrescimentoX ) + ( g->proporcaoCrescimentoY * g->proporcaoCrescimentoY ) );// * arvore.velocidadeCrescimento;
+    }
 
     //printf( "** Energia: %.4f\n", g->energiaConsumida);
 
@@ -524,7 +537,7 @@ int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
         novoGalho->xf = novoGalho->xi;
         novoGalho->yf = novoGalho->yi;
         arvore.raiz = novoGalho;
-        printf( "**Galho PAI criado. ID: %d\n", novoGalho->id );
+    //    printf( "**Galho PAI criado. ID: %d\n", novoGalho->id );
         return novoGalho->id;
     }
 
@@ -550,7 +563,7 @@ int arvore_adicionaGalho( int energiaRecebida, posicao_t posicao,
         break;
     }
 
-    printf( "**Galho criado. ID: %d\n", novoGalho->id );
+//    printf( "**Galho criado. ID: %d\n", novoGalho->id );
     return novoGalho->id;
 }
 //------------------------------------------------------------------------------
@@ -670,6 +683,9 @@ void desenhaFolhas( float cx, float cy, float radius ){
     ALLEGRO_COLOR green = al_map_rgb( 0, 200, 0 );
 
     al_draw_filled_circle( cx, cy, radius, green );
+
+//    bmp = arvore.bmp;
+//    al_draw_bitmap( arvore.bmp, 0, 0, 0 );
 }
 //------------------------------------------------------------------------------
 void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
@@ -677,12 +693,14 @@ void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
     if ( g == NULL )
         return;
 
-    ALLEGRO_COLOR black = al_map_rgb( 0, 0, 0 );
+    al_set_target_bitmap( arvore.bmp );
+
+
+    ALLEGRO_COLOR brown = al_map_rgb( 150, 50, 50 );
 
     float larguraGalho =  ( 1.0 / arvore_profundidadeGalho(g) ) * 30.0;
 
-    //al_set_target_bitmap( bmp );
-    al_draw_line( g->xi + arvore.offsetX, g->yi + arvore.offsetY, g->xf + arvore.offsetX, g->yf + arvore.offsetY, black, larguraGalho );
+    al_draw_line( g->xi + arvore.offsetX, g->yi + arvore.offsetY, g->xf + arvore.offsetX, g->yf + arvore.offsetY, brown, larguraGalho );
 
     int id = 0;
     int x, y;
@@ -693,7 +711,7 @@ void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
         Galho *ponta = arvore_procuraGalhoPeloID( arvore.raiz, id );
 
         if ( ponta->tamanhoFolhas < 80 )
-            ponta->tamanhoFolhas += 0.2;
+            ponta->tamanhoFolhas += 0.1;
 
         desenhaFolhas( x, y, ponta->tamanhoFolhas );
         desenhaFolhas( x + ponta->tamanhoFolhas / 2.0, y, ponta->tamanhoFolhas );
@@ -702,16 +720,32 @@ void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
         desenhaFolhas( x, y - ponta->tamanhoFolhas / 2.0, ponta->tamanhoFolhas );
 
         arvore_proximoPontoCrescimentoFolhas( &x, &y, &id );
+
     }
 
     desenha( g->esquerda, bmp );
     desenha( g->meio, bmp );
     desenha( g->direita, bmp );
 
+    al_set_target_bitmap( bmp );
+    al_draw_bitmap( arvore.bmp, 0, 0, 0 );
+
     return;
 }
 //------------------------------------------------------------------------------
 void arvore_desenha( ALLEGRO_BITMAP *bmp ){
+
+    // Não redesenha se a árvore parou de crescer. Carrega do buffer o último desenho armazenado
+    if ( arvore.crescer == NAO ){
+//        printf("nao crescer: carregando buffer\n");
+        al_set_target_bitmap( bmp );
+        al_draw_bitmap( arvore.bmp, 0, 0, 0 );
+        return;
+    }
+
+    al_set_target_bitmap( arvore.bmp );
+    al_clear_to_color(al_map_rgb(255,255,255));
+    al_set_target_bitmap( bmp );
 
     desenha( arvore.raiz, bmp );
     return;
