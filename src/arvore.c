@@ -15,6 +15,8 @@
 #include "random.h"
 
 #define MIN_ENERGIA_CRESCIMENTO 2
+#define MAX_ENERGIA_EXTRA 8
+#define FATOR_CRESCIMENTO_RAIZ 200; // em %
 
 typedef struct _galho {
 
@@ -78,6 +80,8 @@ typedef struct {
     int id; // Contador para gerar id único para cada galho
     int offsetX;
     int offsetY;
+    float energiaExtra; // se houver mais energia, repassa para todos os galhos e eles continuam crescendo.
+    float totalEnergiaExtra;//
 
     bool_t crescer;
     bool_t crescerFolhas;
@@ -282,6 +286,9 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
     arvore.crescer       = SIM;
     arvore.crescerFolhas = SIM;
 
+    arvore.energiaExtra      = 0;
+    arvore.totalEnergiaExtra = 0;
+
     colorBrown = al_map_rgb( 150, 50, 50 );
     colorGreen = al_map_rgb( 0, 200, 0 );
 
@@ -327,23 +334,54 @@ void arvore_cresceGalho( Galho *g, int velocidadeCrescimento ){
         arvore.crescer = SIM;
 
     int profundidadeGalhos = arvore_profundidadeGalho( g );
-    int energiaLimite = (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100);
+    // int energiaLimite = (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100);
+
+    int energiaLimite;
+
+    if ( g->posicao != RAIZ ) {
+        energiaLimite  = (g->energiaRecebida * (arvore.energiaLimite - (profundidadeGalhos * 2)) / 100);
+    }
+    else {
+        energiaLimite = FATOR_CRESCIMENTO_RAIZ;
+    }
+
+    // if ( g->energiaConsumida < energiaLimite && g->energiaRecebida > 0 ){
+    //     switch ( g->posicao ) {
+    //         case RAIZ:
+    //             g->yf -= (( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos) / 2;
+    //         break;
+    //         case ESQUERDA:
+    //             g->xf -= ( g->proporcaoCrescimentoX * velocidadeCrescimento ) * profundidadeGalhos + 2.0;
+    //             g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
+    //         break;
+    //         case MEIO:
+    //             g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
+    //         break;
+    //         case DIREITA:
+    //             g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento ) * profundidadeGalhos + 2.0;
+    //             g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
+    //         break;
+    //     }
+    //
+    //     g->crescer     = SIM;
+    //     arvore.crescer = SIM;
+    // }
 
     if ( g->energiaConsumida < energiaLimite && g->energiaRecebida > 0 ){
         switch ( g->posicao ) {
             case RAIZ:
-                g->yf -= (( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos) / 2;
+                g->yf -= (( g->proporcaoCrescimentoY * velocidadeCrescimento ) + profundidadeGalhos) / 2;
             break;
             case ESQUERDA:
-                g->xf -= ( g->proporcaoCrescimentoX * velocidadeCrescimento ) * profundidadeGalhos + 2.0;
-                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
+                g->xf -= ( g->proporcaoCrescimentoX * velocidadeCrescimento ) + 2.0;
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) + 1.0;
             break;
             case MEIO:
-                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) + 1.0;
             break;
             case DIREITA:
-                g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento ) * profundidadeGalhos + 2.0;
-                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) * profundidadeGalhos;
+                g->xf += ( g->proporcaoCrescimentoX * velocidadeCrescimento ) + 2.0;
+                g->yf -= ( g->proporcaoCrescimentoY * velocidadeCrescimento ) + 1.0;
             break;
         }
 
@@ -376,6 +414,13 @@ void arvore_atualizaGalhos( Galho *g ){
 
     arvore_cresceGalho( g, arvore.velocidadeCrescimento );
     atualizaPontosCrescimento( g );
+
+    if ( (int)arvore.totalEnergiaExtra <= (int)MAX_ENERGIA_EXTRA && g->posicao != RAIZ && arvore.crescer == SIM ){
+         arvore.energiaLimite += arvore.energiaExtra;
+         g->energiaRecebida += arvore.energiaExtra;
+         arvore.totalEnergiaExtra += arvore.energiaExtra;
+         arvore.energiaExtra = 0;
+    }
 
     // Adiciona novos galhos
     if ( g->criarFilhos && g->energiaConsumida >= 10 ){ // Galho cresceu o suficiente para poder criar filhos
@@ -496,12 +541,13 @@ void arvore_atualizaGalhos( Galho *g ){
     return;
 }
 //------------------------------------------------------------------------------
-void arvore_simulaArvore( int adicionaEnergia ){
+void arvore_simulaArvore( int energiaExtra ){
 //    printf("\nSIMULA ARVORE\n");
 //   for ( int i = 0; i <= arvore.energiaTotal; i += 1 /*arvore.velocidadeCrescimento*/ ){
 //        printf( "Contador simulacao: %d\n", i );
 //        printf( "\nID RAIZ: %d", arvore.raiz->id );
-        arvore_atualizaGalhos( arvore.raiz );
+    arvore.energiaExtra = energiaExtra;
+    arvore_atualizaGalhos( arvore.raiz );
 //   }
 
 //    arvore_imprime();
@@ -702,12 +748,13 @@ void calculaDesenhoFolhas( ALLEGRO_BITMAP *bmp ){
     while ( id != -1 ){
         Galho *ponta = arvore_procuraGalhoPeloID( arvore.raiz, id );
 
-        if ( ponta->tamanhoFolhas < 80 ){
+        int tamanhoFolhas = arvore_profundidadeGalho( ponta ) * 15;
+
+        if ( ponta->tamanhoFolhas < tamanhoFolhas ){
             ponta->tamanhoFolhas += 2.0;
             arvore.crescerFolhas = SIM;
         }
 
-        printf("desenha folhas: %.3f\n", ponta->tamanhoFolhas);
         desenhaFolhas( x, y, ponta->tamanhoFolhas );
         desenhaFolhas( x + ponta->tamanhoFolhas / 2.0, y, ponta->tamanhoFolhas );
         desenhaFolhas( x - ponta->tamanhoFolhas / 2.0, y, ponta->tamanhoFolhas );

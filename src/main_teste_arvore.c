@@ -74,9 +74,15 @@ int main( int argc, char **argv ){
 
 //    al_set_target_bitmap( buffer );
 /* POSIÇÃO ONDE CRESCER OS FRUTOS */
-    int x1, y1, id;
+//    int x1, y1, id;
 
-    arvore_inicializar( 0, 0, 1700, 1.0, 0.0, 1.5, 600, 600 );
+//    arvore_inicializar( 0, 0, 1700, 1.0, 0.0, 1.5, 600, 600 );
+    arvore_inicializar( 0, 0, 1200, 1.0, 0.0, 1.5, 600, 600 );
+
+    int contadorEnergia = 0;
+    int energiaExtra = 0;
+
+    int fpsCounter = 0;
 
     while( 1 ){
 
@@ -90,17 +96,27 @@ int main( int argc, char **argv ){
             break;
         }
 
-        al_clear_to_color(al_map_rgb(255,255,255));
 
-        arvore_simulaArvore( 0 );
-        arvore_desenha( bitmap );
+        contadorEnergia++;
 
+        // if ( contadorEnergia % 10 == 0 )
+        //     energiaExtra = 1;
+
+        if ( fpsCounter % 2 == 0 ){
+            al_clear_to_color(al_map_rgb(255,255,255));
+            arvore_simulaArvore( energiaExtra );
+            arvore_desenha( bitmap );
+            energiaExtra = 0;
+
+            al_flip_display();
+        }
+
+        fpsCounter++;
         /* Retorna os pontos onde os frutos podem crescer */
-        arvore_proximoPontoCrescimentoFrutas( &x1, &y1, &id );
+//        arvore_proximoPontoCrescimentoFrutas( &x1, &y1, &id );
         //printf( "Proximo ponto x: %d  y: %d  id: %d\n", x1, y1, id );
 
 
-        al_flip_display();
     }
 
 
