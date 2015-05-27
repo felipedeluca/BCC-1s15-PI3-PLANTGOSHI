@@ -76,7 +76,7 @@ int main( int argc, char **argv ){
 /* POSIÇÃO ONDE CRESCER OS FRUTOS */
     int x1, y1, id;
 
-    arvore_inicializar( 0, 0, 1700, 1.0, 0.0, 1.5, 600, 600, bitmap );
+    arvore_inicializar( 0, 0, 1700, 1.0, 0.0, 1.5, 600, 600 );
 
     while( 1 ){
 
@@ -92,7 +92,7 @@ int main( int argc, char **argv ){
 
         al_clear_to_color(al_map_rgb(255,255,255));
 
-        arvore_simulaArvore();
+        arvore_simulaArvore( 0 );
         arvore_desenha( bitmap );
 
         /* Retorna os pontos onde os frutos podem crescer */
