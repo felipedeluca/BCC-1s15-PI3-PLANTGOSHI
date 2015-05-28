@@ -99,17 +99,17 @@ int main( int argc, char **argv ){
 
         contadorEnergia++;
 
-        // if ( contadorEnergia % 10 == 0 )
-        //     energiaExtra = 1;
+        if ( contadorEnergia % 10 == 0 )
+            energiaExtra = 1;
 
-        if ( fpsCounter % 2 == 0 ){
+//        if ( fpsCounter % 2 == 0 ){
             al_clear_to_color(al_map_rgb(255,255,255));
             arvore_simulaArvore( energiaExtra );
             arvore_desenha( bitmap );
             energiaExtra = 0;
 
             al_flip_display();
-        }
+//        }
 
         fpsCounter++;
         /* Retorna os pontos onde os frutos podem crescer */

@@ -87,6 +87,7 @@ typedef struct {
     bool_t crescerFolhas;
 
     ALLEGRO_BITMAP *bmp;
+    ALLEGRO_BITMAP *bmpFolhas;
 } Arvore;
 
 
@@ -96,6 +97,7 @@ PontosCrescimento pontosCrescimentoFrutas;
 PontosCrescimento pontosCrescimentoFolhas;
 
 ALLEGRO_COLOR colorBrown, colorGreen;
+
 int arvore_adicionaGalho( int, posicao_t, Galho*, float, float, float, float );
 Galho *arvore_procuraGalhoPeloID( Galho *g, int id );
 int arvore_profundidadeGalho( Galho *g );
@@ -251,7 +253,7 @@ void arvore_imprime( void );
 //------------------------------------------------------------------------------
 void arvore_calculaProporcaoXY( Ponto *p ){
 
-    p->x = ( randomInt( 40, 90 ) * 1.00 ) / 100;
+    p->x = ( randomInt( 50, 90 ) * 1.00 ) / 100;
     p->y = ( randomInt( 30, 80 ) * 1.00 ) / 100;
 
 }
@@ -282,7 +284,8 @@ void arvore_inicializar( float xi, float yi, int energiaTotal, float velocidadeC
 
     srand( time(NULL) );
 
-    arvore.bmp = al_create_bitmap( 1280, 720 );
+    arvore.bmp       = al_create_bitmap( 1280, 720 );
+    arvore.bmpFolhas = al_create_bitmap( 1280, 720 );
     arvore.crescer       = SIM;
     arvore.crescerFolhas = SIM;
 
@@ -430,7 +433,7 @@ void arvore_atualizaGalhos( Galho *g ){
         int quantosGalhos;
         int profundidadeGalhos = arvore_profundidadeGalho( g );
 
-        if ( profundidadeGalhos <= 2 )
+        if ( profundidadeGalhos <= 3 )
             quantosGalhos = 3;
         else
             quantosGalhos  = randomInt( 0, 3 );
@@ -642,8 +645,8 @@ Galho *arvore_procuraGalhoPeloID( Galho *g, int id ){
 void arvore_atualizaXYGalho( float *x, float *y, int id ){
 
     Galho *g = arvore_procuraGalhoPeloID( arvore.raiz, id );
-    *x = g->xf;
-    *y = g->yf;
+    *x = g->xf + arvore.offsetX;
+    *y = g->yf + arvore.offsetY;
 
 }
 //------------------------------------------------------------------------------
@@ -731,6 +734,7 @@ void arvore_imprime( void ){
 void desenhaFolhas( float cx, float cy, float radius ){
 
     al_draw_filled_circle( cx, cy, radius, colorGreen );
+//    al_draw_filled_circle( cx, cy, radius, al_map_rgba_f(0, 0.5, 0, 0.3 ) );
 
 //    bmp = arvore.bmp;
 //    al_draw_bitmap( arvore.bmp, 0, 0, 0 );
@@ -813,18 +817,24 @@ void arvore_desenha( ALLEGRO_BITMAP *bmp ){
 //        printf("nao crescer: carregando buffer\n");
         al_set_target_bitmap( bmp );
         al_draw_bitmap( arvore.bmp, 0, 0, 0 );
+//        al_draw_bitmap( arvore.bmpFolhas, 0, 0, 0 );
+        al_draw_tinted_bitmap( arvore.bmpFolhas, al_map_rgba_f(0, 0.4, 0, 0.95 ), 0, 0, 0 );
         return;
     }
 
     al_set_target_bitmap( arvore.bmp );
-    al_clear_to_color(al_map_rgb(255,255,255));
-//    al_set_target_bitmap( bmp );
+    al_clear_to_color(al_map_rgba(0,0,0, 0));
 
     desenha( arvore.raiz, bmp );
+
+    al_set_target_bitmap( arvore.bmpFolhas );
+    al_clear_to_color(al_map_rgba(0,0,0, 0));
     calculaDesenhoFolhas( bmp );
 
     al_set_target_bitmap( bmp );
     al_draw_bitmap( arvore.bmp, 0, 0, 0 );
+//    al_draw_bitmap( arvore.bmpFolhas, 0, 0, 0 );
+    al_draw_tinted_bitmap( arvore.bmpFolhas, al_map_rgba_f(0, 0.4, 0, 0.95 ), 0, 0, 0 );
     return;
 
 }
