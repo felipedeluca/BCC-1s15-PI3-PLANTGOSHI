@@ -755,7 +755,7 @@ void calculaDesenhoFolhas( ALLEGRO_BITMAP *bmp ){
         int tamanhoFolhas = arvore_profundidadeGalho( ponta ) * 15;
 
         if ( ponta->tamanhoFolhas < tamanhoFolhas ){
-            ponta->tamanhoFolhas += 2.0;
+            ponta->tamanhoFolhas += 1.0;
             arvore.crescerFolhas = SIM;
         }
 
