@@ -644,6 +644,9 @@ Galho *arvore_procuraGalhoPeloID( Galho *g, int id ){
 //------------------------------------------------------------------------------
 void arvore_atualizaXYGalho( float *x, float *y, int id ){
 
+    *x = 0;
+    *y = 0;
+
     Galho *g = arvore_procuraGalhoPeloID( arvore.raiz, id );
     *x = g->xf + arvore.offsetX;
     *y = g->yf + arvore.offsetY;
@@ -658,10 +661,6 @@ int imprime( Galho *g ){
 
     int quantidadeGalhos = 0;
     int quantidadeFilhos = 0;
-
-    // int profundidadeEsquerda = 0;
-    // int profundidadeMeio     = 0;
-    // int profundidadeDireita  = 0;
 
     quantidadeGalhos += 1 + imprime( g->esquerda );
     quantidadeGalhos += 1 + imprime( g->meio );
@@ -735,9 +734,6 @@ void desenhaFolhas( float cx, float cy, float radius ){
 
     al_draw_filled_circle( cx, cy, radius, colorGreen );
 //    al_draw_filled_circle( cx, cy, radius, al_map_rgba_f(0, 0.5, 0, 0.3 ) );
-
-//    bmp = arvore.bmp;
-//    al_draw_bitmap( arvore.bmp, 0, 0, 0 );
 }
 //------------------------------------------------------------------------------
 void calculaDesenhoFolhas( ALLEGRO_BITMAP *bmp ){
@@ -777,34 +773,13 @@ void desenha( Galho *g, ALLEGRO_BITMAP *bmp ){
     if ( g == NULL )
         return;
 
-//    al_set_target_bitmap( arvore.bmp );
-
     float larguraGalho =  ( 1.0 / arvore_profundidadeGalho(g) ) * 30.0;
 
     al_draw_line( g->xi + arvore.offsetX, g->yi + arvore.offsetY, g->xf + arvore.offsetX, g->yf + arvore.offsetY, colorBrown, larguraGalho );
 
-    // while ( id > -1 ){
-    //     Galho *ponta = arvore_procuraGalhoPeloID( arvore.raiz, id );
-    //
-    //     if ( ponta->tamanhoFolhas < 80 )
-    //         ponta->tamanhoFolhas += 0.1;
-    //
-    //     desenhaFolhas( x, y, ponta->tamanhoFolhas );
-    //     desenhaFolhas( x + ponta->tamanhoFolhas / 2.0, y, ponta->tamanhoFolhas );
-    //     desenhaFolhas( x - ponta->tamanhoFolhas / 2.0, y, ponta->tamanhoFolhas );
-    //     desenhaFolhas( x, y + ponta->tamanhoFolhas / 2.0, ponta->tamanhoFolhas );
-    //     desenhaFolhas( x, y - ponta->tamanhoFolhas / 2.0, ponta->tamanhoFolhas );
-    //
-    //     arvore_proximoPontoCrescimentoFolhas( &x, &y, &id );
-    //
-    // }
-
     desenha( g->esquerda, bmp );
     desenha( g->meio, bmp );
     desenha( g->direita, bmp );
-
-    // al_set_target_bitmap( bmp );
-    // al_draw_bitmap( arvore.bmp, 0, 0, 0 );
 
     return;
 }

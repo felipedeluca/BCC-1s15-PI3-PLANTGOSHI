@@ -165,12 +165,36 @@ Utilizamos convers\~ao do modelo RGB em escala de cinza, aplicando os m\'etodos 
 \subsection{Simulação de árvore}
 Para que a árvore tenha um aspecto e comportamento mais próximo de uma árvore, elaboramos uma solução que inclui
 a matéria estudada na disciplina de Estrutura de Dados e alguns algoritmos para simular o crescimento da árvore,
-dos galhos e dos frutos.
-\subsubsection{Estrutura da árvore}
-Adotamos a estrutura de dados de árvore ternária para contruir a árvore do jogo. Essa estrutura é constituida, basicamente,
-em pontos que se dividem no máximo em três partes
+dos galhos e dos frutos. Basicamente a \'arvore cresce de acordo com um valor de energia de crescimento fornecida
+a ela logo no in\'icio do jogo. O jogador tem a oportunidade de fornecer mais energia ao longo da partida, o que
+ir\'a proporcionar uma \'arvore mais desenvolvida e com mais frutos para serem colhidos.
 
-\subsubsection{Primeiros experimentos}
+\subsubsection{Estrutura da árvore}
+Adotamos a estrutura de dados de \'arvore ternária para construir a \'arvore do jogo. Essa estrutura \'e constituida, basicamente,
+em pontos de crescimento que se dividem no m\'aximo em tr\^es partes cada um. Essas partes d\~ao origem aos galhos que crescem at\'e
+determinado tamanho, decidido aleat\'oriamente. As pontas de cada galho s\~ao novos pontos de crescimento,
+que se dividem de novo e d\~ao origem a novos galhos. Esse processo se repete at\'e que determinado limite seja atingido.
+
+\subsubsection{Crescimento}
+Para que os galhos crescam controladamente mas mantendo certa diferencia\c c\~ao em tamanho e
+dire\c c\~ao entre um e outro, estabelecemos um crit\'erio que chamamos de energia de crescimento e energia limite.
+A energia limite determina o quanto cada  galho da \'arvore vai crescer e \'e estabelecido atrav\'es de uma porcentagem,
+calculada a partir do total de energia de crescimento fornecida para o galho. O valor da energia limite pode
+ser alterado de acordo com a intera\c c\~ao do usu\'ario ao longo do jogo, o que pode proporcionar uma \'arvore mais
+mais ou menos desenvolvida.
+
+Enquanto os galhos crescem eles podem dar origem a novos galhos. Isso \'e determinado ap\'os ser consumida uma determinada
+quantidade de energia de crescimento fornecida ao galho. Isso permite que a simula\c c\~ao de crescimento da \'arvore
+fique mais natural. A \'unica exce\c c\~ao \'e o tronco da \'arvore, que tem o crescimento
+mais controlado.
+
+\subsubsection{Pontos de crescimento de frutos e folhas}
+Os pontos de crescimento de frutos e folhas s\~ao determinados de acordo com o m\'inimo de energia que o galho
+tem para crescer. Caso esse valor seja igual ou abaixo de determinado crit\'erio, o algoritmo de simula\c c\~ao assume
+que n\~ao ir\~ao surgir novos galhos a partir do galho atual, ainda durante a fase de crescimento. Com isso determinado,
+o galho passa a produzir folhas e frutos ao inv\'es de novas ramifica\c~ao de galhos.
+
+\subsection{Primeiros experimentos}
 Para o reconhecimento de uma cor emitida por um LED do Arduino, fizemos uma otimiza\c c\~ao f\'isica
 com um peda\c co de papel que reduzisse o brilho da luz, por\'em ainda n\~ao \'e suficiente para
 o reconhecimento total.
