@@ -1,12 +1,13 @@
 \documentclass[12pt]{article}
-
 \usepackage{sbc-template}
-
 \usepackage{graphicx,url}
-
+\usepackage{gensymb}
 %\usepackage[brazil]{babel}   
 \usepackage[latin1]{inputenc}  
+\usepackage{caption3}
+\captionsetup{font=footnotesize}
 
+\hyphenation{ algo-ritmos co-lher}
      
 \sloppy
 
@@ -23,7 +24,17 @@
 \maketitle
      
 \begin{resumo} 
-[ ... ]
+O projeto foi desenvolvido para a disciplina Projeto Integrador III: Sistema Aut\^onomo,
+com o objetivo de aplicar t\'ecnicas e implementar algoritmos de vis\~ao computacional
+em um jogo de tema livre. Para tal, criamos um jogo digital em 2D, desenvolvido em linguagem C,
+onde o jogador deve cuidar de uma \'arvore em seu processo de crescimento, com o objetivo
+principal de colher os melhores frutos. Para isso, o jogador ter\'a como ferramenta de
+intera\c c\~ao uma varinha m\'agica, que permitir\'a aplicar poderes que interajam
+com os elementos dentro do jogo, contribuindo com o crescimento da \'arvore e impedindo
+que pragas ataquem os frutos. A intera\c c\~ao da varinha com o jogo ser\'a por
+interm\'edio do reconhecimento dela nas imagens capturadas pela c\^amera de video
+instalada no computador, processadas por algoritmos baseados em levantamento bibliogr\'afico.
+
 \end{resumo}
 
 \section{Introdu\c c\~ao}
@@ -50,119 +61,142 @@
  o jogo termina.
  
 \section{Estrutura principal do jogo}
+
 \subsection{Layout}
-Na parte inferior, aparecem os \'icones com os poderes dispon\'iveis, cada uma com uma cor diferente
-(azul: hidratar, vermelho: combater, verde: tocar a m\'usica); na parte superior esquerda,
-uma barra de progresso do crescimento da \'arvore (branco, verde claro, verde escuro);
-na parte superior central, uma barra de progresso da qualidade dos frutos; superior direita,
-uma barra de progresso da sa\'ude da planta; esquerdo central, um painel de controle entre o calor,
-a hidrata\c c\~ao da \'arvore e ocorr\^encia de pragas.
-
-\subsection{Componentes de Tela}
-\begin{itemize}
-\item Barras de progresso de crescimento da \'arvore, amadurecimento dos frutos e de sa\'ude da planta;
-\item Painel de Controle com 3 dire\c c\~oes (\'agua, calor e praga);
-\item \'Icones de poderes; \'Arvore (tronco central, galhos, ra\'izes, folhas, frutos), Pragas (ervas daninhas e larvas) e Cesta;
-\item Ferramentas de intera\c c\~ao (m\~aozinha, nota musical e gota d'agua).
-\end{itemize}
-
-\subsection{Jogabilidade}
-o jogador acessa os poderes com a sua varinha conectada ao Arduino encostando
-o objeto na tela e poder\'a aplicar o poder selecionado em qualquer parte da tela,
-encostando novamente. Para isso, estar\~ao presentes duas c\^ameras: uma frontal
-apontado para o jogador (altura e largura) e outra lateral (profundidade).
-Para representar os poderes selecionados no momento, a varinha ter\'a um LED
-correspondente a cor do poder (branco: nada selecionado, azul, vermelho e verde).
+[SCREENSHOT DA TELA]
 
 \subsection{Etapas}
+A partida do jogo \'e dividida em tr\^es principais etapas: 
+
 \begin{enumerate}
-\item \textbf{Nascimento e Crescimento da \'Arvore:} \'e contemplado pelo processo desde o plantio
- da semente at\'e a \'arvore crescer e brotar atingindo um tamanho razo\'avel e que j\'a det\'em a
- capacidade de criar galhos e plantas;
-\item \textbf{Amadurecimento dos Frutos:} \'e composto pelo momento onde a planta j\'a
- come\c ca a dar seus primeiros frutos;
+\item \textbf{Nascimento e Crescimento da \'Arvore:} o jogador dever\'a estar atento a regar a \'arvore sempre que
+necess\'ario e, ao mesmo tempo, combater ervas daninhas que ir\~ao crescer ao p\'e dela.
+\item \textbf{Amadurecimento dos Frutos:} os frutos ir\~ao crescer mais r\'apido se o jogador utilizar notas musicais.
+Tamb\'em ir\~ao crescer pragas nesses frutos, que podem ser combatidas com o poder de remo\c c\~ao de pragas.
 \item \textbf{Colhimento dos Frutos:} \'e o momento no qual os frutos cresceram e amadureceram
- o suficiente para serem recolhidos e depositados numa cesta.
+ o suficiente para serem colhidos, contabilizando pontos para o jogador.
 \end{enumerate}
 
-\subsection{Simula\c c\~ao}
-Iniciando o jogo, a \'arvore est\'a com suas ra\'izes dentro do solo e um pequeno e fino caule
- brotando. Nesse momento, 2 poderes aparecem na tela: azul (lado esquerdo) e vermelho (centro)
- (O poder da nota musical fica desabilitado). Passa um pequeno per\'iodo de tempo e o painel
- de controle come\c ca a tender para a cor azul, indicando a necessidade de regar planta.
- O jogador seleciona com a varinha a gota d'agua (encostando na tela), o LED da varinha
- troca de cor (de branco para azul) e come\c ca a aplicar a \'agua na planta para que cres\c ca
- verticalmente (encostando na tela). A c\^amera lateral detecta a sele\c c\~ao da varinha e
- a aplica\c c\~ao. A c\^amera frontal detecta a posi\c c\~ao (coordenada x, y) que a varinha
- tocou \`a tela. Ap\'os alguns segundos (10 segundos) o poder de \'agua termina e os \'icones
- ficam travados por um tempo (dependendo do n\'ivel) para recarregar e novamente estar
- habilitado na tela. A barra de progresso do crescimento da \'arvore avança um pouco
- (ainda permanecendo na cor branca) e a barra de controle centraliza novamente, indicando
- equil\'ibrio das for\c cas. Ao mesmo tempo, a barra de sa\'ude tamb\'em avan\c ca um pouco.
+\section{Vis\~ao Computacional}
 
- Ao mesmo tempo, aparecem ervas daninhas crescendo junto a planta. O painel de controle indica
- a necessidade de aplicar fogo nas mesmas, tendendo para a cor amarela. Nesse momento, o jogador
- seleciona a m\~aozinha e aplica o fogo para queimar as ervas. Ap\'os alguns segundos (10 segundos),
- o poder termina e novamente todos ficam travados por um tempo (dependendo do n\'ivel) desabilitado.
- Ao final, o painel de controle \'e centralizado novamente.
- 
- Deve se ter o cuidado para n\~ao usar excessivamente o poder do fogo para n\~ao queimar a planta tamb\'em.
- Isso ser\'a indicado no painel de controle com o indicador tendendo para a cor vermelha.
- 
- Assim que a \'arvore estiver crescido consideravelmente (a definir), os poderes ficam dispostos na parte
- inferior da tela da seguinte maneira: azul (lado esquerdo), verde (direito) e vermelho (centro).
-
- Al\'em disso, a medida que o jogo segue come\c cam a aparecer algumas notas musicais flutuando na tela.
- O jogador seleciona a nota musical e aplica na planta para melhorar o crescimento e florescimento da \'arvore
- (espessura) e o crescimento qualitativo dos frutos. Novamente, o poder dura quest\~ao de segundos
- (10 segundos) at\'e que termina e, logo em seguida, todos ficam travados por algum tempo (dependendo do n\'ivel).
-
- Ao mesmo tempo, o jogador deve regar a \'arvore (azul) para que continue crescendo (verticalmente) e combater
- as pragas que come\c cam a aparecer nas folhas e flores (vermelho).
- 
- Nesse momento, come\c cam a crescer os primeiros frutos e, para isso, \'e necess\'ario continuar regando
- a planta, combatendo as pragas e tocando as notas musicais (crescimento dos frutos).
-
- Finalmente, o jogador atinge a \'ultima parte do jogo que \'e constitu\'ida pela colheita dos frutos,
- j\'a em sua condi\c c~ao ideal para tal a\c c\~ao.
-
- Nessa \'ultima etapa o jogador deve ser r\'apido para colher os frutos sem que apodre\c cam (azul, lado direito)
- e, ao mesmo tempo, combater as pragas que crescem e progridem a cada instante (vermelho, lado esquerdo).
- Essas dever\~ao ser realizadas atendendo ao tempo limite imposto sobre aquela etapa (f\'acil: 2 min; m\'edio:
- 1 min; difícil: 30 segs).
- 
- Novos frutos v\~ao nascendo ao mesmo tempo que outros v\~ao amadurecendo at\'e apodrecer. Ent\~ao, \'e
- necess\'aria a percep\c c\~ao de tudo o que ocorre naquele instante, para saber qual for\c ca selecionar
- e qual jogada escolher, visando a sa\'ude da \'arvore e a qualidade dos frutos.
- 
- Ao fim dessa etapa, \'e atribu\'ida uma pontua\c c\~ao ao jogador pela atua\c c\~ao completa e o jogo se
- d\'a por encerrado.
-
-\section{Algoritmos}
-\subsection{Vis\~ao Computacional}
-
-Compreendendo a parte de vis\~ao computacional, est\'a sendo feito um levantamento bibliogr\'afico
+Compreendendo a parte de vis\~ao computacional, foi realizado um levantamento bibliogr\'afico
 referente ao processamento digital de imagens, reconhecimento de padr\~oes em imagens, opera\c c\~oes
-aritm\'eticas e um estudo aprofundado sobre o modelo HSV (Hue, Saturation e Value ou Brightness).
+aritm\'eticas e um estudo aprofundado sobre os modelos de cores, sua natureza e suas caracter\'isticas principais.
 
-\subsection{Espa\c co de cores}
-\subsubsection{Espa\c co de cor HSV}
-Foi poss\'ivel executar alguns testes sobre os pixels capturados da imagem de uma c\^amera,
-descobrindo o grau da cor pura (Matiz) e as faixas representada por cada cor, a porcentagem de satura\c c\~ao
-da cor (Pureza) e a porcentagem de brilho (Valor), apenas convertendo do modelo RGB para o HSV.
+\subsection{Metodologia geral}
+Com base nos algoritmos descritos em \textbf{~\ref{sec:alg}} , foi criada uma fun\c c\~ao de vis\~ao computacional que aplica cada um desses
+algoritmos para retirar informa\c c\~oes sobre os pixels da imagem.
 
-Foram realizadas tamb\'em algumas opera\c c\~oes sobre os pixels como a redu\c c\~ao da quantidade
-das poss\'iveis cores aparentes pela imagem, dividindo a composi\c c\~ao do RGB por um fator (constante).
-Foi poss\'ivel perceber que quanto maior o fator, menor a quantidade de cores poss\'iveis.
+Primeiro, o canal RGB \'e convertido em HSV antes e ap\'os a aplica\c c\~ao do efeito de redu\c c~ao de cor para
+cruzar as informa\c c\~oes de luminosidade com a cor espec\'ifica do LED a ser detectado pelo algoritmo, respectivamente.
+
+Ap\'os isso feito, \'e armazenado numa Matriz Bin\'aria a regi\~ao do LED, definindo o valor 1 para pixel com
+a cor e luminosidade detectada e 0 para n\~ao detectada.
+
+Essa matriz passa por uma sequ\^encia de Eros\~oes e Dilata\c c\~oes at\'e que a regi\~ao principal seja destacada
+e os ru\'idos eliminados. Essas opera\c c\~oes ocorrem por interm\'edio de uma matriz chamada de M\'ascara.
+
+Posteriormente, na matriz bin\'aria \'e verificada a quantidade de massas brancas presentes e, caso haja mais de uma,
+o LED \'e simplesmente ignorado.
+
+Caso haja apenas uma massa, \'e calculada a m\'edia das posi\c c\~oes x e y onde os pixels est\~ao acesos e \'e devolvida
+uma coordenada (x, y) central. Para isso, \'e foi criada uma estrutura chamada Vis\~ao Computacional que armazena
+o par ordenado da regi\~ao central do LED, a cor detectada pelo mesmo e faixa de luminosidade que \'e testada no momento
+da calibra\c c\~ao da c\^amera pelo algoritmo.
+
+\subsection{Algoritmos utilizados\label{sec:alg}}
+
+\subsubsection{HSV e RGB}
+Cada pixel de uma imagem extra\'ida da c\^amera do computador no modelo de cores RGB (Red, Green, Blue) \'e convertido em
+HSV / HSB (Hue, Saturation, Value / Brightness), permitindo descobrir o grau da cor pura (Matiz), as faixas representada por cada cor,
+a porcentagem de satura\c c\~ao da cor (Pureza) e a porcentagem de brilho (Valor).
+
+O H \'e a matiz e \'e medida em graus compreendendo valores de 0\degree a 359\degree.
+A faixa de cada uma das seis cores principais (prim\'arias e secund\'arias) \'e definida numa margem de 60 graus.
+As faixas s\~ao classificadas da seguinte maneira: Vermelho (0\degree a 59\degree), Amarelo (60\degree a 119\degree), Verde (120\degree a 179\degree),
+Ciano (180\degree a 239\degree), Azul (240\degree a 299\degree) e Magenta (300\degree a 359\degree).
+O S \'e a satura\c c\~ao e \'e medida em porcentagem nos valores de 0 a 100\%.
+Finalmente, o V \'e o brilho e medido tamb\'em em porcentagem, (0 a 100\%). Como observa\c c\~ao importante, \'e possível notar
+que as cores branco e preto s\~ao definidas de acordo com o valor de V: quando se aproxima de 0, emite a cor preta,
+e quando se aproxima de 100, branca.
+
+Por exemplo, para reconhecer a luz do LED, \'e poss\'ivel por interm\'edio de uma porcentagem alta
+do V (Valor de brilho) e sua cor pela faixa de H (Matiz).
+
+Para manipular essa representa\c c\~ao, foi necess\'ario a cria\c c\~ao de uma estrutura chamada Pixel
+que deve armazenar todos os dados de cores de apenas um pixel e a implementa\c c\~ao de dois algoritmos
+que compreendem as convers\~oes nos dois sentidos: RGB para HSV e HSV para RGB.
+
+A fim de padronizar, foram implementadas tamb\'em algumas fun\c c\~oes de formata\c c\~ao: convers\~ao de
+um valor decimal para porcentagem (S e V), convers\~ao de um grau para um valor de 0 a 5 (H) e convers\~ao
+de canais de cores RGB em um valor decimal entre 0 e 1.
+
+Al\'em disso, foram desenvolvidas fun\c c\~oes complementares de m\'aximo e m\'inimo dentre tr\^es valores (R, G e B).
+
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=0.15]{img/HSV_color_solid_cylinder_alpha_lowgamma.png}
+		\footnotesize \caption{Representa\c c\~ao tridimensional do espa\c co de cor HSV. Cr\'editos: SharkD. http://en.wikipedia.org/wiki/HSL\_and\_HSV }
+	\end{center}
+	\end{figure}	
+
 
 \subsubsection{Escala de cinza}
-Utilizamos convers\~ao do modelo RGB em escala de cinza, aplicando os m\'etodos de suavidade
-((m\'aximo(R, G, B) + m\'inimo(R, G, B)) / 2), m\'edia ((R + G + B) / 3) e de luminosidade
-(0.21 x R + 0.72 x G + 0.07 x B ou tamb\'em 0.2989 x R + 0.5870 x G + 0.1140 x B).
+Os valores RGB de um pixel podem ser convertidos em escala de cinza por uma s\'erie de m\'etodos.
+Com esse fim, foi escolhido o m\'etodo de escalas fixas correspondendo a cada um dos canais RGB.
+\'E efetuada a seguinte opera\c c\~ao sobre cada pixel:
 
-\subsection{Reconhecimento de objetos}
+\texttt{\small \textbf{R} x 0,3 + \textbf{G} x 0,51 + \textbf{B} x 0,18}
 
-\subsection{Simula\c c\~ao da \'arvore}
+\noindent Dessa maneira, cada pixel assume apenas um valor e, ao mesmo tempo, \'e mantida uma escala para cada valor RGB,
+levando em considera\c c\~ao a sua maior tonalidade.
+
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=1.0]{img/1200px-Beyoglu_4671_tricolor.png}
+		\footnotesize \caption{Convers\~ao de canais de cores para escala de cinza. Cr\'editos: Nevit Dilmen. http://en.wikipedia.org/wiki/Grayscale }
+	\end{center}
+	\end{figure}	
+
+
+\subsubsection{Redu\c c\~ao de cores}
+A redu\c c\~ao de cores \'e uma t\'ecnica que tem por objetivo facilitar o reconhecimento de uma regi\~ao espec\'ifica,
+diminuindo as cores vis\'iveis e tornando uma regi\~ao mais destacada e isolada que as demais.
+Para tal, \'e usada a seguinte opera\c c\~ao sobre cada canal RGB:
+
+\texttt{\small Canal = Canal x Fator + Fator / 2}
+
+\noindent sendo o fator um valor inteiro que define a propor\c c\~ao da quantidade cores que se quer diminuir na imagem.
+Exemplos de Fatores: 2, 16, 64, 128. Quanto maior o fator, menor a quantidade de cores vis\'iveis.
+
+\subsubsection{Eros\~ao e dilata\c c\~ao}
+A Eros\~ao e a Dilata\c c\~ao s\~ao t\'ecnicas de filtragem com o objetivo de reduzir ru\'idos presentes na imagem,
+que possam dificultar a detec\c c\~ao de pontos principais na tela.
+
+Os ru\'idos podem ser causados por uma s\'erie de fatores, dentre eles limita\c c\~oes da c\^amera presente no computador
+e presen\c ca de pontos isolados na tela que tenham caracter\'isticas similares aos procurados.
+
+A Eros\~ao trata de eliminar os pontos isolados na imagem, os quais n\~ao possuem outros em destaque em sua vizinhan\c ca.
+
+A Dilata\c c\~ao trata de aumentar os pontos isolados na imagem, consistindo no processo contr\'ario da Eros\~ao.
+
+Com uma sequ\^encia razo\'avel de opera\c c\~oes de Eros\~ao e Dilata\c c\~ao, a quantidade de ru\'idos \'e descartada,
+ao mesmo passo que a regi\~ao que deve ser destacada \'e mantida em seu tamanho original.
+
+\subsubsection{Controle de massas}
+Visando uma defini\c c\~ao exata e correta do ponto central que deve ser devolvido pela fun\c c\~ao da vis\~ao computacional,
+foi necess\'ario a implementa\c c\~ao de um mecanismo para ter ideia caso outras massas brancas al\'em da principal (o LED)
+est\'a sendo retornada e, com isso, comprometendo a jogabilidade do jogo.
+
+Essa fun\c c\~ao analisa a vizinhan\c ca de cada um dos pixels da imagem contabilizando as massas brancas presentes em tela.
+
+Para isso, \'e criada uma estrutura bidimensional chamada Matriz de V\'ertices, onde cada v\'ertice armazena informa\c c\~oes
+relevantes sobre cada pixel: valor definindo se o pixel está aceso (1 - branco) ou apagado (0 - preto) e o numero de massa
+definido por uma vari\'avel contadora.
+
+Ao final, o algoritmo retorna um n\'umero inteiro compreendendo a quantidade de massas brancas encontradas.
+
+\section{Simula\c c\~ao da \'arvore}
 
 Adotamos a estrutura de dados de \'arvore tern\'aria para construir a \'arvore do jogo. Essa estrutura \'e basicamente constituida
 em pontos de crescimento que se dividem no m\'aximo em tr\^es partes cada um. Essas partes d\~ao origem aos galhos que crescem at\'e
@@ -220,7 +254,7 @@ o galho passa a produzir folhas e frutos ao inv\'es de novas ramifica\c c\~ao de
 	\begin{figure}[ht!]
 	\begin{center}
 		\includegraphics[scale=0.15]{img/PI3_Arvore.png}
-		\caption{\footnotesize {Estrutura da \'arvore e pontos de crescimento de frutos e folhas.} }
+		\footnotesize \caption{Estrutura da \'arvore e pontos de crescimento de frutos e folhas }
 	\end{center}
 	\end{figure}	
 
@@ -234,19 +268,30 @@ a proximidade da luz com a c\^amera e uma otimiza\c c\~ao afim de isolar a cor d
 ignorando as outras cores similares e aparentes na c\^amera.
 
 \section{Bibliotecas}
-\subsection{OpenCV}
-\subsection{Allegro}
+\subsection{OpenCV 2.4.11}
+OpenCV (Open Source Computer Vision Library)
+\'e uma biblioteca de c\'odigo aberto de vis\~ao computacional e aprendizado de m\'aquina,
+desenvolvida para dar suporte a aplicativos que requerem processamento de imagens.
+  
+\subsection{Allegro 5.0}
+O Allegro \'e uma biblioteca multiplataforma de programa\c c\~ao voltada para desenvolvimento de jogos. Ela
+oferece suporte para programa\c c\~ao baixo n\'ivel em C e C++, ou seja, fornece ferramentas para que o usu\'ario
+desenvolva sua pr\'opria programa\c c\~ao de jogo.
 \subsection{Arduino-Serial}
+Biblioteca de c\'odigo aberto em linguagem de programa\c c\~ao C, que oferece suporte a
+comunica\c c\~ao via porta serial do computador com o Arduino.
 
 \section{Equipamentos}
 \begin{itemize}
 \item C\^amera de captura de v\'ideo
-\item Placa controladora ARduino Uno
+\item Placa controladora Arduino Uno
 \item LED RGB
 \item Computador (desktop ou notebook)
 \end{itemize}
 
 \nocite{*}
+\section{Cr\'editos para as imagens}
+Figura 
 
 \section{Bibliografia}
 \bibliographystyle{sbc}
