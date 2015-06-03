@@ -83,29 +83,7 @@ Compreendendo a parte de vis\~ao computacional, foi realizado um levantamento bi
 referente ao processamento digital de imagens, reconhecimento de padr\~oes em imagens, opera\c c\~oes
 aritm\'eticas e um estudo aprofundado sobre os modelos de cores, sua natureza e suas caracter\'isticas principais.
 
-\subsection{Metodologia geral}
-Com base nos algoritmos descritos em \textbf{~\ref{sec:alg}} , foi criada uma fun\c c\~ao de vis\~ao computacional que aplica cada um desses
-algoritmos para retirar informa\c c\~oes sobre os pixels da imagem.
-
-Primeiro, o canal RGB \'e convertido em HSV antes e ap\'os a aplica\c c\~ao do efeito de redu\c c~ao de cor para
-cruzar as informa\c c\~oes de luminosidade com a cor espec\'ifica do LED a ser detectado pelo algoritmo, respectivamente.
-
-Ap\'os isso feito, \'e armazenado numa Matriz Bin\'aria a regi\~ao do LED, definindo o valor 1 para pixel com
-a cor e luminosidade detectada e 0 para n\~ao detectada.
-
-Essa matriz passa por uma sequ\^encia de Eros\~oes e Dilata\c c\~oes at\'e que a regi\~ao principal seja destacada
-e os ru\'idos eliminados. Essas opera\c c\~oes ocorrem por interm\'edio de uma matriz chamada de M\'ascara.
-
-Posteriormente, na matriz bin\'aria \'e verificada a quantidade de massas brancas presentes e, caso haja mais de uma,
-o LED \'e simplesmente ignorado.
-
-Caso haja apenas uma massa, \'e calculada a m\'edia das posi\c c\~oes x e y onde os pixels est\~ao acesos e \'e devolvida
-uma coordenada (x, y) central. Para isso, \'e foi criada uma estrutura chamada Vis\~ao Computacional que armazena
-o par ordenado da regi\~ao central do LED, a cor detectada pelo mesmo e faixa de luminosidade que \'e testada no momento
-da calibra\c c\~ao da c\^amera pelo algoritmo.
-
 \subsection{Algoritmos utilizados\label{sec:alg}}
-
 \subsubsection{HSV e RGB}
 Cada pixel de uma imagem extra\'ida da c\^amera do computador no modelo de cores RGB (Red, Green, Blue) \'e convertido em
 HSV / HSB (Hue, Saturation, Value / Brightness), permitindo descobrir o grau da cor pura (Matiz), as faixas representada por cada cor,
@@ -140,7 +118,6 @@ Al\'em disso, foram desenvolvidas fun\c c\~oes complementares de m\'aximo e m\'i
 	\end{center}
 	\end{figure}	
 
-
 \subsubsection{Escala de cinza}
 Os valores RGB de um pixel podem ser convertidos em escala de cinza por uma s\'erie de m\'etodos.
 Com esse fim, foi escolhido o m\'etodo de escalas fixas correspondendo a cada um dos canais RGB.
@@ -153,11 +130,10 @@ levando em considera\c c\~ao a sua maior tonalidade.
 
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=1.0]{img/1200px-Beyoglu_4671_tricolor.png}
+		\includegraphics[scale=0.8]{img/1200px-Beyoglu_4671_tricolor.png}
 		\footnotesize \caption{Convers\~ao de canais de cores para escala de cinza. Cr\'editos: Nevit Dilmen. http://en.wikipedia.org/wiki/Grayscale }
 	\end{center}
 	\end{figure}	
-
 
 \subsubsection{Redu\c c\~ao de cores}
 A redu\c c\~ao de cores \'e uma t\'ecnica que tem por objetivo facilitar o reconhecimento de uma regi\~ao espec\'ifica,
@@ -168,6 +144,26 @@ Para tal, \'e usada a seguinte opera\c c\~ao sobre cada canal RGB:
 
 \noindent sendo o fator um valor inteiro que define a propor\c c\~ao da quantidade cores que se quer diminuir na imagem.
 Exemplos de Fatores: 2, 16, 64, 128. Quanto maior o fator, menor a quantidade de cores vis\'iveis.
+
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=0.3]{img/kmeansout.png}
+		\footnotesize \caption{Redu\c c\~ao da quantidade de cores de acordo com valor do par\^ametro K. Fonte: http://opencvpython.blogspot.com.br/2013/01/k-means-clustering-3-working-with-opencv.html }
+	\end{center}
+	\end{figure}	
+
+\subsubsection{Controle de massas}
+Visando uma defini\c c\~ao exata e correta do ponto central que deve ser devolvido pela fun\c c\~ao da vis\~ao computacional,
+foi necess\'ario a implementa\c c\~ao de um mecanismo para ter ideia caso outras massas brancas al\'em da principal (o LED)
+est\'a sendo retornada e, com isso, comprometendo a jogabilidade do jogo.
+
+Essa fun\c c\~ao analisa a vizinhan\c ca de cada um dos pixels da imagem contabilizando as massas brancas presentes em tela.
+
+Para isso, \'e criada uma estrutura bidimensional chamada Matriz de V\'ertices, onde cada v\'ertice armazena informa\c c\~oes
+relevantes sobre cada pixel: valor definindo se o pixel está aceso (1 - branco) ou apagado (0 - preto) e o numero de massa
+definido por uma vari\'avel contadora.
+
+Ao final, o algoritmo retorna um n\'umero inteiro compreendendo a quantidade de massas brancas encontradas.
 
 \subsubsection{Eros\~ao e dilata\c c\~ao}
 A Eros\~ao e a Dilata\c c\~ao s\~ao t\'ecnicas de filtragem com o objetivo de reduzir ru\'idos presentes na imagem,
@@ -183,18 +179,33 @@ A Dilata\c c\~ao trata de aumentar os pontos isolados na imagem, consistindo no 
 Com uma sequ\^encia razo\'avel de opera\c c\~oes de Eros\~ao e Dilata\c c\~ao, a quantidade de ru\'idos \'e descartada,
 ao mesmo passo que a regi\~ao que deve ser destacada \'e mantida em seu tamanho original.
 
-\subsubsection{Controle de massas}
-Visando uma defini\c c\~ao exata e correta do ponto central que deve ser devolvido pela fun\c c\~ao da vis\~ao computacional,
-foi necess\'ario a implementa\c c\~ao de um mecanismo para ter ideia caso outras massas brancas al\'em da principal (o LED)
-est\'a sendo retornada e, com isso, comprometendo a jogabilidade do jogo.
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=0.3]{img/erodeDilate.png}
+		\footnotesize \caption{Esquerda: Imagem original. Meio: eros\~ao. Direita: dilata\c c\~ao. Fonte: http://visiblevisible.org/teaching/setpixel/students/katherine/images/erodeDilate.png }
+	\end{center}
+	\end{figure}	
+	
+\subsection{Aplica\c c\~ao dos algoritmos}
+Utilizando os algoritmos descritos em \textbf{~\ref{sec:alg}}, foi criada uma fun\c c\~ao de vis\~ao computacional que aplica cada um desses
+algoritmos para retirar informa\c c\~oes sobre os pixels da imagem.
 
-Essa fun\c c\~ao analisa a vizinhan\c ca de cada um dos pixels da imagem contabilizando as massas brancas presentes em tela.
+Primeiro, o canal RGB \'e convertido em HSV antes e ap\'os a aplica\c c\~ao do efeito de redu\c c~ao de cor para
+cruzar as informa\c c\~oes de luminosidade com a cor espec\'ifica do LED a ser detectado pelo algoritmo, respectivamente.
 
-Para isso, \'e criada uma estrutura bidimensional chamada Matriz de V\'ertices, onde cada v\'ertice armazena informa\c c\~oes
-relevantes sobre cada pixel: valor definindo se o pixel está aceso (1 - branco) ou apagado (0 - preto) e o numero de massa
-definido por uma vari\'avel contadora.
+Ap\'os isso feito, \'e armazenado numa Matriz Bin\'aria a regi\~ao do LED, definindo o valor 1 para pixel com
+a cor e luminosidade detectada e 0 para n\~ao detectada.
 
-Ao final, o algoritmo retorna um n\'umero inteiro compreendendo a quantidade de massas brancas encontradas.
+Essa matriz passa por uma sequ\^encia de Eros\~oes e Dilata\c c\~oes at\'e que a regi\~ao principal seja destacada
+e os ru\'idos eliminados. Essas opera\c c\~oes ocorrem por interm\'edio de uma matriz chamada de M\'ascara.
+
+Posteriormente, na matriz bin\'aria \'e verificada a quantidade de massas brancas presentes e, caso haja mais de uma,
+o LED \'e simplesmente ignorado.
+
+Caso haja apenas uma massa, \'e calculada a m\'edia das posi\c c\~oes x e y onde os pixels est\~ao acesos e \'e devolvida
+uma coordenada (x, y) central. Para isso, \'e foi criada uma estrutura chamada Vis\~ao Computacional que armazena
+o par ordenado da regi\~ao central do LED, a cor detectada pelo mesmo e faixa de luminosidade que \'e testada no momento
+da calibra\c c\~ao da c\^amera pelo algoritmo.
 
 \section{Simula\c c\~ao da \'arvore}
 
@@ -281,6 +292,9 @@ desenvolva sua pr\'opria programa\c c\~ao de jogo.
 Biblioteca de c\'odigo aberto em linguagem de programa\c c\~ao C, que oferece suporte a
 comunica\c c\~ao via porta serial do computador com o Arduino.
 
+\subsection{Linguagens de programa\c c\~ao}
+O projeto inteiro foi desenvolvido em linguagem C padr\~ao 99.
+
 \section{Equipamentos}
 \begin{itemize}
 \item C\^amera de captura de v\'ideo
@@ -290,8 +304,6 @@ comunica\c c\~ao via porta serial do computador com o Arduino.
 \end{itemize}
 
 \nocite{*}
-\section{Cr\'editos para as imagens}
-Figura 
 
 \section{Bibliografia}
 \bibliographystyle{sbc}

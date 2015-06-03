@@ -55,4 +55,9 @@ Team, A.
 \newblock Allegro 5.
 \newblock \url{http://alleg.sourceforge.net/readme.html}.
 
+\bibitem[Wright 2010]{bib:wright}
+Wright, S. (2010).
+\newblock {\em Digital Compositing for Film and Video}.
+\newblock Focal Press, 3rd edition edition.
+
 \end{thebibliography}
