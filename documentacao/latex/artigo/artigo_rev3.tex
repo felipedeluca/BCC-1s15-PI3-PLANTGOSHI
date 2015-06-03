@@ -7,7 +7,7 @@
 \usepackage{caption3}
 \captionsetup{font=footnotesize}
 
-\hyphenation{ algo-ritmos co-lher}
+\hyphenation{ algo-ritmos co-lher }
      
 \sloppy
 
@@ -39,31 +39,99 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
 
 \section{Introdu\c c\~ao}
 
- O Projeto consiste num jogo de simula\c c\~ao de cria\c c\~ao
- de plantas e do seu cuidado contra a presen\c ca de invasores e/ou criaturas nocivas \`a sua
- sobreviv\^encia no seu habitat natural, a terra.
- O jogador ter\'a poderes por interm\'edio de uma varinha m\'agica e, ao longo do jogo, dever\'a utiliz\'a- los para alimentar e
- aprimorar a planta ou a \'arvore e tamb\'em combater as pragas aparentes atrav\'es
- de intera\c c\~ao com diferentes cores emitidas pelo LED.
- 
+ O Projeto desenvolvido para a disciplina Projeto Integrador III: Sistema Aut\^onomo aborda a quest\~ao sobre
+ educa\c c\~ao ambiental. O jogador tem tr\^es minutos para cuidar de uma \'arvore, desde seu crescimento
+ at\'e o amadurecimento e colhimento dos frutos. Durante a partida, o jogador dever\'a estar sempre atento
+ \`a falta de \'agua e pragas que surgir\~ao para comer os frutos.
+   
+ O desafio do projeto consiste em estudar, desenvolver e implementar algoritmos de vis\~ao computacional 
+ para processamento de imagens, com a finalidade de promover a intera\c c\~ao do jogador com o jogo. Essa
+ intera\c c\~ao dever\'a ocorrer exclusivamente atrav\'es da c\^amera de video acoplada ao computador. O jogador
+ ter\'a \`a sua disposi\c c\~ao uma varinha m\'agica com uma luz de LED na ponta, que ser\'a reconhecida pelos algoritmos
+ e seus movimentos traduzidos como coordenadas de posi\c c\~ao X e Y dentro do jogo. Basicamente a varinha tem
+ o funcionamento de um mouse.   
+  
+\section{O jogo}
 
- Os frutos nascem verdes em pontos rand\^omicos e demoram um tempo x para seguir para a segunda etapa.
- Se o fruto no estado verde n\~o for "regado" (ou, poder de música) depois de um tempo determinado,
- ele vai ficar maduro com praga ou ficar\'a estragado. Isso for\c ca o usu\'ario a usar o poder de "regar"
- (ou, poder de m\'usica) no fruto.
+ Para vencer os desafios, o jogador tem \`a sua disposi\c c\~ao quatro tipos de poderes especiais: Poder de Regar,
+ Poder de Remover Pragas, Poder de Colher Frutos e Poder da M\'usica. Cada um desses poderes tem uma fun\c c\~ao
+ diferente no jogo e devem ser utilizadas com cautela, pois quando acionado um desses poderes, os restantes ficar\~ao
+ indispon\'iveis por alguns segundos. N\~ao \'e poss\'ivel utilizar mais de um poder por vez.
  
- Quando o fruto fica maduro, depois de um tempo x ele cria praga, for\c cando o usu\'ario a usar o poder
- de "remover" para eliminar a praga do fruto maduro. 
+ \subsection{Poderes}
+ \subsubsection{Poder de Regar} 
+ Com Poder de Regar o jogador garante que a \'arvore ir\'a crescer mais e consequentemente ir\'a
+ dar mais frutos. \'E necess\'ario estar sempre atento \`a barra de n\'ivel de \'agua. Nunca regue demais a
+ \'arvore e tamb\'em n\~ao a deixe sem \'agua.
  
- Com o fruto maduro e sem praga o usu\'ario poder\'a usar o poder de  "colher" para  colher o fruto e somar pontos. 
- Se o usu\'ario colher fruto verde, maduro com praga ou estragado ele perde pontos.
- Caso deixe o fruto estragar tamb\'em pontos s\~ao descontados. Depois que uma quantidade x de frutos estragar
- o jogo termina.
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=1.15]{img/icone_gota.png}
+		\footnotesize \caption{Poder de Regar }
+	\end{center}
+	\end{figure}	
+  
+ \subsubsection{Poder de Remover Pragas}
+ O Poder de Remover Pragas auxilia o jogador a retirar bichos que nascem, evitando assim
+ que os frutos sejam comidos. O jogador tem um tempo curto para remover essas pragas, antes que
+ elas danifiquem os frutos e a \'arvore.
+
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=1.15]{img/icone_luva.png}
+		\footnotesize \caption{Poder de Remover Pragas }
+	\end{center}
+	\end{figure}	
  
-\section{Estrutura principal do jogo}
+ \subsubsection{Poder da M\'usica}
+ O poder da m\'usica auxilia no amadurecimento mais r\'apido dos frutos. O jogador aplica diretamente esse poder em cima
+ do fruto que deseja.
+ 
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=1.15]{img/icone_nota_musical.png}
+		\footnotesize \caption{Poder da M\'usica}
+	\end{center}
+	\end{figure}	
+
+ \subsubsection{Poder de Colher}
+ A pontua\c c\~ao final da partida do jogo est\'a diretamente ligada ao Poder de Colher. Existe um momento ideal para colher o
+ fruto, que \'e quando ele est\'a vermelho e saud\'avel. Caso seja colhido antes da hora ou depois, o jogador perder\'a
+ pontos. Muita aten\c c\~ao caso o fruto esteja com praga. Se isso ocorrer, ser\'a necess\'ario remov\^e-la antes de
+ colher o fruto.
+ 
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=1.15]{img/icone_cesta.png}
+		\footnotesize \caption{Poder de Colher}
+	\end{center}
+	\end{figure}	
+
+ \subsection{Varinha m\'agica}
+ Com a varinha m\'agica o jogador poder\'a interagir com os elementos dentro do jogo como sele\c c\~ao de poderes, regar e remo\c c\~ao
+ de pragas. Ao selecionar um poder a luz na ponta da varinha ir\'a assumir a cor desse poder, indicando que ele foi selecionado e est\'a ativo.
+ Se n\~ao houver luz, significa que a sele\c c\~ao de poderes est\'a desabilitada temporariamente. Caso a luz seja a cor branco, ent\~ao
+ est\'a dispon\'ivel selecionar qualquer poder.
+ 
+ Para interagir com o jogo, basta mover a varinha em frente \'a tela do computador e um cursor na tela ir\'a indicar qual a posi\c c\~ao
+ atual da varinha dentro do jogo. Para selecionar o poder desejado, \'e necess\'ario posicionar o cursor por dois segundos em cima desse poder.
+ O poder foi selecionado quando a luz na ponta da varinha mudar de cor. 
+
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=0.5]{img/varinha.png}
+		\footnotesize \caption{Varinha m\'agica com LED na ponta.}
+	\end{center}
+	\end{figure}	
 
 \subsection{Layout}
-[SCREENSHOT DA TELA]
+
+	\begin{figure}[ht!]
+	\begin{center}
+		\includegraphics[scale=0.3]{img/tela_jogo.png}
+		\footnotesize \caption{Primeira vers\~ao da tela do jogo. Os gr\'aficos ser\~ao alterados para a vers\~ao final do jogo.}
+	\end{center}
+	\end{figure}	
 
 \subsection{Etapas}
 A partida do jogo \'e dividida em tr\^es principais etapas: 
@@ -293,7 +361,7 @@ Biblioteca de c\'odigo aberto em linguagem de programa\c c\~ao C, que oferece su
 comunica\c c\~ao via porta serial do computador com o Arduino.
 
 \subsection{Linguagens de programa\c c\~ao}
-O projeto inteiro foi desenvolvido em linguagem C padr\~ao 99.
+O projeto inteiro foi desenvolvido em linguagem C padr\~ao c99.
 
 \section{Equipamentos}
 \begin{itemize}

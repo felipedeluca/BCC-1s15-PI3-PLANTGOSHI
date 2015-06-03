@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.8)  2 JUN 2015 21:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.8)  3 JUN 2015 11:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -293,121 +293,159 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <13> not available
 [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 1997) in paragraph at lines 108--111
-[]\OT1/ptm/m/n/12 A fim de padronizar, foram im-ple-men-tadas tamb[]em al-gu-ma
-s fun[][]oes de
- []
-
-<img/HSV_color_solid_cylinder_alpha_lowgamma.png, id=11, 1606.0pt x 1204.5pt>
-File: img/HSV_color_solid_cylinder_alpha_lowgamma.png Graphic file (type png)
-
-<use img/HSV_color_solid_cylinder_alpha_lowgamma.png>
-Package pdftex.def Info: img/HSV_color_solid_cylinder_alpha_lowgamma.png used o
-n input line 116.
-(pdftex.def)             Requested size: 240.8896pt x 180.6672pt.
+<img/icone_gota.png, id=11, 35.13126pt x 35.13126pt>
+File: img/icone_gota.png Graphic file (type png)
+ <use img/icone_gota.png>
+Package pdftex.def Info: img/icone_gota.png used on input line 69.
+(pdftex.def)             Requested size: 40.4006pt x 40.4006pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 117.
-LaTeX Font Info:    Try loading font information for OT1+phv on input line 117.
-
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 70.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 70.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 )
 LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
-(Font)              Font shape `OT1/phv/b/n' tried instead on input line 117.
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 70.
 
-Underfull \hbox (badness 1590) in paragraph at lines 117--117
-[]|\OT1/phv/b/n/10 Figure 1. \OT1/ptm/m/n/10 Representa[][]ao tridi-men-sional 
+<img/icone_luva.png, id=13, 35.13126pt x 35.13126pt>
+File: img/icone_luva.png Graphic file (type png)
+ <use img/icone_luva.png>
+Package pdftex.def Info: img/icone_luva.png used on input line 81.
+(pdftex.def)             Requested size: 40.4006pt x 40.4006pt.
+
+<img/icone_nota_musical.png, id=14, 35.13126pt x 35.13126pt>
+File: img/icone_nota_musical.png Graphic file (type png)
+
+<use img/icone_nota_musical.png>
+Package pdftex.def Info: img/icone_nota_musical.png used on input line 92.
+(pdftex.def)             Requested size: 40.4006pt x 40.4006pt.
+
+<img/icone_cesta.png, id=15, 35.13126pt x 35.13126pt>
+File: img/icone_cesta.png Graphic file (type png)
+
+<use img/icone_cesta.png>
+Package pdftex.def Info: img/icone_cesta.png used on input line 105.
+(pdftex.def)             Requested size: 40.4006pt x 40.4006pt.
+ [2 <./img/icone_gota.png> <./img/icone_luva.png> <./img/icone_nota_musical.png
+>] <img/varinha.png, id=23, 501.875pt x 60.225pt>
+File: img/varinha.png Graphic file (type png)
+
+<use img/varinha.png>
+Package pdftex.def Info: img/varinha.png used on input line 122.
+(pdftex.def)             Requested size: 250.93687pt x 30.11241pt.
+ <img/tela_jogo.png, id=24, 1286.8075pt x 725.71124pt>
+File: img/tela_jogo.png Graphic file (type png)
+
+<use img/tela_jogo.png>
+Package pdftex.def Info: img/tela_jogo.png used on input line 131.
+(pdftex.def)             Requested size: 386.04523pt x 217.71504pt.
+ [3 <./img/icone_cesta.png> <./img/varinha.png> <./img/tela_jogo.png>]
+Underfull \hbox (badness 1997) in paragraph at lines 176--179
+[]\OT1/ptm/m/n/12 A fim de padronizar, foram im-ple-men-tadas tamb[]em al-gu-ma
+s fun[][]oes de
+ []
+
+<img/HSV_color_solid_cylinder_alpha_lowgamma.png, id=31, 1606.0pt x 1204.5pt>
+File: img/HSV_color_solid_cylinder_alpha_lowgamma.png Graphic file (type png)
+
+<use img/HSV_color_solid_cylinder_alpha_lowgamma.png>
+Package pdftex.def Info: img/HSV_color_solid_cylinder_alpha_lowgamma.png used o
+n input line 184.
+(pdftex.def)             Requested size: 240.8896pt x 180.6672pt.
+
+Underfull \hbox (badness 1590) in paragraph at lines 185--185
+[]|\OT1/phv/b/n/10 Figure 7. \OT1/ptm/m/n/10 Representa[][]ao tridi-men-sional 
 do espa[]o de cor HSV. Cr[]editos: SharkD.
  []
 
-[2]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 126.
+[4]
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 194.
 
  (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 126.
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 194.
 
-<img/1200px-Beyoglu_4671_tricolor.png, id=16, 289.08pt x 190.311pt>
+<img/1200px-Beyoglu_4671_tricolor.png, id=36, 289.08pt x 190.311pt>
 File: img/1200px-Beyoglu_4671_tricolor.png Graphic file (type png)
 
 <use img/1200px-Beyoglu_4671_tricolor.png>
 Package pdftex.def Info: img/1200px-Beyoglu_4671_tricolor.png used on input lin
-e 133.
+e 201.
 (pdftex.def)             Requested size: 231.2643pt x 152.249pt.
- [3 <./img/HSV_color_solid_cylinder_alpha_lowgamma.png> <./img/1200px-Beyoglu_4
+ [5 <./img/HSV_color_solid_cylinder_alpha_lowgamma.png> <./img/1200px-Beyoglu_4
 671_tricolor.png>]
-<img/kmeansout.png, id=25, 775.39688pt x 581.17125pt>
+<img/kmeansout.png, id=43, 775.39688pt x 581.17125pt>
 File: img/kmeansout.png Graphic file (type png)
  <use img/kmeansout.png>
-Package pdftex.def Info: img/kmeansout.png used on input line 150.
+Package pdftex.def Info: img/kmeansout.png used on input line 218.
 (pdftex.def)             Requested size: 232.62085pt x 174.35272pt.
 
-Underfull \hbox (badness 3302) in paragraph at lines 151--151
-[]|\OT1/phv/b/n/10 Figure 3. \OT1/ptm/m/n/10 Redu[][]ao da quan-ti-dade de core
+Underfull \hbox (badness 3302) in paragraph at lines 219--219
+[]|\OT1/phv/b/n/10 Figure 9. \OT1/ptm/m/n/10 Redu[][]ao da quan-ti-dade de core
 s de acordo com valor do par[]ametro
  []
 
-[4 <./img/kmeansout.png>]
-<img/erodeDilate.png, id=30, 1008.76875pt x 525.965pt>
+[6 <./img/kmeansout.png>]
+<img/erodeDilate.png, id=48, 1008.76875pt x 525.965pt>
 File: img/erodeDilate.png Graphic file (type png)
 
 <use img/erodeDilate.png>
-Package pdftex.def Info: img/erodeDilate.png used on input line 184.
+Package pdftex.def Info: img/erodeDilate.png used on input line 252.
 (pdftex.def)             Requested size: 302.63297pt x 157.79071pt.
- [5 <./img/erodeDilate.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 217--222
+ [7 <./img/erodeDilate.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 285--290
 
  []
 
 LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 224.
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 292.
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--225
+Underfull \hbox (badness 10000) in paragraph at lines 292--293
 []\OT1/pcr/b/n/10 SE \OT1/pcr/m/n/10 galho.energiaConsumida == ((galho.energiaL
 imite * 50) / 100) \OT1/pcr/b/n/10 E
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--225
+Underfull \hbox (badness 10000) in paragraph at lines 292--293
 
  []
 
-<img/PI3_Ponto_Crescimento.png, id=34, 642.4pt x 742.775pt>
+<img/PI3_Ponto_Crescimento.png, id=53, 642.4pt x 742.775pt>
 File: img/PI3_Ponto_Crescimento.png Graphic file (type png)
 
 <use img/PI3_Ponto_Crescimento.png>
-Package pdftex.def Info: img/PI3_Ponto_Crescimento.png used on input line 233.
+Package pdftex.def Info: img/PI3_Ponto_Crescimento.png used on input line 301.
 (pdftex.def)             Requested size: 128.47772pt x 148.55237pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 245--246
+Underfull \hbox (badness 10000) in paragraph at lines 313--314
 []\OT1/pcr/m/n/10 galho.energiaLimite = (energiaRecebida * (arvore.energiaLimit
 e -
  []
 
-[6 <./img/PI3_Ponto_Crescimento.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 257--258
+[8 <./img/PI3_Ponto_Crescimento.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 325--326
 []\OT1/pcr/b/n/10 SE \OT1/pcr/m/n/10 galho.energiaConsumida < galho.energiaLimi
 te \OT1/pcr/b/n/10 E
  []
 
-<img/PI3_Arvore.png, id=39, 1608.0075pt x 1188.44pt>
+<img/PI3_Arvore.png, id=58, 1608.0075pt x 1188.44pt>
 File: img/PI3_Arvore.png Graphic file (type png)
  <use img/PI3_Arvore.png>
-Package pdftex.def Info: img/PI3_Arvore.png used on input line 267.
+Package pdftex.def Info: img/PI3_Arvore.png used on input line 335.
 (pdftex.def)             Requested size: 241.19072pt x 178.2583pt.
 
-[7 <./img/PI3_Arvore.png>]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 300.
+[9 <./img/PI3_Arvore.png>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 368.
 
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 300.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 368.
 
 (./artigo_rev3.bbl
 Underfull \hbox (badness 2393) in paragraph at lines 10--13
@@ -427,30 +465,30 @@ Underfull \hbox (badness 10000) in paragraph at lines 15--19
  blog / 2009 / 08 / 24 /
  []
 
-) [8] (./artigo_rev3.aux) ) 
+) [10] (./artigo_rev3.aux) ) 
 Here is how much of TeX's memory you used:
- 3369 strings out of 493117
- 51260 string characters out of 6135434
+ 3396 strings out of 493117
+ 51876 string characters out of 6135434
  118320 words of memory out of 5000000
- 6759 multiletter control sequences out of 15000+600000
- 25063 words of font info for 54 fonts, out of 8000000 for 9000
+ 6781 multiletter control sequences out of 15000+600000
+ 23478 words of font info for 52 fonts, out of 8000000 for 9000
  1143 hyphenation exceptions out of 8191
- 43i,10n,40p,597b,351s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/
-base/8r.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cms
-y10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></
-usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/loca
-l/texlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texli
-ve/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2014/te
-xmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-dist/
-fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type
-1/urw/times/utmri8a.pfb>
-Output written on artigo_rev3.pdf (8 pages, 2247378 bytes).
+ 43i,10n,40p,598b,351s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips
+/base/8r.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb><
+/usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/loc
+al/texlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texl
+ive/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2014/t
+exmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-dist
+/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
+e1/urw/times/utmri8a.pfb>
+Output written on artigo_rev3.pdf (10 pages, 2352288 bytes).
 PDF statistics:
- 83 PDF objects out of 1000 (max. 8388607)
- 52 compressed objects within 1 object stream
+ 101 PDF objects out of 1000 (max. 8388607)
+ 56 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
