@@ -642,7 +642,7 @@ Galho *arvore_procuraGalhoPeloID( Galho *g, int id ){
     return galho;
 }
 //------------------------------------------------------------------------------
-void arvore_atualizaXYGalho( float *x, float *y, int id ){
+void arvore_atualizaXYGalho( int *x, int *y, int id ){
 
     *x = 0;
     *y = 0;
