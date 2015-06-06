@@ -47,7 +47,7 @@ void imageProc_init( void ){
     vermelho.h_b2 = 360;
     vermelho.minS = 160;
     vermelho.minV = 0;
-    vermelho.minLuma = 0;
+    vermelho.minLuma = 30;
 
     azul.h_a1 = 230;
     azul.h_a2 = 240;

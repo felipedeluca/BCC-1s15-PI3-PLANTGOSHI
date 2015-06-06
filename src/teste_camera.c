@@ -79,7 +79,7 @@ int main( void ) {
       if ( atualizar && al_is_event_queue_empty(queue) ) {
           int x = 0, y = 0; // temporario
 
-          imageProc_atualizaXY( &x, &y, AMARELO ); // Função principal
+          imageProc_atualizaXY( &x, &y, VERMELHO ); // Função principal
           imageProc_desenhaImagem( esquerda, direita ); // Mostra o processamento. Função opcional.
 
           al_draw_circle( x, y, 10, cor, 3 );
