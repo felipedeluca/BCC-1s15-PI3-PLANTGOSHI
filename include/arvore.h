@@ -10,5 +10,6 @@ void arvore_simulaArvore( int energiaExtra );
 void arvore_desenha( ALLEGRO_BITMAP *bmp );
 void arvore_proximoPontoCrescimentoFrutas( int *x, int *y, int *id );
 void arvore_atualizaXYGalho( int *x, int *y, int id );
+void arvore_destroi( void );
 
 #endif

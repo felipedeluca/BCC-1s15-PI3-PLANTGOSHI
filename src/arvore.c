@@ -814,3 +814,39 @@ void arvore_desenha( ALLEGRO_BITMAP *bmp ){
 
 }
 //------------------------------------------------------------------------------
+void destroiPontosCrescimento( PontoCrescimento *p ){
+    if ( p == NULL )
+        return;
+
+    destroiPontosCrescimento( p->proximo );
+
+    free( p );
+}
+//------------------------------------------------------------------------------
+void destroiArvore( Galho *g ) {
+    if ( g == NULL )
+        return;
+
+    destroiArvore( g->esquerda );
+    destroiArvore( g->meio);
+    destroiArvore( g->direita );
+
+    free( g );
+}
+//------------------------------------------------------------------------------
+void arvore_destroi( void ){
+
+    destroiPontosCrescimento( pontosCrescimentoFrutas.inicio );
+    free( pontosCrescimentoFrutas.inicio );
+
+    destroiPontosCrescimento( pontosCrescimentoFolhas.inicio );
+    free( pontosCrescimentoFolhas.inicio );
+
+    destroiArvore( arvore.raiz );
+    free( arvore.raiz );
+
+    al_destroy_bitmap( arvore.bmp );
+    al_destroy_bitmap( arvore.bmpFolhas );
+
+}
+//------------------------------------------------------------------------------

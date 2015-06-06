@@ -9,15 +9,15 @@ CC=gcc
 
 CFLAGS= -std=c99
 
-LIBS=-L/usr/local/lib -lm -lallegro -lallegro_main -lallegro_image -lallegro_ttf -lallegro_font -lallegro_primitives -lallegro_audio -lallegro_acodec -lallegro_dialog
+LIBS=-L/usr/local/lib -lm -lopencv_core -lopencv_highgui -lallegro -lallegro_main -lallegro_image -lallegro_ttf -lallegro_font -lallegro_primitives -lallegro_audio -lallegro_acodec -lallegro_dialog
 
 # todas as minhas .c
-_SRC=main.c arvore.c random.c
+_SRC=teste_camera.c camera.c image_proc.c
 
 SRC=$(patsubst %,$(SDIR)/%,$(_SRC))
 
 #nome do meu exe
-EXECUTABLE=arvore
+EXECUTABLE=teste_camera
 
 all:
 	$(CC) -Wall $(CFLAGS) $(IDIR) $(SRC) -o $(EXECUTABLE) $(LIBS)

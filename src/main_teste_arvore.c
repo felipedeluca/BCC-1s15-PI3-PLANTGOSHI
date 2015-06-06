@@ -13,6 +13,7 @@
 
 #include "plantgoshi_arduino.h"
 #include "arvore.h"
+#include "image_proc.h"
 
 #define FPS 60
 
@@ -154,7 +155,9 @@ int main( int argc, char **argv ){
 //
 // //    al_shutdown_primitives_addon();
 //     al_uninstall_system();
+//    arvore_destroi();
     printf( "\nFIM\n" );
+//    char c = getchar();
     exit( EXIT_SUCCESS );
 }
 //------------------------------------------------------------------------------
