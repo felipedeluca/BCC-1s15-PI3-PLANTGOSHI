@@ -2,9 +2,9 @@ char inData[4]; // Allocate some space for the string (signed char)
 char inChar=-1; // Where to store the character read
 byte index = 0; // Index into array; where to store the character
 
-int redPin = 11;
+int redPin = 9;
 int greenPin = 10;
-int bluePin = 9;
+int bluePin = 11;
 //---------------------------------------------------------------
 void setup() {
   Serial.begin(9600);

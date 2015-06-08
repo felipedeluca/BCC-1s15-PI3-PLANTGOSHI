@@ -34,9 +34,9 @@ void arduino_LED( ArduinoComm* comm ){
         if( comm->rc == -1 )
             printf( "error writing to Arduino\n" );
 
-    printf( "%s\n", comm->buffer );
-    printf( "%s\n", comm->serialPort );
-    printf( "%d\n", comm->fd );
+    // printf( "%s\n", comm->buffer );
+    // printf( "%s\n", comm->serialPort );
+    // printf( "%d\n", comm->fd );
 
 
     return;

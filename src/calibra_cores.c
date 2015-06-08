@@ -62,6 +62,8 @@ int main( void ) {
 
   al_start_timer(timer);
 
+  al_rest(3);
+  printf("iniciando calibragem\n");
   while(continuar) {
       ALLEGRO_EVENT event;
 
@@ -79,10 +81,17 @@ int main( void ) {
       if ( atualizar && al_is_event_queue_empty(queue) ) {
           int x = 0, y = 0; // temporario
 
-          imageProc_atualizaXY( &x, &y, VERMELHO ); // Função principal
+          imageProc_atualizaXY( &x, &y, VERDE ); // Função principal
           imageProc_desenhaImagem( esquerda, direita ); // Mostra o processamento. Função opcional.
+          imageProc_calibraCor( VERDE, 100, 150, 100, 150 );
 
+//          al_set_target_bitmap( esquerda );
           al_draw_circle( x, y, 10, cor, 3 );
+
+//          al_set_target_bitmap( direita );
+          al_draw_rectangle( 100, 100, 150, 150, cor, 5 );
+
+//          al_set_target_bitmap( esquerda );
 
           al_flip_display();
 
