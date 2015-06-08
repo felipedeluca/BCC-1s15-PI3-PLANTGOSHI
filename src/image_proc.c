@@ -5,6 +5,7 @@
 #include "cor.h"
 
 #define POSTERIZE 100
+#define BUFFER_FRAMES 3
 
 unsigned char ***matrizFrame1;
 unsigned char ***matrizFrame2;
@@ -200,39 +201,41 @@ unsigned char RGBtoY( unsigned char *r, unsigned char *g, unsigned char *b ) {
 void processaMatriz( const unsigned char valorPixel, int y, int x ){
 
     // Buffer de 6 frames
+    int divisao = frame % BUFFER_FRAMES;
 
-    if ( frame % 6 == 1 ){
-        matrizFrame1[y][x][0] = valorPixel;
-        matrizFrame1[y][x][1] = valorPixel;
-        matrizFrame1[y][x][2] = valorPixel;
+    switch ( divisao ){
+        case 1:
+            matrizFrame1[y][x][0] = valorPixel;
+            matrizFrame1[y][x][1] = valorPixel;
+            matrizFrame1[y][x][2] = valorPixel;
+        break;
+        case 2:
+            matrizFrame2[y][x][0] = valorPixel;
+            matrizFrame2[y][x][1] = valorPixel;
+            matrizFrame2[y][x][2] = valorPixel;
+        break;
+        case 3:
+            matrizFrame3[y][x][0] = valorPixel;
+            matrizFrame3[y][x][1] = valorPixel;
+            matrizFrame3[y][x][2] = valorPixel;
+        break;
+        case 4:
+            matrizFrame4[y][x][0] = valorPixel;
+            matrizFrame4[y][x][1] = valorPixel;
+            matrizFrame4[y][x][2] = valorPixel;
+        break;
+        case 5:
+            matrizFrame5[y][x][0] = valorPixel;
+            matrizFrame5[y][x][1] = valorPixel;
+            matrizFrame5[y][x][2] = valorPixel;
+        break;
+        case 0:
+            matrizFrame6[y][x][0] = valorPixel;
+            matrizFrame6[y][x][1] = valorPixel;
+            matrizFrame6[y][x][2] = valorPixel;
+        break;
     }
-    else if ( frame % 6 == 2 ){
-        matrizFrame2[y][x][0] = valorPixel;
-        matrizFrame2[y][x][1] = valorPixel;
-        matrizFrame2[y][x][2] = valorPixel;
-    }
-    else if ( frame % 6 == 3 ){
-        matrizFrame3[y][x][0] = valorPixel;
-        matrizFrame3[y][x][1] = valorPixel;
-        matrizFrame3[y][x][2] = valorPixel;
-    }
-    if ( frame % 6 == 4 ){
-        matrizFrame4[y][x][0] = valorPixel;
-        matrizFrame4[y][x][1] = valorPixel;
-        matrizFrame4[y][x][2] = valorPixel;
-    }
-    else if ( frame % 6 == 5 ){
-        matrizFrame5[y][x][0] = valorPixel;
-        matrizFrame5[y][x][1] = valorPixel;
-        matrizFrame5[y][x][2] = valorPixel;
-    }
-    else if ( frame % 6 == 0 ){
-        matrizFrame6[y][x][0] = valorPixel;
-        matrizFrame6[y][x][1] = valorPixel;
-        matrizFrame6[y][x][2] = valorPixel;
-    }
-
-    // buffer triplo
+    // buffer de 6 frames
     matriz[y][x][0] = ( matrizFrame1[y][x][0] | matrizFrame2[y][x][0] | matrizFrame3[y][x][0] | matrizFrame4[y][x][0] | matrizFrame5[y][x][0] | matrizFrame6[y][x][0] );
     matriz[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
     matriz[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
@@ -350,7 +353,7 @@ void processaImagem( FaixaCor_t cor ){
             RGBtoHSV( &pR, &pG, &pB, &pH, &pS, &pV );
             mS *= 255;
 
-            if ( ((pH >= _cor.h_a1 && pH <= _cor.h_a2) || (pH >= _cor.h_b1 && pH <= _cor.h_b2)) && mS >= _cor.minS && luma >= _cor.minLuma && pV >= _cor.minV )
+            if ( ((pH >= _cor.h_a1 & pH <= _cor.h_a2) || (pH >= _cor.h_b1 & pH <= _cor.h_b2)) & (mS >= _cor.minS) & (luma >= _cor.minLuma) & (pV >= _cor.minV) )
                 valorPixel = 255;
             else
                 valorPixel = 0;
@@ -365,7 +368,7 @@ void processaImagem( FaixaCor_t cor ){
 
     //desenhaImagem();
 
-    if ( frame >= 6 )
+    if ( frame >= BUFFER_FRAMES )
       frame = 0;
 
     frame++;
