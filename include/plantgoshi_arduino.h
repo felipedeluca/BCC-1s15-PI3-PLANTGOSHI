@@ -20,5 +20,6 @@ typedef struct {
 } ArduinoComm;
 
 void arduino_LED( ArduinoComm* comm );
+void arduinoInit( ArduinoComm* comm );
 
 #endif

@@ -6,7 +6,7 @@
 #include "plantgoshi_arduino.h"
 
 #define POSTERIZE 100
-#define BUFFER_FRAMES 3
+#define BUFFER_FRAMES 6
 
 unsigned char ***matrizFrame1;
 unsigned char ***matrizFrame2;
@@ -26,6 +26,121 @@ ArduinoComm arduinoComm;
 FaixaCor_t arduinoCorAtual;
 
 int frame;
+//------------------------------------------------------------------------------
+void escreverArquivo(FaixaCor_t cor){
+
+   FILE *pf;
+
+//   char a = 'a';
+   switch (cor){
+      case AMARELO:
+         pf = fopen("AMARELO.txt", "wb");
+         if (pf == NULL) {
+            printf( "\nNão encontrei arquivo AMARELO.txt\n");
+            exit( EXIT_FAILURE);
+         }
+         break;
+      case VERMELHO:
+         pf = fopen("VERMELHO.txt", "wb");
+         if (pf == NULL) {
+            printf( "\nNão encontrei arquivo VERMELHO.txt\n");
+            exit( EXIT_FAILURE);
+         }
+         break;
+      case AZUL:
+         pf = fopen("AZUL.txt", "wb");
+         if (pf == NULL) {
+            printf( "\nNão encontrei arquivo AZUL.txt\n");
+            exit( EXIT_FAILURE);
+         }
+         break;
+      case VERDE:
+         pf = fopen("VERDE.txt", "wb");
+         if (pf == NULL) {
+            printf( "\nNão encontrei arquivo VERDE.txt\n");
+            exit( EXIT_FAILURE);
+         }
+         break;
+       case CIANO:
+            pf = fopen("CIANO.txt", "wb");
+            if (pf == NULL) {
+                printf( "\nNão encontrei arquivo CIANO.txt\n");
+                exit( EXIT_FAILURE);
+            }
+       break;
+       case MAGENTA:
+            pf = fopen("MAGENTA.txt", "wb");
+            if (pf == NULL) {
+                printf( "\nNão encontrei arquivo MAGENTA.txt\n");
+                exit( EXIT_FAILURE);
+             }
+       break;
+      default:
+        return;
+   }
+   fprintf(pf, "%f ", corAtual.h_a1);
+   fprintf(pf, "%f ", corAtual.h_a2);
+   fprintf(pf, "%f ", corAtual.h_b1);
+   fprintf(pf, "%f ", corAtual.h_b2);
+   fprintf(pf, "%f ", corAtual.minS);
+   fprintf(pf, "%f ", corAtual.minV);
+   fprintf(pf, "%c ", corAtual.minLuma);
+
+   fclose(pf); /* Fecha o arquivo */
+}
+//------------------------------------------------------------------------------
+void lerArquivo(FaixaCor_t cor){
+
+ //  int k= 1, a, b, c, d, e;
+   FILE *pf;
+
+   switch (cor){
+      case AMARELO:
+         pf = fopen("AMARELO.txt", "r");
+         break;
+      case VERMELHO:
+         pf = fopen("VERMELHO.txt", "r");
+         break;
+      case AZUL:
+         pf = fopen("AZUL.txt", "r");
+         break;
+      case VERDE:
+         pf = fopen("VERDE.txt", "r");
+         break;
+      case MAGENTA:
+         pf = fopen("MAGENTA.txt", "r");
+         break;
+      case CIANO:
+         pf = fopen("CIANO.txt", "r");
+         break;
+      default:
+        return;
+   }
+
+   if ( pf == NULL){
+       return;
+       fclose(pf);
+   }
+
+   fscanf(pf, "%f", &corAtual.h_a1);
+   fscanf(pf, "%f", &corAtual.h_a2);
+   fscanf(pf, "%f", &corAtual.h_b1);
+   fscanf(pf, "%f", &corAtual.h_b2);
+   fscanf(pf, "%f", &corAtual.minS);
+   fscanf(pf, "%f", &corAtual.minV);
+   fscanf(pf, "%c", &corAtual.minLuma);
+
+   // fscanf(pf, "%f", &a);
+   // fscanf(pf, "%f", &b);
+   // fscanf(pf, "%f", &c);
+   // fscanf(pf, "%f", &d);
+   // fscanf(pf, "%d", &e);
+   // fscanf(pf, "%d", &e);
+
+   printf("%.2f, %.2f, %.2f, %.2f, %d\n", corAtual.h_a1, corAtual.h_a2, corAtual.h_b1, corAtual.h_b2, corAtual.minLuma );
+
+   fclose(pf);
+}
 //------------------------------------------------------------------------------
 int analisaFrameExterior( unsigned char ***m, int x1, int x2, int y1, int y2 ){
     int contagem = 0;
@@ -110,6 +225,30 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = amarelo.numTentativas;
             corAtual.maxTentativas = amarelo.maxTentativas;
         break;
+        case CIANO:
+            corAtual.h_a1 = ciano.h_a1;
+            corAtual.h_a2 = ciano.h_a2;
+            corAtual.h_b1 = ciano.h_b1;
+            corAtual.h_b2 = ciano.h_b2;
+            corAtual.minS = ciano.minS;
+            corAtual.minV = ciano.minV;
+            corAtual.minLuma = ciano.minLuma;
+            corAtual.calibrada = ciano.calibrada;
+            corAtual.numTentativas = ciano.numTentativas;
+            corAtual.maxTentativas = ciano.maxTentativas;
+        break;
+        case MAGENTA:
+            corAtual.h_a1 = magenta.h_a1;
+            corAtual.h_a2 = magenta.h_a2;
+            corAtual.h_b1 = magenta.h_b1;
+            corAtual.h_b2 = magenta.h_b2;
+            corAtual.minS = magenta.minS;
+            corAtual.minV = magenta.minV;
+            corAtual.minLuma = magenta.minLuma;
+            corAtual.calibrada = magenta.calibrada;
+            corAtual.numTentativas = magenta.numTentativas;
+            corAtual.maxTentativas = magenta.maxTentativas;
+        break;
         default:
             corAtual.h_a1 = 0;
             corAtual.h_a2 = 0;
@@ -177,6 +316,29 @@ void setCor( FaixaCor_t faixaCor ){
             amarelo.numTentativas = corAtual.numTentativas;
             amarelo.maxTentativas = corAtual.maxTentativas;
         break;
+        case CIANO:
+            ciano.h_a1 = corAtual.h_a1;
+            ciano.h_a2 = corAtual.h_a2;
+            ciano.h_b1 = corAtual.h_b1;
+            ciano.h_b2 = corAtual.h_b2;
+            ciano.minS = corAtual.minS;
+            ciano.minV = corAtual.minV;
+            ciano.minLuma = corAtual.minLuma;
+            ciano.calibrada = corAtual.calibrada;
+            ciano.numTentativas = corAtual.numTentativas;
+            ciano.maxTentativas = corAtual.maxTentativas;
+        break;
+        case MAGENTA:
+            magenta.h_a1 = corAtual.h_a1;
+            magenta.h_a2 = corAtual.h_a2;
+            magenta.h_b1 = corAtual.h_b1;
+            magenta.h_b2 = corAtual.h_b2;
+            magenta.minS = corAtual.minS;
+            magenta.minV = corAtual.minV;
+            magenta.minLuma = corAtual.minLuma;
+            magenta.calibrada = corAtual.calibrada;
+            magenta.numTentativas = corAtual.numTentativas;
+            magenta.maxTentativas = corAtual.maxTentativas;
         default:
             corAtual.h_a1 = 0;
             corAtual.h_a2 = 0;
@@ -190,8 +352,30 @@ void setCor( FaixaCor_t faixaCor ){
     }
 }
 //------------------------------------------------------------------------------
-void imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
+void imageProc_carregaCores( void ){
+
+    lerArquivo( VERDE );
+    setCor( VERDE );
+
+    lerArquivo( VERMELHO );
+    setCor( VERMELHO );
+
+    lerArquivo( AZUL );
+    setCor( AZUL );
+
+    lerArquivo( MAGENTA );
+    setCor( MAGENTA );
+
+    lerArquivo( AMARELO );
+    setCor( AMARELO );
+
+    lerArquivo( CIANO );
+    setCor( CIANO );
+}
+//------------------------------------------------------------------------------
+int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
 //    int totalPixelsFrame = cam->largura * cam->altura;
+
     int numPixelsExterior = analisaFrameExterior( matrizProcessada, x1, x2, y1, y2 );
     int numPixelsInterior = analisaFrameInterior( matrizProcessada, x1, x2, y1, y2 );
 
@@ -201,55 +385,59 @@ void imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 )
 //    printf("%d\n", corAtual.calibrada);
     if ( numPixelsInterior < 10 && numPixelsExterior < 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
 //        corAtual.calibrada = 1;
-        corAtual.h_a1 -= 1;
-        corAtual.h_a2 += 1;
-        corAtual.h_b1 -= 1;
-        corAtual.h_b2 += 1;
+        corAtual.h_a1 -= 0.1;
+        corAtual.h_a2 += 0.1;
+        corAtual.h_b1 -= 0.1;
+        corAtual.h_b2 += 0.1;
         // if ( corAtual.minLuma > 0 && corAtual.minS ){
         //     corAtual.minLuma -= 5;
         //     corAtual.minS -= 5;
         // }
         corAtual.minLuma += 1;
-        corAtual.minS += 3;
+        corAtual.minS += 1;
         setCor( faixaCor ); // salva corAtual (variavel global)
-        printf( "---Tentativas: %d\n h_a1: %.3f  h_a2: %.3f\n", corAtual.numTentativas, corAtual.h_a1, corAtual.h_a2 );
-        printf("Interior: %d\n", numPixelsInterior);
-        printf("Exterior: %d\n", numPixelsExterior);
-        printf("Luma: %d\n", corAtual.minLuma);
-        printf("Sat: %.3f\n", corAtual.minS);
-        printf( "---Cor re-calibrada\n" );
+        // printf( "---Tentativas: %d\n h_a1: %.3f  h_a2: %.3f\n", corAtual.numTentativas, corAtual.h_a1, corAtual.h_a2 );
+        // printf("Interior: %d\n", numPixelsInterior);
+        // printf("Exterior: %d\n", numPixelsExterior);
+        // printf("Luma: %d\n", corAtual.minLuma);
+        // printf("Sat: %.3f\n", corAtual.minS);
+        printf( "+ Cor recalculada\n" );
     }
 
-    if ( corAtual.calibrada == 1 || corAtual.numTentativas >= corAtual.maxTentativas )
-        return;
+
+    if ( corAtual.calibrada == 1 || corAtual.numTentativas >= corAtual.maxTentativas ){
+        escreverArquivo( faixaCor );
+        return 1;
+    }
 
     if ( (numPixelsExterior < 50 && numPixelsInterior >= 100 ) ){ // 2%
         corAtual.calibrada = 1;
-        printf( "---Cor calibrada\n" );
+        printf( "** Cor calibrada\n" );
     }
     else {
         if ( numPixelsInterior >= 100 && numPixelsExterior >= 50 ){
-            if ( corAtual.h_a2 - corAtual.h_a1 >= 30 ) {
-                corAtual.h_a1 += 1;
-                corAtual.h_a2 -= 1;
-                corAtual.h_b1 += 1;
-                corAtual.h_b2 -= 1;
+            if ( corAtual.h_a2 - corAtual.h_a1 >= 10 ) {
+                corAtual.h_a1 += 0.5;
+                corAtual.h_a2 -= 0.5;
+                corAtual.h_b1 += 0.5;
+                corAtual.h_b2 -= 0.5;
             }
-            else {
-                corAtual.minLuma += 5;
-                corAtual.minS += 5;
-            }
+            // else {
+            //     corAtual.minLuma += 1;
+            //     corAtual.minS += 1;
+            // }
 
             corAtual.numTentativas += 1;
-            printf( "---Tentativas: %d\n h_a1: %.3f  h_a2: %.3f\n", corAtual.numTentativas, corAtual.h_a1, corAtual.h_a2 );
-            printf("Interior: %d\n", numPixelsInterior);
-            printf("Exterior: %d\n", numPixelsExterior);
-            printf("Luma: %d\n", corAtual.minLuma);
-            printf("Sat: %.3f\n", corAtual.minS);
+            // printf( "---Tentativas: %d\n h_a1: %.3f  h_a2: %.3f\n", corAtual.numTentativas, corAtual.h_a1, corAtual.h_a2 );
+            // printf("Interior: %d\n", numPixelsInterior);
+            // printf("Exterior: %d\n", numPixelsExterior);
+            // printf("Luma: %d\n", corAtual.minLuma);
+            // printf("Sat: %.3f\n", corAtual.minS);
         }
     }
 
     setCor( faixaCor ); // salva corAtual (variavel global)
+    return 0;
 }
 //------------------------------------------------------------------------------
 void setupArduino( void ) {
@@ -260,39 +448,52 @@ void setupArduino( void ) {
     arduinoComm.baudRate   = 9600;
     arduinoComm.timeOut    = 5000;
     arduinoComm.endOfLine  = '\n';
+
+    arduinoInit( &arduinoComm );
 }
 //------------------------------------------------------------------------------
 void arduino_setLEDColor( FaixaCor_t c ){
 
-        unsigned char r, g, b;
+        unsigned char r = 0, g = 0, b = 0;
         arduinoCorAtual = c;
 
         switch ( c ){
-            case VERMELHO:
-                r = 255;
-                g = 10;
-                b = 10;
-            break;
             case AZUL:
-                r = 10;
-                g = 10;
-                b = 255;
+                r = 5;
+                g = 5;
+                b = 30;
             break;
             case VERDE:
-                r = 10;
-                g = 255;
-                b = 10;
+                r = 5;
+                g = 30;
+                b = 5;
             break;
             case AMARELO:
-                r = 255;
-                g = 10;
-                b = 255;
+                r = 100;
+                g = 20;
+                b = 5;
+            break;
+            case CIANO:
+                r = 5;
+                g = 30;
+                b = 30;
+            break;
+            case MAGENTA:
+                r = 100;
+                g = 0;
+                b = 100;
+            break;
+            case VERMELHO:
+                r = 100;
+                g = 0;
+                b = 0;
             break;
             default:
                 r = 100;
                 g = 100;
                 b = 100;
         }
+
         arduinoComm.buffer[ 0 ] = b;
         arduinoComm.buffer[ 1 ] = g;
         arduinoComm.buffer[ 2 ] = r;
@@ -311,6 +512,8 @@ void imageProc_init( void ){
         exit(EXIT_FAILURE);
     }
 
+    arduinoCorAtual = AZUL;
+
     matrizFrame1  = camera_aloca_matriz(cam);
     matrizFrame2  = camera_aloca_matriz(cam);
     matrizFrame3  = camera_aloca_matriz(cam);
@@ -323,26 +526,26 @@ void imageProc_init( void ){
     matrizProcessada = camera_aloca_matriz(cam);
 
     vermelho.h_a1 = 0;
-    vermelho.h_a2 = 70;
-    vermelho.h_b1 = 330;
+    vermelho.h_a2 = 30;
+    vermelho.h_b1 = 340;
     vermelho.h_b2 = 360;
-    vermelho.minS = 100;
+    vermelho.minS = 0;
     vermelho.minV = 0;
-    vermelho.minLuma = 60;
+    vermelho.minLuma = 0;
     vermelho.calibrada = 0;
-    vermelho.nome = VERMELHO;
+    vermelho.tipo = VERMELHO;
     vermelho.numTentativas = 0;
     vermelho.maxTentativas = 200;
 
-    azul.h_a1 = 180;
+    azul.h_a1 = 200;
     azul.h_a2 = 270;
-    azul.h_b1 = 180;
+    azul.h_b1 = 200;
     azul.h_b2 = 270;
     azul.minS = 0;
     azul.minV = 0;
     azul.minLuma = 0;
     azul.calibrada = 0;
-    azul.nome = AZUL;
+    azul.tipo = AZUL;
     azul.numTentativas = 0;
     azul.maxTentativas = 200;
 
@@ -354,21 +557,45 @@ void imageProc_init( void ){
     verde.minV = 0;
     verde.minLuma = 0;
     verde.calibrada = 0;
-    verde.nome = VERDE;
+    verde.tipo = VERDE;
     verde.numTentativas = 0;
     verde.maxTentativas = 200;
 
-    amarelo.h_a1 = 45;
+    amarelo.h_a1 = 35;
     amarelo.h_a2 = 75;
-    amarelo.h_b1 = 45;
+    amarelo.h_b1 = 35;
     amarelo.h_b2 = 75;
-    amarelo.minS = 150;
+    amarelo.minS = 0;
     amarelo.minV = 0;
-    amarelo.minLuma = 50;
+    amarelo.minLuma = 0;
     amarelo.calibrada = 0;
-    amarelo.nome = AMARELO;
+    amarelo.tipo = AMARELO;
     amarelo.numTentativas = 0;
     amarelo.maxTentativas = 200;
+
+    ciano.h_a1 = 160;
+    ciano.h_a2 = 200;
+    ciano.h_b1 = 160;
+    ciano.h_b2 = 200;
+    ciano.minS = 0;
+    ciano.minV = 0;
+    ciano.minLuma = 0;
+    ciano.calibrada = 0;
+    ciano.tipo = CIANO;
+    ciano.numTentativas = 0;
+    ciano.maxTentativas = 200;
+
+    magenta.h_a1 = 290;
+    magenta.h_a2 = 340;
+    magenta.h_b1 = 290;
+    magenta.h_b2 = 340;
+    magenta.minS = 0;
+    magenta.minV = 0;
+    magenta.minLuma = 0;
+    magenta.calibrada = 0;
+    magenta.tipo = MAGENTA;
+    magenta.numTentativas = 0;
+    magenta.maxTentativas = 200;
 
     frame = 1;
 
@@ -542,6 +769,7 @@ void processaMatriz( const unsigned char valorPixel, int y, int x ){
     // median( matriz, matrizPreProcessada, y, x, cam->altura, cam->largura );
 
     unsigned char e = erode( matriz, y, x, cam->altura, cam->largura );
+    //unsigned char e = matriz[y][x][0];
     matrizProcessada[y][x][0] = e;
     matrizProcessada[y][x][1] = e;
     matrizProcessada[y][x][2] = e;
@@ -579,9 +807,10 @@ void processaImagem( FaixaCor_t faixaCor ){
 
     getCor( faixaCor );
 
-    if ( arduinoCorAtual != faixaCor){
-        arduino_setLEDColor( faixaCor );
-    }
+    // if ( arduinoCorAtual != faixaCor){
+    //     arduino_setLEDColor( faixaCor );
+    //     arduinoCorAtual = faixaCor;
+    // }
 
     // Pré-processamento: calcula a mediana dos pixels
     for ( int y = 0; y < cam->altura; y++ ){
@@ -608,7 +837,7 @@ void processaImagem( FaixaCor_t faixaCor ){
             RGBtoHSV( &pR, &pG, &pB, &pH, &pS, &pV );
             mS *= 255;
 
-            if ( ((pH >= corAtual.h_a1 & pH <= corAtual.h_a2) || (pH >= corAtual.h_b1 & pH <= corAtual.h_b2)) & (mS >= corAtual.minS) & (luma >= corAtual.minLuma) & (pV >= corAtual.minV) )
+            if ( ((pH >= corAtual.h_a1 & pH <= corAtual.h_a2) || (pH >= corAtual.h_b1 & pH <= corAtual.h_b2)) & (mS >= corAtual.minS) & (luma >= corAtual.minLuma) & (mV >= corAtual.minV) )
                 valorPixel = 255;
             else
                 valorPixel = 0;

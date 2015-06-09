@@ -15,9 +15,7 @@
 #include "plantgoshi_arduino.h"
 
 //------------------------------------------------------------------------------
-// Envia comando para mudar a cor do LED RGB
-void arduino_LED( ArduinoComm* comm ){
-
+void arduinoInit( ArduinoComm* comm ){
     if( comm->fd != -1 ) // A porta serial já está aberta
         serialport_close( comm->fd );
 
@@ -28,12 +26,18 @@ void arduino_LED( ArduinoComm* comm ){
         return;
     }
 
+}
+//------------------------------------------------------------------------------
+// Envia comando para mudar a cor do LED RGB
+void arduino_LED( ArduinoComm* comm ){
+
     serialport_flush( comm->fd );
 
     comm->rc = serialport_write( comm->fd, comm->buffer );
         if( comm->rc == -1 )
             printf( "error writing to Arduino\n" );
 
+    // serialport_close( comm->fd );
     // printf( "%s\n", comm->buffer );
     // printf( "%s\n", comm->serialPort );
     // printf( "%d\n", comm->fd );

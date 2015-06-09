@@ -19,7 +19,7 @@ void erro(char *mensagem) {
 }
 
 //------------------------------------------------------------------------------
-int main( void ) {
+int main( int argc, char **argv ) {
 
   imageProc_init(); // Função de inicialização
 
@@ -63,7 +63,46 @@ int main( void ) {
   al_start_timer(timer);
 
   al_rest(3);
-  printf("iniciando calibragem\n");
+  printf("===========================================\n");
+  printf("iniciando calibragem de cores\n");
+  printf("===========================================\n");
+
+ // int calibrarCor = 0;
+//  int corCalibrada = 0;
+  FaixaCor_t faixaCor = AZUL;
+  const unsigned char opt = argv[1][0];
+//  printf("%c\n", opt );
+
+  printf("-------------------------------------------\n");
+  if ( opt == '6' ){
+      faixaCor = VERMELHO;
+      printf("Calibrando VERMELHO..\n");
+  }
+  if ( opt == '1' ){
+      faixaCor = AMARELO;
+      printf("Calibrando AMARELO\n");
+  }
+  if ( opt == '2' ){
+      faixaCor = VERDE;
+      printf("Calibrando VERDE\n");
+  }
+  if ( opt == '3' ){
+      faixaCor = CIANO;
+      printf("Calibrando CIANO\n");
+  }
+  if ( opt == '4' ){
+      faixaCor = AZUL;
+      printf("Calibrando AZUL\n");
+  }
+  if ( opt == '5' ){
+      faixaCor = MAGENTA;
+      printf("Calibrando MAGENTA\n");
+  }
+
+  printf("-------------------------------------------\n");
+
+ // imageProc_carregaCores();
+
   while(continuar) {
       ALLEGRO_EVENT event;
 
@@ -81,17 +120,14 @@ int main( void ) {
       if ( atualizar && al_is_event_queue_empty(queue) ) {
           int x = 0, y = 0; // temporario
 
-          imageProc_atualizaXY( &x, &y, VERDE ); // Função principal
-          imageProc_desenhaImagem( esquerda, direita ); // Mostra o processamento. Função opcional.
-          imageProc_calibraCor( VERDE, 100, 150, 100, 150 );
+          imageProc_atualizaXY( &x, &y, faixaCor ); // Função principal
+          imageProc_calibraCor( faixaCor, 100, 150, 100, 150 );
 
-//          al_set_target_bitmap( esquerda );
+          imageProc_desenhaImagem( esquerda, direita ); // Mostra o processamento. Função opcional.
+
           al_draw_circle( x, y, 10, cor, 3 );
 
-//          al_set_target_bitmap( direita );
           al_draw_rectangle( 100, 100, 150, 150, cor, 5 );
-
-//          al_set_target_bitmap( esquerda );
 
           al_flip_display();
 
@@ -122,4 +158,4 @@ int main( void ) {
   al_uninstall_system();
 
   return EXIT_SUCCESS;
-}
+ }

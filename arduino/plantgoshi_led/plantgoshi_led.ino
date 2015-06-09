@@ -43,7 +43,7 @@ void setColor(int red, int green, int blue)
 void loop()
 {
   readSerialData();
-  delay(10);
+  delay(100);
 //  if (Comp("m1 on")==0) {
 //        Serial.write("Motor 1 -> Online\n");
           setColor( int(inData[0]), int(inData[1]), int(inData[2]) );
