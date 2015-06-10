@@ -18,10 +18,37 @@ void erro(char *mensagem) {
   exit(EXIT_FAILURE);
 }
 
-//------------------------------------------------------------------------------
+///-----------------------------------------------------------------------------
+void opcoesInicializacao( void ){
+
+    printf("PlantGoshi v. 1.0\n");
+    printf("=========================================\n");
+    printf("Digite o número da cor a ser utilizada no rastreamento:\n\n");
+    printf("1 - amarelo\n");
+    printf("2 - verde\n");
+    printf("3 - ciano\n");
+    printf("4 - azul\n");
+    printf("5 - magenta\n");
+    printf("6 - vermelho\n\n");
+
+    exit(EXIT_FAILURE);
+}
+//-------------------------------------------------------------------------------
 int main( int argc, char **argv ) {
 
-  imageProc_init(); // Função de inicialização
+    unsigned char opt = '7';
+
+    if ( argc < 2 ){
+        opcoesInicializacao();
+    }
+    else{
+        opt = argv[1][0];
+
+        if ( !(opt == '1' || opt == '2' || opt == '3' || opt == '4' || opt == '5' || opt == '6') )
+            opcoesInicializacao();
+    }
+
+  imageProc_init( 1 ); // Função de inicialização
 
   if(!al_init())
     erro("nao foi possivel inicializar allegro");
@@ -47,7 +74,8 @@ int main( int argc, char **argv ) {
 
   /**********/
 
-  ALLEGRO_COLOR cor = al_map_rgb_f(0.5, 0.5, 1);
+  ALLEGRO_COLOR al_colorGreen = al_map_rgb_f(0.2, 1.0, 0.2);
+  ALLEGRO_COLOR al_colorRed = al_map_rgb_f(1.0, 0.2, 0.2);
 
   ALLEGRO_BITMAP *buffer = al_get_backbuffer(display);
 
@@ -62,7 +90,7 @@ int main( int argc, char **argv ) {
 
   al_start_timer(timer);
 
-  al_rest(3);
+  al_rest(1);
 
   printf("===========================================\n");
   printf("iniciando calibragem de cores\n");
@@ -71,7 +99,6 @@ int main( int argc, char **argv ) {
  // int calibrarCor = 0;
 //  int corCalibrada = 0;
   FaixaCor_t faixaCor = PRETO;
-  const unsigned char opt = argv[1][0];
 //  printf("%c\n", opt );
 
   printf("-------------------------------------------\n");
@@ -122,13 +149,13 @@ int main( int argc, char **argv ) {
           int x = 0, y = 0; // temporario
 
           imageProc_atualizaXY( &x, &y, faixaCor ); // Função principal
-          imageProc_calibraCor( faixaCor, 100, 150, 100, 150 );
+//          imageProc_calibraCor( faixaCor, 80, 200, 80, 180 );
 
           imageProc_desenhaImagem( esquerda, direita ); // Mostra o processamento. Função opcional.
 
-          al_draw_circle( x, y, 10, cor, 3 );
+          al_draw_circle( x, y, 10, al_colorGreen, 3 );
 
-          al_draw_rectangle( 100, 100, 150, 150, cor, 5 );
+          al_draw_rectangle( 80, 80, 200, 180, al_colorRed, 5 );
 
           al_flip_display();
 

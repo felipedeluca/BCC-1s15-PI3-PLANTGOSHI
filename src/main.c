@@ -1,3 +1,23 @@
+/*
+================================================================================
+    PlantGoshi v1.0
+
+    Centro Universitário Senac
+
+    Bacharelado em Ciência da Computação
+    Professor orientador Marcelo Hashimoto
+    Projeto Integrador III
+
+    Integrantes do grupo:
+
+        Anderson J. da Silva
+        Felipe R. de Luca
+        Nelson J. Dressler
+
+    09/06/2015
+
+================================================================================
+*/
 // Os arquivos de cabeçalho
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
@@ -79,9 +99,55 @@ void atualizandoPoderEstadoFruto (Fruta[], AllVariaveisJogo *, TempoFruto *, Pos
 void atualizandoFuncaoVarinha (AllVariaveisJogo *);
 void reiniciaTempoParaFrutoMudar(TempoFruto *);
 
+//----------------------------------------------------------------------------------------------
+void opcoesInicializacao( void ){
+
+    printf("PlantGoshi v. 1.0\n");
+    printf("=========================================\n");
+    printf("Digite o número da cor a ser utilizada no rastreamento:\n\n");
+    printf("1 - amarelo\n");
+    printf("2 - verde\n");
+    printf("3 - ciano\n");
+    printf("4 - azul\n");
+    printf("5 - magenta\n");
+    printf("6 - vermelho\n\n");
+
+    exit(EXIT_FAILURE);
+}
+//----------------------------------------------------------------------------------------------
 int main ( int argc, char **argv ) {
 
-    imageProc_init(); // Função de inicialização
+
+    if ( argc < 2 ){
+        opcoesInicializacao();
+    }
+    else{
+        const unsigned char opt = argv[1][0];
+        switch ( opt ){
+            case '1':
+                corAtualVarinha = AMARELO;
+            break;
+            case '2':
+                corAtualVarinha = VERDE;
+            break;
+            case '3':
+                corAtualVarinha = CIANO;
+            break;
+            case '4':
+                corAtualVarinha = AZUL;
+            break;
+            case '5':
+                corAtualVarinha = MAGENTA;
+            break;
+            case '6':
+                corAtualVarinha = VERMELHO;
+            break;
+            default:
+                opcoesInicializacao();
+        }
+    }
+
+    imageProc_init( 0 ); // Função de inicialização
 
     if (inicializadores() == -1){
         return -1;
@@ -219,7 +285,7 @@ int main ( int argc, char **argv ) {
                 else {
                     if (allVariaveisJogo.contadorFrame % 6 == 0 ){
 
-                        imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, AZUL );
+                        imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
                         x = allVariaveisJogo.mouse_x;
                         y = allVariaveisJogo.mouse_y;
 
@@ -807,8 +873,7 @@ int main ( int argc, char **argv ) {
     free(frutas);
     return 0;
 }
-
-
+//----------------------------------------------------------------------------------------------
 int inicializadores () {
 
     if (!al_init()){
@@ -949,7 +1014,7 @@ int inicializadores () {
 
     return 1;
 }
-
+//----------------------------------------------------------------------------------------------
 void destruir () {
 
 //    imageProc_finaliza();
@@ -960,7 +1025,7 @@ void destruir () {
     al_destroy_font(fonte_80);
 
 }
-
+//----------------------------------------------------------------------------------------------
 void AtribuindoPosicaoFrutoNovo (Fruta frutas[], int i, PosicaoFruto *posicaoFruto ){
     int k = i;
     int aux = false;
@@ -1005,7 +1070,7 @@ void AtribuindoPosicaoFrutoNovo (Fruta frutas[], int i, PosicaoFruto *posicaoFru
     frutas[i].posY = 0;
     frutas[i].id   = -1;
 }
-
+//----------------------------------------------------------------------------------------------
 void tempPosicaoNovoNo (Fruta frutas[], int i, PosicaoFruto *posicaoFruto ) {
 
     AtribuindoPosicaoFrutoNovo (frutas, i, posicaoFruto);
@@ -1026,7 +1091,7 @@ void tempPosicaoNovoNo (Fruta frutas[], int i, PosicaoFruto *posicaoFruto ) {
         frutas[i].tamanhoPraga  = 0;
     }
 }
-
+//----------------------------------------------------------------------------------------------
 void desenhandoNovoFruto (Fruta frutas[], AllVariaveisJogo *allVariaveisJogo, PosicaoFruto *posicaoFruto){
 
     allVariaveisJogo->timeDesenharNovoFruto++;
@@ -1051,7 +1116,7 @@ void desenhandoNovoFruto (Fruta frutas[], AllVariaveisJogo *allVariaveisJogo, Po
        }
     }
 }
-
+//----------------------------------------------------------------------------------------------
 void reiniciarParaNovoJogo(Fruta frutas[], PosicaoFruto *posicaoFruto, AllVariaveisJogo *allVariaveisJogo){
 
     arvore_inicializar( 0, 0, 1500, 1.0, 0.0, 1.5, 600, 600);
@@ -1099,7 +1164,7 @@ void reiniciarParaNovoJogo(Fruta frutas[], PosicaoFruto *posicaoFruto, AllVariav
         posicaoFruto->index           = 0;
     }
 }
-
+//----------------------------------------------------------------------------------------------
 void reiniciaTempoParaFrutoMudar(TempoFruto *tempoFruto){
 
     tempoFruto->paraRegar   = 15;
@@ -1109,7 +1174,7 @@ void reiniciaTempoParaFrutoMudar(TempoFruto *tempoFruto){
     tempoFruto->estragado   = 50;
 
 }
-
+//----------------------------------------------------------------------------------------------
 void atualizandoPoderEstadoFruto (Fruta frutas[], AllVariaveisJogo *allVariaveisJogo, TempoFruto *tempoFruto, PosicaoFruto *posicaoFruto){
 
     for (int i = 0; i < quantidadeFruto; i++){
@@ -1184,7 +1249,7 @@ void atualizandoPoderEstadoFruto (Fruta frutas[], AllVariaveisJogo *allVariaveis
         }
     }
 }
-
+//----------------------------------------------------------------------------------------------
 void atualizandoFuncaoVarinha (AllVariaveisJogo *allVariaveisJogo){
 
     if (funcaoVarinha != nenhuma){

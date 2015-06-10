@@ -28,7 +28,7 @@ void arduino_LED( ArduinoComm* comm ){
     comm->fd = serialport_init( comm->serialPort, comm->baudRate );
 
     if ( comm->fd == -1 ){
-        printf( "Couldn't open port\n" );
+    //    printf( "Couldn't open port\n" );
         return;
 
     }

@@ -2,6 +2,7 @@
 #include "estrutura_cam.h"
 #include <allegro5/allegro.h>
 
+
 #define CAM_RES_W 320
 #define CAM_RES_H 240
 
