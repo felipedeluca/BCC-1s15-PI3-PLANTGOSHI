@@ -69,7 +69,7 @@ int main( int argc, char **argv ) {
 
  // int calibrarCor = 0;
 //  int corCalibrada = 0;
-  FaixaCor_t faixaCor = AZUL;
+  FaixaCor_t faixaCor = PRETO;
   const unsigned char opt = argv[1][0];
 //  printf("%c\n", opt );
 

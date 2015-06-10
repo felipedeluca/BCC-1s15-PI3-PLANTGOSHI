@@ -5,7 +5,7 @@
 #include "cor.h"
 #include "plantgoshi_arduino.h"
 
-#define POSTERIZE 100
+#define POSTERIZE 90
 #define BUFFER_FRAMES 6
 
 unsigned char ***matrizFrame1;
@@ -383,18 +383,19 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
 
 
 //    printf("%d\n", corAtual.calibrada);
-    if ( numPixelsInterior < 10 && numPixelsExterior < 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
+    if ( numPixelsInterior > 0 && numPixelsInterior < 10 && numPixelsExterior < 30 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
 //        corAtual.calibrada = 1;
-        corAtual.h_a1 -= 0.1;
-        corAtual.h_a2 += 0.1;
-        corAtual.h_b1 -= 0.1;
-        corAtual.h_b2 += 0.1;
+        corAtual.h_a1 -= 0.2;
+        corAtual.h_a2 += 0.2;
+        corAtual.h_b1 -= 0.2;
+        corAtual.h_b2 += 0.2;
         // if ( corAtual.minLuma > 0 && corAtual.minS ){
         //     corAtual.minLuma -= 5;
         //     corAtual.minS -= 5;
         // }
         corAtual.minLuma += 1;
         corAtual.minS += 1;
+        //corAtual.minV += 1;
         setCor( faixaCor ); // salva corAtual (variavel global)
         // printf( "---Tentativas: %d\n h_a1: %.3f  h_a2: %.3f\n", corAtual.numTentativas, corAtual.h_a1, corAtual.h_a2 );
         // printf("Interior: %d\n", numPixelsInterior);
@@ -403,19 +404,22 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         // printf("Sat: %.3f\n", corAtual.minS);
         printf( "+ Cor recalculada\n" );
     }
-
+    if ( numPixelsInterior == 0 ){
+        corAtual.minLuma -= 1;
+        corAtual.minS -= 1;
+    }
 
     if ( corAtual.calibrada == 1 || corAtual.numTentativas >= corAtual.maxTentativas ){
         escreverArquivo( faixaCor );
         return 1;
     }
 
-    if ( (numPixelsExterior < 50 && numPixelsInterior >= 100 ) ){ // 2%
+    if ( (numPixelsExterior < 40 && numPixelsInterior >= 150 ) ){ // 2%
         corAtual.calibrada = 1;
         printf( "** Cor calibrada\n" );
     }
     else {
-        if ( numPixelsInterior >= 100 && numPixelsExterior >= 50 ){
+        if ( numPixelsInterior >= 150 && numPixelsExterior >= 40 ){
             if ( corAtual.h_a2 - corAtual.h_a1 >= 10 ) {
                 corAtual.h_a1 += 0.5;
                 corAtual.h_a2 -= 0.5;
@@ -448,58 +452,42 @@ void setupArduino( void ) {
     arduinoComm.baudRate   = 9600;
     arduinoComm.timeOut    = 5000;
     arduinoComm.endOfLine  = '\n';
-
-    arduinoInit( &arduinoComm );
 }
 //------------------------------------------------------------------------------
-void arduino_setLEDColor( FaixaCor_t c ){
+void arduino_setLEDColor( FaixaCor_t cor ){
 
-        unsigned char r = 0, g = 0, b = 0;
-        arduinoCorAtual = c;
+//    printf("AZUL\n");
 
-        switch ( c ){
-            case AZUL:
-                r = 5;
-                g = 5;
-                b = 30;
+        char setColor = '6';
+        switch ( cor ){
+            case AMARELO:
+                setColor = '1';
             break;
             case VERDE:
-                r = 5;
-                g = 30;
-                b = 5;
-            break;
-            case AMARELO:
-                r = 100;
-                g = 20;
-                b = 5;
+                setColor = '2';
             break;
             case CIANO:
-                r = 5;
-                g = 30;
-                b = 30;
+                setColor = '3';
+            break;
+            case AZUL:
+                setColor = '4';
             break;
             case MAGENTA:
-                r = 100;
-                g = 0;
-                b = 100;
+                setColor = '5';
             break;
             case VERMELHO:
-                r = 100;
-                g = 0;
-                b = 0;
+                setColor = '6';
             break;
             default:
-                r = 100;
-                g = 100;
-                b = 100;
+                setColor = '7';
         }
 
-        arduinoComm.buffer[ 0 ] = b;
-        arduinoComm.buffer[ 1 ] = g;
-        arduinoComm.buffer[ 2 ] = r;
-        arduinoComm.buffer[ 3 ] = '\0';
+         arduinoComm.buffer[ 0 ] = setColor;
+         arduinoComm.buffer[ 1 ] = 0;
+         arduinoComm.buffer[ 2 ] = 0;
+         arduinoComm.buffer[ 3 ] = '\0';
 
-    //    strcpy( arduinoComm.buffer, "zaz" );
+        //strcpy( arduinoComm.buffer, "zzz" );
 
         arduino_LED( &arduinoComm );
 }
@@ -806,11 +794,10 @@ void processaImagem( FaixaCor_t faixaCor ){
     unsigned char valorPixel = 0;
 
     getCor( faixaCor );
-
-    // if ( arduinoCorAtual != faixaCor){
-    //     arduino_setLEDColor( faixaCor );
-    //     arduinoCorAtual = faixaCor;
-    // }
+    if ( arduinoCorAtual != faixaCor){
+        arduino_setLEDColor( faixaCor );
+        arduinoCorAtual = faixaCor;
+    }
 
     // Pré-processamento: calcula a mediana dos pixels
     for ( int y = 0; y < cam->altura; y++ ){
