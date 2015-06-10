@@ -590,9 +590,9 @@ void median( unsigned char ***m, unsigned char ***output, int y, int x, int altu
     }
 
 //    printf("x: %d   y: %d\n", x, y);
-    output[y][x][0] = sumR / 49;
-    output[y][x][1] = sumG / 49;
-    output[y][x][2] = sumB / 49;
+    output[y][x][0] = (sumR / 49);
+    output[y][x][1] = (sumG / 49);
+    output[y][x][2] = (sumB / 49);
 }
 //------------------------------------------------------------------------------
 unsigned char erode( unsigned char ***m, int y, int x, int altura, int largura ){
