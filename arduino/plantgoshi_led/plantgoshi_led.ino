@@ -7,7 +7,7 @@ int greenPin = 10;
 int bluePin = 11;
 //---------------------------------------------------------------
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode( redPin, OUTPUT );
   pinMode( greenPin, OUTPUT );
   pinMode( bluePin, OUTPUT );
@@ -46,13 +46,13 @@ void loop()
   delay(100);
 //  if (Comp("m1 on")==0) {
 //        Serial.write("Motor 1 -> Online\n");
-          if ( inData[0] == '1' ) setColor( 255, 100, 0 );
-          if ( inData[0] == '2' ) setColor( 0, 255, 0 );
-          if ( inData[0] == '3' ) setColor( 0, 255, 255 );
-          if ( inData[0] == '4' ) setColor( 0, 0, 50 );
-          if ( inData[0] == '5' ) setColor( 80, 0, 80 );
-          if ( inData[0] == '6' ) setColor( 255, 0, 0 );
-          inData[0] == '0';
+          if ( inData[1] == '1' ) setColor( 255, 100, 0 );
+          if ( inData[1] == '2' ) setColor( 0, 255, 0 );
+          if ( inData[1] == '3' ) setColor( 0, 255, 255 );
+          if ( inData[1] == '4' ) setColor( 0, 0, 50 );
+          if ( inData[1] == '5' ) setColor( 80, 0, 80 );
+          if ( inData[1] == '6' ) setColor( 255, 0, 0 );
+          inData[1] == '0';
 //          setColor( 255, 0, 0 );
 //        delay( 1000 );
 //  

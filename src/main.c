@@ -280,8 +280,7 @@ int main ( int argc, char **argv ) {
                 }
 
                 else {
-                    if (allVariaveisJogo.contadorFrame % 4 == 0 ){
-
+                    if (allVariaveisJogo.contadorFrame % 6 == 0 ){
                         imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
                         x = allVariaveisJogo.mouse_x;
                         y = allVariaveisJogo.mouse_y;

@@ -52,8 +52,8 @@ void imageProc_init( int calibrar ){
     matrizProcessada = camera_aloca_matriz(cam);
 
     vermelho.h_a1 = 0;
-    vermelho.h_a2 = 35;
-    vermelho.h_b1 = 330;
+    vermelho.h_a2 = 30;
+    vermelho.h_b1 = 320;
     vermelho.h_b2 = 360;
     vermelho.minS = -1;
     vermelho.minV = -1;
@@ -64,7 +64,7 @@ void imageProc_init( int calibrar ){
     vermelho.calibrada = 0;
     vermelho.tipo = VERMELHO;
     vermelho.numTentativas = 0;
-    vermelho.maxTentativas = 300;
+    vermelho.maxTentativas = 100;
 
     azul.h_a1 = 200;
     azul.h_a2 = 270;
@@ -79,7 +79,7 @@ void imageProc_init( int calibrar ){
     azul.calibrada = 0;
     azul.tipo = AZUL;
     azul.numTentativas = 0;
-    azul.maxTentativas = 300;
+    azul.maxTentativas = 100;
 
     verde.h_a1 = 60;
     verde.h_a2 = 200;
@@ -94,7 +94,7 @@ void imageProc_init( int calibrar ){
     verde.calibrada = 0;
     verde.tipo = VERDE;
     verde.numTentativas = 0;
-    verde.maxTentativas = 300;
+    verde.maxTentativas = 100;
 
     amarelo.h_a1 = 35;
     amarelo.h_a2 = 75;
@@ -109,7 +109,7 @@ void imageProc_init( int calibrar ){
     amarelo.calibrada = 0;
     amarelo.tipo = AMARELO;
     amarelo.numTentativas = 0;
-    amarelo.maxTentativas = 300;
+    amarelo.maxTentativas = 100;
 
     ciano.h_a1 = 160;
     ciano.h_a2 = 200;
@@ -124,7 +124,7 @@ void imageProc_init( int calibrar ){
     ciano.calibrada = 0;
     ciano.tipo = CIANO;
     ciano.numTentativas = 0;
-    ciano.maxTentativas = 300;
+    ciano.maxTentativas = 100;
 
     magenta.h_a1 = 290;
     magenta.h_a2 = 340;
@@ -139,7 +139,7 @@ void imageProc_init( int calibrar ){
     magenta.calibrada = 0;
     magenta.tipo = MAGENTA;
     magenta.numTentativas = 0;
-    magenta.maxTentativas = 300;
+    magenta.maxTentativas = 100;
 
     frame = 1;
 
@@ -521,7 +521,7 @@ void setupArduino( void ) {
     // Configura a comunicação com o Arduino
     strcpy( arduinoComm.serialPort, "/dev/cu.usbmodem1411" );
     arduinoComm.fd         = -1;
-    arduinoComm.baudRate   = 9600;
+    arduinoComm.baudRate   = 115200;
     arduinoComm.timeOut    = 5000;
     arduinoComm.endOfLine  = '\n';
 }
@@ -555,8 +555,8 @@ void arduino_setLEDColor( FaixaCor_t cor ){
         }
 
          arduinoComm.buffer[ 0 ] = setColor;
-         arduinoComm.buffer[ 1 ] = 0;
-         arduinoComm.buffer[ 2 ] = 0;
+         arduinoComm.buffer[ 1 ] = setColor;
+         arduinoComm.buffer[ 2 ] = setColor;
          arduinoComm.buffer[ 3 ] = '\0';
 
         //strcpy( arduinoComm.buffer, "zzz" );
@@ -782,14 +782,14 @@ void analisaMinMaxFrameInterior( int x1, int x2, int y1, int y2, int i, int j, f
 
     if ( i >= y1 && i <= y2 && j >= x1 && j <= x2 ){
         if ( corAtual.minS == -1 || ( mS / 2 ) > corAtual.minS )
-            corAtual.minS += 0.0001;
+            corAtual.minS += 0.001;
         else if ( corAtual.maxS == 1 || ( mS / 2 ) + corAtual.minS <= corAtual.maxS )
-            corAtual.maxS -= 0.000001;
+            corAtual.maxS -= 0.00001;
 
         if ( corAtual.minLuma == -1 || ( luma / 2 ) > corAtual.minLuma )
-            corAtual.minLuma += 0.01;
+            corAtual.minLuma += 0.1;
         else if ( corAtual.maxLuma == 255 || ( luma / 2 ) + corAtual.minLuma <= corAtual.maxLuma )
-            corAtual.maxLuma -= 0.01;
+            corAtual.maxLuma -= 0.5;
 
             printf("luma: %.3f  minLuma: %.3f   maxLuma: %.3f   sat: %.3f  minS: %.3f  maxS: %.3f\n", luma, corAtual.minLuma, corAtual.maxLuma, mS, corAtual.minS, corAtual.maxS );
     }
@@ -798,30 +798,30 @@ void analisaMinMaxFrameInterior( int x1, int x2, int y1, int y2, int i, int j, f
 int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
 //    int totalPixelsFrame = cam->largura * cam->altura;
 
+    if ( corAtual.calibrada )
+            return 0;
+
     int numPixelsExterior = analisaFrameExterior( matrizProcessada, x1, x2, y1, y2 );
     int numPixelsInterior = analisaFrameInterior( matrizProcessada, x1, x2, y1, y2 );
 
-//    getCor( faixaCor ); // seleciona  corAtual (variavel global)
+    getCor( faixaCor ); // seleciona  corAtual (variavel global)
 
 
 //    printf("%d\n", corAtual.calibrada);
-    if ( numPixelsInterior > 10 && numPixelsInterior < 100  && numPixelsExterior <= 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
-//        corAtual.calibrada = 1;
+    if ( numPixelsInterior > 10 && numPixelsInterior < 250  && numPixelsExterior <= 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
         corAtual.h_a1 -= 0.2;
         corAtual.h_a2 += 0.2;
         corAtual.h_b1 -= 0.2;
         corAtual.h_b2 += 0.2;
-        // if ( corAtual.minLuma > 0 && corAtual.minS ){
-        //     corAtual.minLuma -= 5;
-        //     corAtual.minS -= 5;
-        // }
-        //corAtual.minV += 1;
         setCor( faixaCor ); // salva corAtual (variavel global)
-        // printf( "---Tentativas: %d\n h_a1: %.3f  h_a2: %.3f\n", corAtual.numTentativas, corAtual.h_a1, corAtual.h_a2 );
-        // printf("Interior: %d\n", numPixelsInterior);
-        // printf("Exterior: %d\n", numPixelsExterior);
-        // printf("Luma: %d\n", corAtual.minLuma);
-        // printf("Sat: %.3f\n", corAtual.minS);
+        printf( "+Ajustando cor\n" );
+    }
+    else if ( numPixelsInterior > 10 && numPixelsInterior < 300  && numPixelsExterior > 150 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
+        corAtual.minLuma += 0.08;
+        corAtual.maxLuma -= 0.1;
+        corAtual.minS += 0.0005;
+        corAtual.maxS -= 0.000001;
+        setCor( faixaCor ); // salva corAtual (variavel global)
         printf( "+Ajustando cor\n" );
     }
     else if ( numPixelsInterior <= 10 && numPixelsExterior <= 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){
@@ -836,14 +836,13 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         corAtual.maxS += 0.0000001;
    }
 
-    if ( corAtual.calibrada == 1 || corAtual.numTentativas >= corAtual.maxTentativas ){
+    if (  corAtual.numTentativas >= corAtual.maxTentativas && !corAtual.calibrada ){
         if ( corAtual.numTentativas == corAtual.maxTentativas){
             printf( "Número esgotado de tentativas de calibragem!\n" );
+            printf( "-- Cor calibrada com imprecisão.!\n" );
+            escreverArquivo( faixaCor );
             exit(EXIT_FAILURE);
         }
-
-        escreverArquivo( faixaCor );
-        return 1;
     }
 
     if ( (numPixelsExterior < 150 && numPixelsInterior >= 300 ) ){ // 2%
@@ -853,7 +852,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         return 0;
     }
     else {
-        if ( numPixelsInterior >= 300 && numPixelsExterior >= 150 ){
+        if ( numPixelsInterior >= 400 && numPixelsExterior >= 150 ){
             if ( corAtual.h_a2 - corAtual.h_a1 >= 5 ) {
             //    printf( "fechando angulo!\n" );
                 corAtual.h_a1 += 0.5;
@@ -924,9 +923,9 @@ void processaImagem( FaixaCor_t faixaCor ){
     for ( int y = 0; y < cam->altura; y++ ){
         for ( int x = 0; x < cam->largura; x++ ) {
 
-            mR = matrizMediana[y][x][0];
-            mG = matrizMediana[y][x][1];
-            mB = matrizMediana[y][x][2];
+            mR = matrizMediana[y][x][0] * 0.9;
+            mG = matrizMediana[y][x][1] * 0.7;
+            mB = matrizMediana[y][x][2] * 0.8;
 
             pR = (mR / POSTERIZE ) * POSTERIZE;
             pG = (mG / POSTERIZE ) * POSTERIZE;
