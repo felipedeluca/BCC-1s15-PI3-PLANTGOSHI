@@ -63,6 +63,7 @@ int main( int argc, char **argv ) {
   al_start_timer(timer);
 
   al_rest(3);
+
   printf("===========================================\n");
   printf("iniciando calibragem de cores\n");
   printf("===========================================\n");

@@ -5,7 +5,7 @@
 #include "cor.h"
 #include "plantgoshi_arduino.h"
 
-#define POSTERIZE 90
+#define POSTERIZE 1
 #define BUFFER_FRAMES 6
 
 unsigned char ***matrizFrame1;
@@ -96,22 +96,22 @@ void lerArquivo(FaixaCor_t cor){
 
    switch (cor){
       case AMARELO:
-         pf = fopen("AMARELO.txt", "r");
+         pf = fopen("config/AMARELO.txt", "r");
          break;
       case VERMELHO:
-         pf = fopen("VERMELHO.txt", "r");
+         pf = fopen("config/VERMELHO.txt", "r");
          break;
       case AZUL:
-         pf = fopen("AZUL.txt", "r");
+         pf = fopen("config/AZUL.txt", "r");
          break;
       case VERDE:
-         pf = fopen("VERDE.txt", "r");
+         pf = fopen("config/VERDE.txt", "r");
          break;
       case MAGENTA:
-         pf = fopen("MAGENTA.txt", "r");
+         pf = fopen("config/MAGENTA.txt", "r");
          break;
       case CIANO:
-         pf = fopen("CIANO.txt", "r");
+         pf = fopen("config/CIANO.txt", "r");
          break;
       default:
         return;
@@ -456,7 +456,7 @@ void setupArduino( void ) {
 //------------------------------------------------------------------------------
 void arduino_setLEDColor( FaixaCor_t cor ){
 
-//    printf("AZUL\n");
+//    printf("%d\n", cor);
 
         char setColor = '6';
         switch ( cor ){
@@ -500,8 +500,6 @@ void imageProc_init( void ){
         exit(EXIT_FAILURE);
     }
 
-    arduinoCorAtual = AZUL;
-
     matrizFrame1  = camera_aloca_matriz(cam);
     matrizFrame2  = camera_aloca_matriz(cam);
     matrizFrame3  = camera_aloca_matriz(cam);
@@ -514,7 +512,7 @@ void imageProc_init( void ){
     matrizProcessada = camera_aloca_matriz(cam);
 
     vermelho.h_a1 = 0;
-    vermelho.h_a2 = 30;
+    vermelho.h_a2 = 20;
     vermelho.h_b1 = 340;
     vermelho.h_b2 = 360;
     vermelho.minS = 0;
@@ -794,6 +792,7 @@ void processaImagem( FaixaCor_t faixaCor ){
     unsigned char valorPixel = 0;
 
     getCor( faixaCor );
+
     if ( arduinoCorAtual != faixaCor){
         arduino_setLEDColor( faixaCor );
         arduinoCorAtual = faixaCor;
@@ -846,6 +845,7 @@ void processaImagem( FaixaCor_t faixaCor ){
 }
 //------------------------------------------------------------------------------
 void imageProc_atualizaXY( int *x, int *y, FaixaCor_t faixaCor ){
+
     processaImagem( faixaCor );
 
     int ci = 0, cj = 0, cn = 0;

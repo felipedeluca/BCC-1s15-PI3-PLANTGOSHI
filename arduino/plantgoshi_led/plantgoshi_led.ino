@@ -49,8 +49,8 @@ void loop()
           if ( inData[0] == '1' ) setColor( 255, 100, 0 );
           if ( inData[0] == '2' ) setColor( 0, 255, 0 );
           if ( inData[0] == '3' ) setColor( 0, 255, 255 );
-          if ( inData[0] == '4' ) setColor( 0, 0, 255 );
-          if ( inData[0] == '5' ) setColor( 255, 0, 255 );
+          if ( inData[0] == '4' ) setColor( 0, 0, 50 );
+          if ( inData[0] == '5' ) setColor( 80, 0, 80 );
           if ( inData[0] == '6' ) setColor( 255, 0, 0 );
           inData[0] == '0';
 //          setColor( 255, 0, 0 );
