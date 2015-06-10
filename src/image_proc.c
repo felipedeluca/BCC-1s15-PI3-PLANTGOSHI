@@ -64,7 +64,7 @@ void imageProc_init( int calibrar ){
     vermelho.calibrada = 0;
     vermelho.tipo = VERMELHO;
     vermelho.numTentativas = 0;
-    vermelho.maxTentativas = 200;
+    vermelho.maxTentativas = 300;
 
     azul.h_a1 = 200;
     azul.h_a2 = 270;
@@ -79,7 +79,7 @@ void imageProc_init( int calibrar ){
     azul.calibrada = 0;
     azul.tipo = AZUL;
     azul.numTentativas = 0;
-    azul.maxTentativas = 200;
+    azul.maxTentativas = 300;
 
     verde.h_a1 = 60;
     verde.h_a2 = 200;
@@ -94,7 +94,7 @@ void imageProc_init( int calibrar ){
     verde.calibrada = 0;
     verde.tipo = VERDE;
     verde.numTentativas = 0;
-    verde.maxTentativas = 200;
+    verde.maxTentativas = 300;
 
     amarelo.h_a1 = 35;
     amarelo.h_a2 = 75;
@@ -109,7 +109,7 @@ void imageProc_init( int calibrar ){
     amarelo.calibrada = 0;
     amarelo.tipo = AMARELO;
     amarelo.numTentativas = 0;
-    amarelo.maxTentativas = 200;
+    amarelo.maxTentativas = 300;
 
     ciano.h_a1 = 160;
     ciano.h_a2 = 200;
@@ -124,7 +124,7 @@ void imageProc_init( int calibrar ){
     ciano.calibrada = 0;
     ciano.tipo = CIANO;
     ciano.numTentativas = 0;
-    ciano.maxTentativas = 200;
+    ciano.maxTentativas = 300;
 
     magenta.h_a1 = 290;
     magenta.h_a2 = 340;
@@ -139,7 +139,7 @@ void imageProc_init( int calibrar ){
     magenta.calibrada = 0;
     magenta.tipo = MAGENTA;
     magenta.numTentativas = 0;
-    magenta.maxTentativas = 200;
+    magenta.maxTentativas = 300;
 
     frame = 1;
 
@@ -203,8 +203,11 @@ void escreverArquivo(FaixaCor_t cor){
    fprintf(pf, "%f ", corAtual.h_b1);
    fprintf(pf, "%f ", corAtual.h_b2);
    fprintf(pf, "%f ", corAtual.minS);
+   fprintf(pf, "%f ", corAtual.maxS);
    fprintf(pf, "%f ", corAtual.minV);
+   fprintf(pf, "%f ", corAtual.maxV);
    fprintf(pf, "%f ", corAtual.minLuma);
+   fprintf(pf, "%f ", corAtual.maxLuma);
 
    fclose(pf); /* Fecha o arquivo */
 }
@@ -238,6 +241,7 @@ void lerArquivo(FaixaCor_t cor){
    }
 
    if ( pf == NULL){
+       printf("Não foi possível carregar a configuração da cor.\n");
        return;
        fclose(pf);
    }
@@ -247,8 +251,11 @@ void lerArquivo(FaixaCor_t cor){
    fscanf(pf, "%f", &corAtual.h_b1);
    fscanf(pf, "%f", &corAtual.h_b2);
    fscanf(pf, "%f", &corAtual.minS);
+   fscanf(pf, "%f", &corAtual.maxS);
    fscanf(pf, "%f", &corAtual.minV);
+   fscanf(pf, "%f", &corAtual.maxV);
    fscanf(pf, "%f", &corAtual.minLuma);
+   fscanf(pf, "%f", &corAtual.maxLuma);
 
    // fscanf(pf, "%f", &a);
    // fscanf(pf, "%f", &b);
@@ -257,7 +264,8 @@ void lerArquivo(FaixaCor_t cor){
    // fscanf(pf, "%d", &e);
    // fscanf(pf, "%d", &e);
 
-   printf("%.2f, %.2f, %.2f, %.2f, %f\n", corAtual.h_a1, corAtual.h_a2, corAtual.h_b1, corAtual.h_b2, corAtual.minLuma );
+   printf("ha1: %.2f, ha2: %.2f, hb1: %.2f, hb2: %.2f, minL: %.3f, maxL: %.3f, minS: %.3f, maxS: %.3f\n", corAtual.h_a1,
+            corAtual.h_a2, corAtual.h_b1, corAtual.h_b2, corAtual.minLuma, corAtual.maxLuma, corAtual.minS, corAtual.maxS );
 
    fclose(pf);
 }
@@ -769,19 +777,19 @@ int analisaFrameInterior( unsigned char ***m, int x1, int x2, int y1, int y2 ){
 //------------------------------------------------------------------------------
 void analisaMinMaxFrameInterior( int x1, int x2, int y1, int y2, int i, int j, float mS, float luma ){
 
-    if ( luma < 0 )
+    if ( luma <= 0 )
         return;
 
     if ( i >= y1 && i <= y2 && j >= x1 && j <= x2 ){
-        if ( corAtual.minS == -1 || mS > corAtual.minS )
-            corAtual.minS += 0.001;
-        else if ( corAtual.maxS == 1 || mS <= corAtual.maxS )
-            corAtual.maxS -= 0.001;
+        if ( corAtual.minS == -1 || ( mS / 2 ) > corAtual.minS )
+            corAtual.minS += 0.0001;
+        else if ( corAtual.maxS == 1 || ( mS / 2 ) + corAtual.minS <= corAtual.maxS )
+            corAtual.maxS -= 0.000001;
 
-        if ( corAtual.minLuma == -1 || luma < corAtual.minLuma )
-            corAtual.minLuma += 0.1;
-        else if ( corAtual.maxLuma == 255 || luma >= corAtual.maxLuma )
-            corAtual.maxLuma -= 0.1;
+        if ( corAtual.minLuma == -1 || ( luma / 2 ) > corAtual.minLuma )
+            corAtual.minLuma += 0.01;
+        else if ( corAtual.maxLuma == 255 || ( luma / 2 ) + corAtual.minLuma <= corAtual.maxLuma )
+            corAtual.maxLuma -= 0.01;
 
             printf("luma: %.3f  minLuma: %.3f   maxLuma: %.3f   sat: %.3f  minS: %.3f  maxS: %.3f\n", luma, corAtual.minLuma, corAtual.maxLuma, mS, corAtual.minS, corAtual.maxS );
     }
@@ -797,7 +805,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
 
 
 //    printf("%d\n", corAtual.calibrada);
-    if ( numPixelsInterior > 10 && numPixelsInterior < 100  && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
+    if ( numPixelsInterior > 10 && numPixelsInterior < 100  && numPixelsExterior <= 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
 //        corAtual.calibrada = 1;
         corAtual.h_a1 -= 0.2;
         corAtual.h_a2 += 0.2;
@@ -816,29 +824,36 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         // printf("Sat: %.3f\n", corAtual.minS);
         printf( "+Ajustando cor\n" );
     }
-    else if ( numPixelsInterior <= 10 ){
+    else if ( numPixelsInterior <= 10 && numPixelsExterior <= 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){
         corAtual.h_a1 -= 0.2;
         corAtual.h_a2 += 0.2;
         corAtual.h_b1 -= 0.2;
         corAtual.h_b2 += 0.2;
 
-//        corAtual.minLuma -= 0.5;
-//        corAtual.minS -= 0.05;
-    }
+        corAtual.minLuma -= 0.001;
+        corAtual.maxLuma += 0.001;
+        corAtual.minS -= 0.0000001;
+        corAtual.maxS += 0.0000001;
+   }
 
     if ( corAtual.calibrada == 1 || corAtual.numTentativas >= corAtual.maxTentativas ){
+        if ( corAtual.numTentativas == corAtual.maxTentativas){
+            printf( "Número esgotado de tentativas de calibragem!\n" );
+            exit(EXIT_FAILURE);
+        }
+
         escreverArquivo( faixaCor );
         return 1;
     }
 
-    if ( (numPixelsExterior < 50 && numPixelsInterior >= 200 ) ){ // 2%
+    if ( (numPixelsExterior < 150 && numPixelsInterior >= 300 ) ){ // 2%
         corAtual.calibrada = 1;
         printf( "** Cor calibrada!\n" );
         setCor( faixaCor );
         return 0;
     }
     else {
-        if ( numPixelsInterior >= 200 && numPixelsExterior >= 30 ){
+        if ( numPixelsInterior >= 300 && numPixelsExterior >= 150 ){
             if ( corAtual.h_a2 - corAtual.h_a1 >= 5 ) {
             //    printf( "fechando angulo!\n" );
                 corAtual.h_a1 += 0.5;
@@ -926,7 +941,7 @@ void processaImagem( FaixaCor_t faixaCor ){
             if ( ((pH >= corAtual.h_a1 & pH <= corAtual.h_a2) || (pH >= corAtual.h_b1 & pH <= corAtual.h_b2))
                    & (mS >= corAtual.minS && mS <= corAtual.maxS ) & (luma >= corAtual.minLuma && luma <= corAtual.maxLuma) ){
 
-                if ( !corAtual.calibrada )
+                if ( !corAtual.calibrada && calibrarCor )
                         analisaMinMaxFrameInterior( 80, 200, 80, 180, y, x, mS,  luma );
 
                 valorPixel = 255;

@@ -147,8 +147,6 @@ int main ( int argc, char **argv ) {
         }
     }
 
-    imageProc_init( 0 ); // Função de inicialização
-
     if (inicializadores() == -1){
         return -1;
     }
@@ -170,7 +168,6 @@ int main ( int argc, char **argv ) {
     reiniciaTempoParaFrutoMudar(&tempoFruto);
 
     telaAtual = telaMenu;
-    corAtualVarinha = VERDE;
     PosicaoFruto posicaoFruto;
 
     Fruta *frutas;
@@ -187,7 +184,7 @@ int main ( int argc, char **argv ) {
     //ALLEGRO_BITMAP *esquerda = al_create_sub_bitmap( bitmap, 0, 0, imageProc_getLargura(), imageProc_getAltura() );
     //ALLEGRO_BITMAP *direita = al_create_sub_bitmap( bitmap, imageProc_getLargura(), 0, imageProc_getLargura(), imageProc_getAltura() );
 
-    imageProc_init(); // Função de inicialização
+    imageProc_init( 0 ); // Função de inicialização
     imageProc_carregaCores();
 
     float x,y;
@@ -381,7 +378,7 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                     funcaoVarinha = regar;
-                                    corAtualVarinha = CIANO;
+                                    //corAtualVarinha = CIANO;
                                     corCursor.r = 0;
                                     corCursor.g = 0;
                                     corCursor.b = 255;
@@ -402,7 +399,7 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                      funcaoVarinha = matar;
-                                     corAtualVarinha = VERDE;
+                                    // corAtualVarinha = VERDE;
                                      corCursor.r = 255;
                                      corCursor.g = 0;
                                      corCursor.b = 0;
@@ -424,7 +421,7 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                      funcaoVarinha = colher;
-                                     corAtualVarinha = AZUL;
+                                    // corAtualVarinha = AZUL;
                                      corCursor.r = 0;
                                      corCursor.g = 255;
                                      corCursor.b = 0;
@@ -447,7 +444,7 @@ int main ( int argc, char **argv ) {
                                 //allVariaveisJogo.aguardandoPoder = true;
                                 //if (allVariaveisJogo.tempoCursorNoBotaoPoder >= 0){
                                      funcaoVarinha = regarArvore;
-                                     corAtualVarinha = MAGENTA;
+                                    // corAtualVarinha = MAGENTA;
                                      corCursor.r = 255;
                                      corCursor.g = 0;
                                      corCursor.b = 255;
@@ -479,7 +476,7 @@ int main ( int argc, char **argv ) {
                                 corCursor.r = 0;
                                 corCursor.g = 0;
                                 corCursor.b = 0;
-                                corAtualVarinha = AZUL;
+                                //corAtualVarinha = AZUL;
                                 allVariaveisJogo.aguardandoPoder = false;
                                 allVariaveisJogo.tempoCursorNoBotaoPoder = 0;
 

@@ -13,6 +13,6 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 );
 int imageProc_getLargura( void );
 int imageProc_getAltura( void );
 
-//void imageProc_carregaCores( void );
+void imageProc_carregaCores( void );
 
 #endif
