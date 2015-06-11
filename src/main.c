@@ -259,6 +259,7 @@ int main ( int argc, char **argv ) {
 
             if (evento.timer.source == timer){
 
+
                 allVariaveisJogo.contadorFrame++;
                 if (allVariaveisJogo.contadorFrame >= 60){
                     allVariaveisJogo.contadorFrame = 0;
@@ -280,20 +281,19 @@ int main ( int argc, char **argv ) {
                 }
 
                 else {
-                    if (allVariaveisJogo.contadorFrame % 5 == 0 ){
-                        imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
-                        x = allVariaveisJogo.mouse_x;
-                        y = allVariaveisJogo.mouse_y;
-
-                        //printf("x: %f --- y: %f\n\n", (x / 320) * LARGURA_TELA, (y / 240) * ALTURA_TELA);
-
-                        x = ((x / 320) * LARGURA_TELA);
-                        y = ((y / 240) * ALTURA_TELA);
-
-                        allVariaveisJogo.mouse_x = x;
-                        allVariaveisJogo.mouse_y = y;
-
-                    }
+                    // if (allVariaveisJogo.contadorFrame % 5 == 0 ){
+                    //     imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
+                    //     x = allVariaveisJogo.mouse_x;
+                    //     y = allVariaveisJogo.mouse_y;
+                    //     //printf("x: %f --- y: %f\n\n", (x / 320) * LARGURA_TELA, (y / 240) * ALTURA_TELA);
+                    //
+                    //     x = ((x / 320) * LARGURA_TELA);
+                    //     y = ((y / 240) * ALTURA_TELA);
+                    //
+                    //     allVariaveisJogo.mouse_x = x;
+                    //     allVariaveisJogo.mouse_y = y;
+                    //
+                    // }
 
                      if (allVariaveisJogo.contadorFrame % 20 == 0){
 
@@ -858,9 +858,23 @@ int main ( int argc, char **argv ) {
             }
 
 //----------- atualizando...
+//if (allVariaveisJogo.contadorFrame % 3 == 0 ){
+
+//}
             al_flip_display();
             al_clear_to_color(al_map_rgb(160, 230, 210));
-            al_rest(0.001);
+
+            // Calcula a posição do cursor do mouse
+            imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
+            x = allVariaveisJogo.mouse_x;
+            y = allVariaveisJogo.mouse_y;
+            //printf("x: %f --- y: %f\n\n", (x / 320) * LARGURA_TELA, (y / 240) * ALTURA_TELA);
+
+            x = ((x / 320) * LARGURA_TELA);
+            y = ((y / 240) * ALTURA_TELA);
+
+            allVariaveisJogo.mouse_x = x;
+            allVariaveisJogo.mouse_y = y;
         }
     }
 

@@ -6,6 +6,8 @@
 #define CAM_RES_W 320
 #define CAM_RES_H 240
 
+IplImage *image;
+
 void camera_converte(camera *cam, IplImage *image);
 camera *camera_inicializa(int i);
 void camera_finaliza(camera *cam);
@@ -20,7 +22,6 @@ void camera_converte(camera *cam, IplImage *image) {
 
   int scaledY = 0;
   int scaledX = 0;
-
   for(int y = 0; y < cam->altura / cam->escalaY; y++) {
     char *pixel = row;
     for(int x = (cam->largura - 1) / cam->escalaX; x >= 0; x--) {
@@ -80,15 +81,17 @@ void camera_finaliza(camera *cam) {
 }
 //------------------------------------------------------------------------------
 void camera_atualiza(camera *cam) {
-  IplImage *image = cvQueryFrame(cam->capture);
 
-  if(image)
-    camera_converte(cam, image);
+    //IplImage *image = cvQueryFrame(cam->capture);
+    image = cvQueryFrame(cam->capture);
+
+    if(image)
+        camera_converte(cam, image);
 }
 //------------------------------------------------------------------------------
 void camera_copia(camera *cam, unsigned char ***matriz, ALLEGRO_BITMAP *bitmap) {
-  ALLEGRO_LOCKED_REGION *region = al_lock_bitmap(bitmap, ALLEGRO_PIXEL_FORMAT_ARGB_8888, ALLEGRO_LOCK_WRITEONLY);
 
+  ALLEGRO_LOCKED_REGION *region = al_lock_bitmap(bitmap, ALLEGRO_PIXEL_FORMAT_ARGB_8888, ALLEGRO_LOCK_WRITEONLY);
   char *row = region->data;
   for(int y = 0; y < cam->altura; y++) {
       char *pixel = row;
@@ -107,7 +110,6 @@ void camera_copia(camera *cam, unsigned char ***matriz, ALLEGRO_BITMAP *bitmap) 
 
     row += region->pitch;
   }
-
   al_unlock_bitmap(bitmap);
 }
 //------------------------------------------------------------------------------
