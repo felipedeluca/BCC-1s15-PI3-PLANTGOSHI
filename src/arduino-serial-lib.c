@@ -15,7 +15,6 @@
 #include <sys/ioctl.h>
 
 
-#include <allegro5/allegro.h>
 // uncomment this to debug reads
 //#define SERIALPORTDEBUG
 

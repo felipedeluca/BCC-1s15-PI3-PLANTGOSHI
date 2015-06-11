@@ -551,8 +551,25 @@ void imageProc_carregaCores( void ){
 //------------------------------------------------------------------------------
 void setupArduino( void ) {
 
+    FILE *pf;
+
+    if ( calibrarCor )
+        pf = fopen("arduino_porta.txt", "r");
+    else
+        pf = fopen("config/arduino_porta.txt", "r");
+
+
+    if (pf != NULL) {
+        fscanf(pf, "%s", arduinoComm.serialPort );
+    }
+    else {
+        strcpy( arduinoComm.serialPort, "/dev/cu.usbmodem1411" );
+    }
+
+    fclose(pf); /* Fecha o arquivo */
+
+    printf("Porta USB: %s\n", arduinoComm.serialPort );
     // Configura a comunicação com o Arduino
-    strcpy( arduinoComm.serialPort, "/dev/cu.usbmodem1411" );
     arduinoComm.fd         = -1;
     arduinoComm.baudRate   = 115200;
     arduinoComm.timeOut    = 5000;
