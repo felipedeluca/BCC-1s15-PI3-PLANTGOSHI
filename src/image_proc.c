@@ -1019,10 +1019,10 @@ void processaImagem( FaixaCor_t faixaCor ){
             RGBtoHSV( &pR, &pG, &pB, &pH, &pS, &pV );
             //mS *= 255;
 //printf("mS: %f\n", luma);
-            if ( ((pH >= corAtual.h_a1 & pH <= corAtual.h_a2) | (pH >= corAtual.h_b1 & pH <= corAtual.h_b2))
+            if ( (((pH >= corAtual.h_a1) & (pH <= corAtual.h_a2)) | ((pH >= corAtual.h_b1) & (pH <= corAtual.h_b2)))
                    & ((mS >= corAtual.minS) & (mS <= corAtual.maxS) ) & ((luma >= corAtual.minLuma) & (luma <= corAtual.maxLuma)) ){
 
-                if ( !corAtual.calibrada & calibrarCor )
+                if ( (!corAtual.calibrada) & (calibrarCor) )
                         analisaMinMaxFrameInterior( 80, 200, 80, 180, y, x, mS,  luma );
 
                 valorPixel = 255;

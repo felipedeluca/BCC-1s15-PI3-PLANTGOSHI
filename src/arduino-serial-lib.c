@@ -36,9 +36,9 @@ int serialport_init(const char* serialport, int baud)
         return -1;
     }
 
-    int iflags = TIOCM_DTR;
+    //int iflags = TIOCM_DTR;
     //ioctl(fd, TIOCMBIS, &iflags);     // turn on DTR
-    ioctl(fd, TIOCMBIC, &iflags);    // turn off DTR
+    //ioctl(fd, TIOCMBIC, &iflags);    // turn off DTR
 
     if (tcgetattr(fd, &toptions) < 0) {
     //    perror("serialport_init: Couldn't get term attributes");
