@@ -7,7 +7,7 @@
 #include "plantgoshi_arduino.h"
 
 #define POSTERIZE 100
-#define BUFFER_FRAMES 6
+#define BUFFER_FRAMES 3
 
 unsigned char ***matrizFrame1;
 unsigned char ***matrizFrame2;
@@ -598,35 +598,35 @@ void median( unsigned char ***m, unsigned char ***output, int y, int x, int altu
 //------------------------------------------------------------------------------
 unsigned char erode( unsigned char ***m, int y, int x, int altura, int largura ){
 	int left = 0, right = 0, top = 0, bottom = 0, topLeft = 0, bottomLeft = 0, topRight = 0, bottomRight = 0;
-	//printf("Entrei %d, %d\n", i, j);
 
     int x1 = x - 1;
     int x2 = x + 1;
     int y1 = y - 1;
     int y2 = y + 1;
 
-	if ( y1 < 0 || m[y1][x][0] > 0 ){
+	if ( (y1 < 0) | (m[y1][x][0] > 0) ){
         top = 1;
     }
-	if ( y2 >= altura || m[y2][x][0] > 0 ){
+    printf("Entrei\n");
+	if ( (y2 >= altura) | (m[y2][x][0] > 0) ){
         bottom = 1;
     }
-	if ( x1 < 0 || m[y][x1][0] > 0 ){
+	if ( (x1 < 0) | (m[y][x1][0] > 0) ){
         left = 1;
     }
-	if ( x2 >= largura || m[y][x2][0] > 0 ){
+	if ( (x2 >= largura) | (m[y][x2][0] > 0) ){
         right = 1;
     }
-    if ( (y1 < 0 || m[y1][x][0] > 0) & (x1 < 0 || m[y][x1][0] > 0) ) {
+    if ( ((y1 < 0) | (m[y1][x][0] > 0)) & ((x1 < 0) | (m[y][x1][0] > 0)) ) {
         topLeft = 1;
     }
-    if ( (y1 < 0 || m[y1][x][0] > 0) & (x2 >= largura || m[y][x2][0] > 0) ) {
+    if ( ((y1 < 0) | (m[y1][x][0] > 0)) & ((x2 >= largura) | (m[y][x2][0] > 0)) ) {
         topRight = 1;
     }
-    if ( (y2 >= altura || m[y2][x][0] > 0) & (x1 < 0 || m[y][x1][0] > 0) ) {
+    if ( ((y2 >= altura) | (m[y2][x][0] > 0)) & ((x1 < 0) | (m[y][x1][0] > 0)) ) {
         bottomLeft = 1;
     }
-    if ( (y2 >= altura || m[y2][x][0] > 0) & (x2 >= largura || m[y][x2][0] > 0) ) {
+    if ( ((y2 >= altura) | (m[y2][x][0] > 0)) & ((x2 >= largura) | (m[y][x2][0] > 0)) ) {
         bottomRight = 1;
     }
 
@@ -724,17 +724,20 @@ void processaMatriz( const unsigned char valorPixel, int y, int x ){
         break;
     }
     // buffer de 6 frames
-    matriz[y][x][0] = ( matrizFrame1[y][x][0] | matrizFrame2[y][x][0] | matrizFrame3[y][x][0] | matrizFrame4[y][x][0] | matrizFrame5[y][x][0] | matrizFrame6[y][x][0] );
-    matriz[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
-    matriz[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
+    // matriz[y][x][0] = ( matrizFrame1[y][x][0] | matrizFrame2[y][x][0] | matrizFrame3[y][x][0] | matrizFrame4[y][x][0] | matrizFrame5[y][x][0] | matrizFrame6[y][x][0] );
+    // matriz[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
+    // matriz[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
 
+    matrizProcessada[y][x][0] = ( matrizFrame1[y][x][0] | matrizFrame2[y][x][0] | matrizFrame3[y][x][0] | matrizFrame4[y][x][0] | matrizFrame5[y][x][0] | matrizFrame6[y][x][0] );
+    matrizProcessada[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
+    matrizProcessada[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
     // median( matriz, matrizPreProcessada, y, x, cam->altura, cam->largura );
 
-    unsigned char e = erode( matriz, y, x, cam->altura, cam->largura );
+    //unsigned char e = erode( matriz, y, x, cam->altura, cam->largura );
     //unsigned char e = matriz[y][x][0];
-    matrizProcessada[y][x][0] = e;
-    matrizProcessada[y][x][1] = e;
-    matrizProcessada[y][x][2] = e;
+    // matrizProcessada[y][x][0] = e;
+    // matrizProcessada[y][x][1] = e;
+    // matrizProcessada[y][x][2] = e;
 }
 //------------------------------------------------------------------------------
 void imageProc_desenhaImagem( ALLEGRO_BITMAP *telaEsquerda, ALLEGRO_BITMAP *telaDireita ){
@@ -749,7 +752,7 @@ int analisaFrameExterior( unsigned char ***m, int x1, int x2, int y1, int y2 ){
 
     for ( int i = 0; i < cam->altura; i++ ){
         for ( int j = 0; j < cam->largura; j++ ){
-            if ( !(i >= y1 && i <= y2 && j >= x1 && j <= x2) ){
+            if ( !((i >= y1) & (i <= y2) & (j >= x1) & (j <= x2)) ){
                 if ( m[i][j][0] > 0 ){
 //                    printf("x1: %d   x2: %d  y1: %d  y2: %d\n", x1, x2, y1, y2 );
                     contagem++;
@@ -766,7 +769,7 @@ int analisaFrameInterior( unsigned char ***m, int x1, int x2, int y1, int y2 ){
 
     for ( int i = 0; i < cam->altura; i++ ){
         for ( int j = 0; j < cam->largura; j++ ){
-            if ( i >= y1 && i <= y2 && j >= x1 && j <= x2 ){
+            if ( (i >= y1) & (i <= y2) & (j >= x1) & (j <= x2) ){
                 if ( m[i][j][0] > 0 )
                     contagem++;
             }
@@ -809,7 +812,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
 
 
 //    printf("%d\n", corAtual.calibrada);
-    if ( numPixelsInterior > 10 && numPixelsInterior < 250  && numPixelsExterior <= 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
+    if ( (numPixelsInterior > 10) & (numPixelsInterior < 250)  & (numPixelsExterior <= 10) & (!corAtual.calibrada) & (corAtual.numTentativas > 0) ){ // caso tenha passado do angulo de detecção
         corAtual.h_a1 -= 0.2;
         corAtual.h_a2 += 0.2;
         corAtual.h_b1 -= 0.2;
@@ -817,7 +820,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         setCor( faixaCor ); // salva corAtual (variavel global)
         printf( "+Ajustando cor\n" );
     }
-    else if ( numPixelsInterior > 10 && numPixelsInterior < 300  && numPixelsExterior > 150 && !corAtual.calibrada && corAtual.numTentativas > 0 ){ // caso tenha passado do angulo de detecção
+    else if ( (numPixelsInterior > 10) & (numPixelsInterior < 300)  & (numPixelsExterior > 150) & (!corAtual.calibrada) & (corAtual.numTentativas > 0) ){ // caso tenha passado do angulo de detecção
         corAtual.minLuma += 0.08;
         corAtual.maxLuma -= 0.1;
         corAtual.minS += 0.0005;
@@ -825,7 +828,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         setCor( faixaCor ); // salva corAtual (variavel global)
         printf( "+Ajustando cor\n" );
     }
-    else if ( numPixelsInterior <= 10 && numPixelsExterior <= 10 && !corAtual.calibrada && corAtual.numTentativas > 0 ){
+    else if ( (numPixelsInterior <= 10) & (numPixelsExterior <= 10) & (!corAtual.calibrada) & (corAtual.numTentativas > 0) ){
         corAtual.h_a1 -= 0.2;
         corAtual.h_a2 += 0.2;
         corAtual.h_b1 -= 0.2;
@@ -837,7 +840,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         corAtual.maxS += 0.0000001;
    }
 
-    if (  corAtual.numTentativas >= corAtual.maxTentativas && !corAtual.calibrada ){
+    if (  (corAtual.numTentativas >= corAtual.maxTentativas) & (!corAtual.calibrada) ){
         if ( corAtual.numTentativas == corAtual.maxTentativas){
             printf( "Número esgotado de tentativas de calibragem!\n" );
             printf( "-- Cor calibrada com imprecisão.!\n" );
@@ -846,7 +849,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         }
     }
 
-    if ( (numPixelsExterior < 150 && numPixelsInterior >= 300 ) ){ // 2%
+    if ( (numPixelsExterior < 150) & (numPixelsInterior >= 300) ){ // 2%
         corAtual.calibrada = 1;
         printf( "** Cor calibrada!\n" );
         setCor( faixaCor );
@@ -854,29 +857,16 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         return 0;
     }
     else {
-        if ( numPixelsInterior >= 400 && numPixelsExterior >= 150 ){
+        if ( (numPixelsInterior >= 400) & (numPixelsExterior >= 150) ){
             if ( corAtual.h_a2 - corAtual.h_a1 >= 5 ) {
             //    printf( "fechando angulo!\n" );
                 corAtual.h_a1 += 0.5;
                 corAtual.h_a2 -= 0.5;
                 corAtual.h_b1 += 0.5;
                 corAtual.h_b2 -= 0.5;
-                // corAtual.minLuma -= 0.5;
-                // corAtual.maxLuma += 0.5;
-                // corAtual.minS -= 0.05;
-                // corAtual.maxS += 0.05;
             }
-            // else {
-            //     corAtual.minLuma += 1;
-            //     corAtual.minS += 0.01;
-            // }
 
             corAtual.numTentativas += 1;
-            // printf( "---Tentativas: %d\n h_a1: %.3f  h_a2: %.3f\n", corAtual.numTentativas, corAtual.h_a1, corAtual.h_a2 );
-            // printf("Interior: %d\n", numPixelsInterior);
-            // printf("Exterior: %d\n", numPixelsExterior);
-            // printf("Luma: %d\n", corAtual.minLuma);
-            // printf("Sat: %.3f\n", corAtual.minS);
         }
     }
 
@@ -981,10 +971,10 @@ void processaImagem( FaixaCor_t faixaCor ){
             RGBtoHSV( &pR, &pG, &pB, &pH, &pS, &pV );
             //mS *= 255;
 //printf("mS: %f\n", luma);
-            if ( ((pH >= corAtual.h_a1 & pH <= corAtual.h_a2) || (pH >= corAtual.h_b1 & pH <= corAtual.h_b2))
-                   & (mS >= corAtual.minS && mS <= corAtual.maxS ) & (luma >= corAtual.minLuma && luma <= corAtual.maxLuma) ){
+            if ( ((pH >= corAtual.h_a1 & pH <= corAtual.h_a2) | (pH >= corAtual.h_b1 & pH <= corAtual.h_b2))
+                   & ((mS >= corAtual.minS) & (mS <= corAtual.maxS) ) & ((luma >= corAtual.minLuma) & (luma <= corAtual.maxLuma)) ){
 
-                if ( !corAtual.calibrada && calibrarCor )
+                if ( !corAtual.calibrada & calibrarCor )
                         analisaMinMaxFrameInterior( 80, 200, 80, 180, y, x, mS,  luma );
 
                 valorPixel = 255;
