@@ -50,6 +50,8 @@ const float FPS          = 60.0;
 //controle de tela
 const int quantidadeFruto = 10;
 FaixaCor_t corAtualVarinha;
+
+int coresDinamicas = 0;
 /*
 ArduinoComm arduinoComm;
 //------------------------------------------------------------------------------
@@ -117,12 +119,13 @@ void opcoesInicializacao( void ){
 //----------------------------------------------------------------------------------------------
 int main ( int argc, char **argv ) {
 
+    unsigned char opt;
 
     if ( argc < 2 ){
         opcoesInicializacao();
     }
     else{
-        const unsigned char opt = argv[1][0];
+        opt = argv[1][0];
         switch ( opt ){
             case '1':
                 corAtualVarinha = AMARELO;
@@ -147,6 +150,11 @@ int main ( int argc, char **argv ) {
         }
     }
 
+    if (argc >= 3 ){
+        opt = argv[2][0];
+        if ( opt == 's' ) // Arduino muda de cor de acordo com o poder selecionado
+            coresDinamicas = 1;
+    }
     if (inicializadores() == -1){
         return -1;
     }
@@ -377,10 +385,12 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                     funcaoVarinha = regar;
-                                    corAtualVarinha = AMARELO;
                                     corCursor.r = 0;
                                     corCursor.g = 0;
                                     corCursor.b = 255;
+
+                                    if ( coresDinamicas )
+                                        corAtualVarinha = AMARELO;
 
                                     allVariaveisJogo.aguardandoPoder = false;
                                     allVariaveisJogo.tempoCursorNoBotaoPoder = 0;
@@ -398,10 +408,12 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                      funcaoVarinha = matar;
-                                     corAtualVarinha = VERDE;
                                      corCursor.r = 255;
                                      corCursor.g = 0;
                                      corCursor.b = 0;
+
+                                     if ( coresDinamicas )
+                                         corAtualVarinha = VERDE;
 
                                     allVariaveisJogo.aguardandoPoder = false;
                                     allVariaveisJogo.tempoCursorNoBotaoPoder = 0;
@@ -420,10 +432,12 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                      funcaoVarinha = colher;
-                                     corAtualVarinha = AZUL;
                                      corCursor.r = 0;
                                      corCursor.g = 255;
                                      corCursor.b = 0;
+
+                                     if ( coresDinamicas )
+                                         corAtualVarinha = AZUL;
 
                                     allVariaveisJogo.aguardandoPoder = false;
                                     allVariaveisJogo.tempoCursorNoBotaoPoder = 0;
@@ -443,11 +457,12 @@ int main ( int argc, char **argv ) {
                                 //allVariaveisJogo.aguardandoPoder = true;
                                 //if (allVariaveisJogo.tempoCursorNoBotaoPoder >= 0){
                                      funcaoVarinha = regarArvore;
-                                     corAtualVarinha = VERMELHO;
                                      corCursor.r = 255;
                                      corCursor.g = 0;
                                      corCursor.b = 255;
 
+                                     if ( coresDinamicas )
+                                         corAtualVarinha = VERMELHO;
                                     //allVariaveisJogo.aguardandoPoder = false;
                                    //allVariaveisJogo.tempoCursorNoBotaoPoder = 0;
                                 //}
@@ -475,9 +490,11 @@ int main ( int argc, char **argv ) {
                                 corCursor.r = 0;
                                 corCursor.g = 0;
                                 corCursor.b = 0;
-                                corAtualVarinha = AZUL;
                                 allVariaveisJogo.aguardandoPoder = false;
                                 allVariaveisJogo.tempoCursorNoBotaoPoder = 0;
+
+                                if ( coresDinamicas )
+                                    corAtualVarinha = AZUL;
 
                         }
 
@@ -866,7 +883,6 @@ int main ( int argc, char **argv ) {
 
             // Calcula a posição do cursor do mouse
             imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
-            printf("CorAtualVarinha: %d\n", corAtualVarinha );
             x = allVariaveisJogo.mouse_x;
             y = allVariaveisJogo.mouse_y;
             //printf("x: %f --- y: %f\n\n", (x / 320) * LARGURA_TELA, (y / 240) * ALTURA_TELA);

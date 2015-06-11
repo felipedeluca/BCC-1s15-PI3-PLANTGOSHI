@@ -21,6 +21,7 @@ typedef struct {
 	int calibrada; // a cor já foi calibrada
 	int numTentativas; // tentativas de calibragem
 	int maxTentativas; // limite de tentativas de calibragem
+	int posterizeRatio; // Posterizacao de cores
     float minLuma, maxLuma; // luminancia mínima
 } Cor;
 

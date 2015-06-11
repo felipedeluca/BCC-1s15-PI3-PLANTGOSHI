@@ -4,7 +4,7 @@
 #include <stdlib.h>
 // Configuração
 
-#define MAX_BUFFER 256
+#define MAX_BUFFER 64
 
 typedef struct {
 
