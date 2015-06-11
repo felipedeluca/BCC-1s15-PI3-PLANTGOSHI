@@ -26,8 +26,8 @@ int serialport_init(const char* serialport, int baud)
     struct termios toptions;
     int fd;
 
-    //fd = open(serialport, O_RDWR | O_NOCTTY | O_NDELAY);
-    fd = open(serialport, O_RDWR | O_NONBLOCK );
+    fd = open(serialport, O_RDWR | O_NOCTTY | O_NDELAY);
+    //fd = open(serialport, O_RDWR | O_NONBLOCK );
 
     if (fd == -1)  {
     //    perror("serialport_init: Unable to open port ");

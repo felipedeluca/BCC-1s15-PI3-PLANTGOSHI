@@ -213,7 +213,7 @@ int main ( int argc, char **argv ) {
 
 // --------------- TIME PARA ATUALIZACAO DOS FRUTOS ------------------------------------
 
-            if (evento.timer.source == contador && telaAtual == telaJogo && !allVariaveisJogo.pausado){
+            if ((evento.timer.source == contador) & (telaAtual == telaJogo) & (!allVariaveisJogo.pausado)){
 
                 allVariaveisJogo.enableSimularArvore = false;
 
@@ -236,7 +236,7 @@ int main ( int argc, char **argv ) {
                     contadorSegundos = 0;
                 }
 
-                if (allVariaveisJogo.contadorJogoMinuto == 0 && allVariaveisJogo.contadorJogoSegundo == 1){
+                if ((allVariaveisJogo.contadorJogoMinuto == 0) & (allVariaveisJogo.contadorJogoSegundo == 1)){
                     allVariaveisJogo.gameOver = true;
                     telaAtual = telaFeedback;
                 }
@@ -377,7 +377,7 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                     funcaoVarinha = regar;
-                                    //corAtualVarinha = CIANO;
+                                    corAtualVarinha = AMARELO;
                                     corCursor.r = 0;
                                     corCursor.g = 0;
                                     corCursor.b = 255;
@@ -398,7 +398,7 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                      funcaoVarinha = matar;
-                                    // corAtualVarinha = VERDE;
+                                     corAtualVarinha = VERDE;
                                      corCursor.r = 255;
                                      corCursor.g = 0;
                                      corCursor.b = 0;
@@ -420,7 +420,7 @@ int main ( int argc, char **argv ) {
                                 allVariaveisJogo.aguardandoPoder = true;
                                 if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
                                      funcaoVarinha = colher;
-                                    // corAtualVarinha = AZUL;
+                                     corAtualVarinha = AZUL;
                                      corCursor.r = 0;
                                      corCursor.g = 255;
                                      corCursor.b = 0;
@@ -443,7 +443,7 @@ int main ( int argc, char **argv ) {
                                 //allVariaveisJogo.aguardandoPoder = true;
                                 //if (allVariaveisJogo.tempoCursorNoBotaoPoder >= 0){
                                      funcaoVarinha = regarArvore;
-                                    // corAtualVarinha = MAGENTA;
+                                     corAtualVarinha = VERMELHO;
                                      corCursor.r = 255;
                                      corCursor.g = 0;
                                      corCursor.b = 255;
@@ -475,7 +475,7 @@ int main ( int argc, char **argv ) {
                                 corCursor.r = 0;
                                 corCursor.g = 0;
                                 corCursor.b = 0;
-                                //corAtualVarinha = AZUL;
+                                corAtualVarinha = AZUL;
                                 allVariaveisJogo.aguardandoPoder = false;
                                 allVariaveisJogo.tempoCursorNoBotaoPoder = 0;
 
@@ -866,6 +866,7 @@ int main ( int argc, char **argv ) {
 
             // Calcula a posição do cursor do mouse
             imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
+            printf("CorAtualVarinha: %d\n", corAtualVarinha );
             x = allVariaveisJogo.mouse_x;
             y = allVariaveisJogo.mouse_y;
             //printf("x: %f --- y: %f\n\n", (x / 320) * LARGURA_TELA, (y / 240) * ALTURA_TELA);

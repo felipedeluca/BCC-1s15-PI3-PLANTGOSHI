@@ -6,7 +6,7 @@
 #include "cor.h"
 #include "plantgoshi_arduino.h"
 
-#define POSTERIZE 100
+#define POSTERIZE 1
 #define BUFFER_FRAMES 3
 
 unsigned char ***matrizFrame1;
@@ -26,11 +26,13 @@ Cor vermelho, azul, verde, amarelo, laranja, ciano, magenta, corAtual;
 ArduinoComm arduinoComm;
 FaixaCor_t arduinoCorAtual;
 
+int posterizeRatio;
 int frame, calibrarCor;
 
 void setupArduino( void );
 //------------------------------------------------------------------------------
 void imageProc_init( int calibrar ){
+
 
     cam = camera_inicializa(0);
 
@@ -40,6 +42,7 @@ void imageProc_init( int calibrar ){
     }
 
     calibrarCor = calibrar;
+    posterizeRatio = 1;
 
     matrizFrame1  = camera_aloca_matriz(cam);
     matrizFrame2  = camera_aloca_matriz(cam);
@@ -209,6 +212,7 @@ void escreverArquivo(FaixaCor_t cor){
    fprintf(pf, "%f ", corAtual.maxV);
    fprintf(pf, "%f ", corAtual.minLuma);
    fprintf(pf, "%f ", corAtual.maxLuma);
+   fprintf(pf, "%d ", posterizeRatio);
 
    fclose(pf); /* Fecha o arquivo */
 }
@@ -257,6 +261,7 @@ void lerArquivo(FaixaCor_t cor){
    fscanf(pf, "%f", &corAtual.maxV);
    fscanf(pf, "%f", &corAtual.minLuma);
    fscanf(pf, "%f", &corAtual.maxLuma);
+   fscanf(pf, "%d", &posterizeRatio);
 
    // fscanf(pf, "%f", &a);
    // fscanf(pf, "%f", &b);
@@ -289,6 +294,7 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = vermelho.numTentativas;
             corAtual.maxTentativas = vermelho.maxTentativas;
             corAtual.tipo = faixaCor;
+        //    posterizeRatio = 100;
         break;
         case VERDE:
             corAtual.h_a1 = verde.h_a1;
@@ -305,6 +311,7 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = verde.numTentativas;
             corAtual.maxTentativas = verde.maxTentativas;
             corAtual.tipo = faixaCor;
+        //    posterizeRatio = 1;
         break;
         case AZUL:
             corAtual.h_a1 = azul.h_a1;
@@ -321,6 +328,7 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = azul.numTentativas;
             corAtual.maxTentativas = azul.maxTentativas;
             corAtual.tipo = faixaCor;
+        //    posterizeRatio = 1;
         break;
         case AMARELO:
             corAtual.h_a1 = amarelo.h_a1;
@@ -337,6 +345,7 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = amarelo.numTentativas;
             corAtual.maxTentativas = amarelo.maxTentativas;
             corAtual.tipo = faixaCor;
+        //    posterizeRatio = 1;
         break;
         case CIANO:
             corAtual.h_a1 = ciano.h_a1;
@@ -353,6 +362,7 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = ciano.numTentativas;
             corAtual.maxTentativas = ciano.maxTentativas;
             corAtual.tipo = faixaCor;
+        //    posterizeRatio = 1;
         break;
         case MAGENTA:
             corAtual.h_a1 = magenta.h_a1;
@@ -369,6 +379,7 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = magenta.numTentativas;
             corAtual.maxTentativas = magenta.maxTentativas;
             corAtual.tipo = faixaCor;
+        //    posterizeRatio = 1;
         break;
         default:
             corAtual.h_a1 = 0;
@@ -385,6 +396,7 @@ void getCor( FaixaCor_t faixaCor ){
             corAtual.numTentativas = 0;
             corAtual.maxTentativas = 10;
             corAtual.tipo = faixaCor;
+        //    posterizeRatio = 100;
     }
 }
 //------------------------------------------------------------------------------
@@ -728,9 +740,9 @@ void processaMatriz( const unsigned char valorPixel, int y, int x ){
     // matriz[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
     // matriz[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
 
-    matrizProcessada[y][x][0] = ( matrizFrame1[y][x][0] | matrizFrame2[y][x][0] | matrizFrame3[y][x][0] | matrizFrame4[y][x][0] | matrizFrame5[y][x][0] | matrizFrame6[y][x][0] );
-    matrizProcessada[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
-    matrizProcessada[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
+    matrizProcessada[y][x][0] = ( matrizFrame1[y][x][0] | matrizFrame2[y][x][0] | matrizFrame3[y][x][0] );// | matrizFrame4[y][x][0] | matrizFrame5[y][x][0] | matrizFrame6[y][x][0] );
+    matrizProcessada[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] );// | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
+    matrizProcessada[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] );// | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
     // median( matriz, matrizPreProcessada, y, x, cam->altura, cam->largura );
 
     //unsigned char e = erode( matriz, y, x, cam->altura, cam->largura );
@@ -823,10 +835,10 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
     else if ( (numPixelsInterior > 10) & (numPixelsInterior < 300)  & (numPixelsExterior > 150) & (!corAtual.calibrada) & (corAtual.numTentativas > 0) ){ // caso tenha passado do angulo de detecção
         corAtual.minLuma += 0.08;
         corAtual.maxLuma -= 0.1;
-        corAtual.minS += 0.0005;
-        corAtual.maxS -= 0.000001;
+        corAtual.minS += 0.005;
+        corAtual.maxS -= 0.0001;
         setCor( faixaCor ); // salva corAtual (variavel global)
-        printf( "+Ajustando cor\n" );
+        printf( "++Ajustando cor\n" );
     }
     else if ( (numPixelsInterior <= 10) & (numPixelsExterior <= 10) & (!corAtual.calibrada) & (corAtual.numTentativas > 0) ){
         corAtual.h_a1 -= 0.2;
@@ -834,10 +846,13 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         corAtual.h_b1 -= 0.2;
         corAtual.h_b2 += 0.2;
 
-        corAtual.minLuma -= 0.001;
-        corAtual.maxLuma += 0.001;
-        corAtual.minS -= 0.0000001;
-        corAtual.maxS += 0.0000001;
+        posterizeRatio--;
+        if ( posterizeRatio < 1 )
+            posterizeRatio = 1;
+        // corAtual.minLuma -= 0.001;
+        // corAtual.maxLuma += 0.001;
+        // corAtual.minS -= 0.0000001;
+        // corAtual.maxS += 0.0000001;
    }
 
     if (  (corAtual.numTentativas >= corAtual.maxTentativas) & (!corAtual.calibrada) ){
@@ -864,6 +879,11 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
                 corAtual.h_a2 -= 0.5;
                 corAtual.h_b1 += 0.5;
                 corAtual.h_b2 -= 0.5;
+
+                posterizeRatio++;
+
+                if ( posterizeRatio > 100 )
+                    posterizeRatio = 100;
             }
 
             corAtual.numTentativas += 1;
@@ -961,9 +981,9 @@ void processaImagem( FaixaCor_t faixaCor ){
             mG = matrizMediana[y][x][1] * brilhoG;
             mB = matrizMediana[y][x][2] * brilhoB;
 
-            pR = (mR / POSTERIZE ) * POSTERIZE;
-            pG = (mG / POSTERIZE ) * POSTERIZE;
-            pB = (mB / POSTERIZE ) * POSTERIZE;
+            pR = (mR / posterizeRatio ) * posterizeRatio;
+            pG = (mG / posterizeRatio ) * posterizeRatio;
+            pB = (mB / posterizeRatio ) * posterizeRatio;
 
             luma = RGBtoY(&mR, &mG, &mB);
 

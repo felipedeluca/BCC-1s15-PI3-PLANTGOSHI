@@ -53,22 +53,22 @@ void loop()
           if ( inData[1] == '5' ) setColor( 80, 0, 80 );
           if ( inData[1] == '6' ) setColor( 255, 0, 0 );
           inData[1] == '0';
-//          setColor( 255, 0, 0 );
+//          setColor( 250, 0, 0 );
 //        delay( 1000 );
 //  
-//        setColor( 0, 0, 50 );
+//        setColor( 0, 0, 250 );
 //        delay( 1000 );
 //  
-//        setColor( 0, 0, 255 );
+//        setColor( 0, 0, 250 );
 //        delay( 1000 );
 //  
-//        setColor( 255, 255, 0 );
+//        setColor( 250, 250, 0 );
 //        delay( 1000 );
 //  
-//        setColor( 80, 0, 80 );
+//        setColor( 250, 0, 250 );
 //        delay( 1000 );
 //  
-//        setColor( 0, 255, 255 );
+//        setColor( 0, 250, 250 );
 //        delay( 1000 );
 //    }
 //    if (Comp("m1 off")==0) {
