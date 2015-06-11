@@ -1,3 +1,4 @@
+
 #include <allegro5/allegro.h>
 
 #include "camera.h"
@@ -55,8 +56,8 @@ void imageProc_init( int calibrar ){
     vermelho.h_a2 = 30;
     vermelho.h_b1 = 320;
     vermelho.h_b2 = 360;
-    vermelho.minS = -1;
-    vermelho.minV = -1;
+    vermelho.minS = -0.01;
+    vermelho.minV = -0.01;
     vermelho.maxS = 1;
     vermelho.maxV = 0;
     vermelho.maxLuma = 255;
@@ -70,8 +71,8 @@ void imageProc_init( int calibrar ){
     azul.h_a2 = 270;
     azul.h_b1 = 200;
     azul.h_b2 = 270;
-    azul.minS = -1;
-    azul.minV = -1;
+    azul.minS = -0.01;
+    azul.minV = -0.01;
     azul.maxS = 1;
     azul.maxV = 0;
     azul.maxLuma = 255;
@@ -85,8 +86,8 @@ void imageProc_init( int calibrar ){
     verde.h_a2 = 200;
     verde.h_b1 = 60;
     verde.h_b2 = 200;
-    verde.minS = -1;
-    verde.minV = -1;
+    verde.minS = -0.01;
+    verde.minV = -0.01;
     verde.maxS = 1;
     verde.maxV = 0;
     verde.maxLuma = 255;
@@ -100,8 +101,8 @@ void imageProc_init( int calibrar ){
     amarelo.h_a2 = 75;
     amarelo.h_b1 = 35;
     amarelo.h_b2 = 75;
-    amarelo.minS = -1;
-    amarelo.minV = -1;
+    amarelo.minS = -0.01;
+    amarelo.minV = -0.01;
     amarelo.maxS = 1;
     amarelo.maxV = 0;
     amarelo.maxLuma = 255;
@@ -115,8 +116,8 @@ void imageProc_init( int calibrar ){
     ciano.h_a2 = 200;
     ciano.h_b1 = 160;
     ciano.h_b2 = 200;
-    ciano.minS = -1;
-    ciano.minV = -1;
+    ciano.minS = -0.01;
+    ciano.minV = -0.01;
     ciano.maxS = 1;
     ciano.maxV = 0;
     ciano.maxLuma = 255;
@@ -130,8 +131,8 @@ void imageProc_init( int calibrar ){
     magenta.h_a2 = 340;
     magenta.h_b1 = 290;
     magenta.h_b2 = 340;
-    magenta.minS = -1;
-    magenta.minV = -1;
+    magenta.minS = -0.01;
+    magenta.minV = -0.01;
     magenta.maxS = 1;
     magenta.maxV = 0;
     magenta.maxLuma = 255;
@@ -781,14 +782,14 @@ void analisaMinMaxFrameInterior( int x1, int x2, int y1, int y2, int i, int j, f
         return;
 
     if ( i >= y1 && i <= y2 && j >= x1 && j <= x2 ){
-        if ( corAtual.minS == -1 || ( mS / 2 ) > corAtual.minS )
+        if ( (corAtual.minS <= 0) | (( mS / 2 ) > corAtual.minS) )
             corAtual.minS += 0.001;
-        else if ( corAtual.maxS == 1 || ( mS / 2 ) + corAtual.minS <= corAtual.maxS )
+        else if ( (corAtual.maxS == 1) | (( mS / 2 ) + corAtual.minS <= corAtual.maxS) )
             corAtual.maxS -= 0.00001;
 
-        if ( corAtual.minLuma == -1 || ( luma / 2 ) > corAtual.minLuma )
+        if ( (corAtual.minLuma <= 0) | (( luma / 2 ) > corAtual.minLuma) )
             corAtual.minLuma += 0.1;
-        else if ( corAtual.maxLuma == 255 || ( luma / 2 ) + corAtual.minLuma <= corAtual.maxLuma )
+        else if ( (corAtual.maxLuma == 255) | (( luma / 2 ) + corAtual.minLuma <= corAtual.maxLuma) )
             corAtual.maxLuma -= 0.5;
 
             printf("luma: %.3f  minLuma: %.3f   maxLuma: %.3f   sat: %.3f  minS: %.3f  maxS: %.3f\n", luma, corAtual.minLuma, corAtual.maxLuma, mS, corAtual.minS, corAtual.maxS );
@@ -849,6 +850,7 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
         corAtual.calibrada = 1;
         printf( "** Cor calibrada!\n" );
         setCor( faixaCor );
+        escreverArquivo( faixaCor );
         return 0;
     }
     else {
@@ -880,6 +882,45 @@ int imageProc_calibraCor( FaixaCor_t faixaCor, int x1, int x2, int y1, int y2 ){
 
     setCor( faixaCor ); // salva corAtual (variavel global)
     return 0;
+}
+//------------------------------------------------------------------------------
+void calculaBrilho( FaixaCor_t cor, float *r, float *g, float *b ){
+    switch (cor){
+       case AMARELO:
+            *r = 0.7;
+            *g = 0.7;
+            *b = 1.0;
+       break;
+       case VERMELHO:
+            *r = 0.7;
+            *g = 1.0;
+            *b = 1.0;
+       break;
+       case AZUL:
+           *r = 1.0;
+           *g = 1.0;
+           *b = 0.7;
+       break;
+       case VERDE:
+           *r = 1.0;
+           *g = 0.7;
+           *b = 1.0;
+       break;
+       case MAGENTA:
+           *r = 0.7;
+           *g = 1.0;
+           *b = 0.7;
+       break;
+       case CIANO:
+           *r = 1.0;
+           *g = 0.7;
+           *b = 0.7;
+       break;
+       default:
+           *r = 0.9;
+           *g = 0.9;
+           *b = 0.9;
+    }
 }
 //------------------------------------------------------------------------------
 void processaImagem( FaixaCor_t faixaCor ){
@@ -919,13 +960,16 @@ void processaImagem( FaixaCor_t faixaCor ){
         }
     }
 
+    float brilhoR, brilhoG, brilhoB; // Valores para manipulação individual dos canais de cores
+    calculaBrilho( faixaCor, &brilhoR, &brilhoG, &brilhoB );
+
     // Processa a imagem
     for ( int y = 0; y < cam->altura; y++ ){
         for ( int x = 0; x < cam->largura; x++ ) {
 
-            mR = matrizMediana[y][x][0] * 0.9;
-            mG = matrizMediana[y][x][1] * 0.7;
-            mB = matrizMediana[y][x][2] * 0.8;
+            mR = matrizMediana[y][x][0] * brilhoR;
+            mG = matrizMediana[y][x][1] * brilhoG;
+            mB = matrizMediana[y][x][2] * brilhoB;
 
             pR = (mR / POSTERIZE ) * POSTERIZE;
             pG = (mG / POSTERIZE ) * POSTERIZE;
