@@ -90,6 +90,7 @@ ALLEGRO_BITMAP          *fogoCursor         = NULL;
 
 ALLEGRO_BITMAP          *gota               = NULL;
 ALLEGRO_BITMAP          *gotaCursor         = NULL;
+ALLEGRO_SAMPLE          *music              = NULL;
 
 int  inicializadores ();
 void destruir ();
@@ -168,7 +169,8 @@ int main ( int argc, char **argv ) {
          redraw        = false;
 
     int  contadorSegundos   = 0,
-         contadorMinutos    = 0;
+         contadorMinutos    = 0,
+         contSegundoAtualizacaoFruto = 0;
 
     funcaoVarinha = nenhuma;
 
@@ -197,6 +199,7 @@ int main ( int argc, char **argv ) {
 
     float x,y;
 //printf("INICIANDO JOGO....\n");
+    al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
     while (!finalizarJogo){
         //registrando evento
         ALLEGRO_EVENT evento;
@@ -215,6 +218,20 @@ int main ( int argc, char **argv ) {
 
 
             if (allVariaveisJogo.power <= 0){
+                if (allVariaveisJogo.contadorRegacaoArvore < 4 ){
+                    switch (allVariaveisJogo.contadorRegacaoArvore) {
+                        case 1:
+                            allVariaveisJogo.score -= 20;
+                            break;
+                        case 2:
+                            allVariaveisJogo.score -= 50;
+                            break;
+                        case 3:
+                            allVariaveisJogo.score -= 70;
+                            break;
+                    }
+                }
+
                 allVariaveisJogo.gameOver = true;
                 telaAtual = telaFeedback;
             }
@@ -257,8 +274,14 @@ int main ( int argc, char **argv ) {
                     }
                 }
 
-                desenhandoNovoFruto(frutas, &allVariaveisJogo, &posicaoFruto);
+                contSegundoAtualizacaoFruto++;
+                if (contSegundoAtualizacaoFruto >= 1){
+                    //atualizandoPoderEstadoFruto(frutas, &allVariaveisJogo, &tempoFruto, &posicaoFruto);
+                    contSegundoAtualizacaoFruto = 0;
+                }
+
                 atualizandoPoderEstadoFruto(frutas, &allVariaveisJogo, &tempoFruto, &posicaoFruto);
+                desenhandoNovoFruto(frutas, &allVariaveisJogo, &posicaoFruto);
                 atualizandoFuncaoVarinha(&allVariaveisJogo);
 
             }
@@ -275,7 +298,7 @@ int main ( int argc, char **argv ) {
 
                 if (allVariaveisJogo.enableSimularArvore){
 
-                    if (allVariaveisJogo.contadorRegacaoArvore < 5){
+                    if (allVariaveisJogo.contadorRegacaoArvore < 4){
                         allVariaveisJogo.contadorRegacaoArvore++;
                         arvore_simulaArvore(2);
                     }
@@ -383,7 +406,7 @@ int main ( int argc, char **argv ) {
                                 /* code */
                                 al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
                                 allVariaveisJogo.aguardandoPoder = true;
-                                if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
+                                if (allVariaveisJogo.tempoCursorNoBotaoPoder >= 1){
                                     funcaoVarinha = regar;
                                     corCursor.r = 0;
                                     corCursor.g = 0;
@@ -406,7 +429,7 @@ int main ( int argc, char **argv ) {
                                 al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
 
                                 allVariaveisJogo.aguardandoPoder = true;
-                                if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
+                                if (allVariaveisJogo.tempoCursorNoBotaoPoder >= 1){
                                      funcaoVarinha = matar;
                                      corCursor.r = 255;
                                      corCursor.g = 0;
@@ -430,7 +453,7 @@ int main ( int argc, char **argv ) {
                                 al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
 
                                 allVariaveisJogo.aguardandoPoder = true;
-                                if (allVariaveisJogo.tempoCursorNoBotaoPoder > 1){
+                                if (allVariaveisJogo.tempoCursorNoBotaoPoder >= 1){
                                      funcaoVarinha = colher;
                                      corCursor.r = 0;
                                      corCursor.g = 255;
@@ -472,11 +495,11 @@ int main ( int argc, char **argv ) {
                         else if (funcaoVarinha != nenhuma){
 
                             for (int i = 0; i < quantidadeFruto; i++){
-                                if ( frutas[i].naTela &&
-                                     allVariaveisJogo.mouse_x > (frutas[i].posX - frutas[i].raio) &&
-                                     allVariaveisJogo.mouse_x < (frutas[i].posX + frutas[i].raio) &&
-                                     allVariaveisJogo.mouse_y > (frutas[i].posY - frutas[i].raio) &&
-                                     allVariaveisJogo.mouse_y < (frutas[i].posY + frutas[i].raio) ) {
+                                if ( (frutas[i].naTela) &
+                                     (allVariaveisJogo.mouse_x > (frutas[i].posX - frutas[i].raio)) &
+                                     (allVariaveisJogo.mouse_x < (frutas[i].posX + frutas[i].raio)) &
+                                     (allVariaveisJogo.mouse_y > (frutas[i].posY - frutas[i].raio)) &
+                                     (allVariaveisJogo.mouse_y < (frutas[i].posY + frutas[i].raio) )) {
 
                                    frutas[i].poderAplicado = funcaoVarinha;
 
@@ -500,18 +523,19 @@ int main ( int argc, char **argv ) {
 
                         //al_draw_filled_rectangle((LARGURA_TELA / 2 - 40) - 20, 600 - 100 , (LARGURA_TELA / 2 - 40) + 20 , 600 , al_map_rgb(255  , 0  , 255));
 
-                        if (funcaoVarinha == regarArvore &&
-                            !allVariaveisJogo.enableSimularArvore&&
-                             allVariaveisJogo.mouse_x > (LARGURA_TELA / 2 - 40) - 20 &&
-                             allVariaveisJogo.mouse_x < (LARGURA_TELA / 2 - 40) + 20 &&
-                             allVariaveisJogo.mouse_y > 600 - 100&&
-                             allVariaveisJogo.mouse_y < 600){
+                        if ((funcaoVarinha == regarArvore) &
+                            (!allVariaveisJogo.enableSimularArvore) &
+                             (allVariaveisJogo.mouse_x > (LARGURA_TELA / 2 - 40) - 20) &
+                             (allVariaveisJogo.mouse_x < (LARGURA_TELA / 2 - 40) + 20) &
+                             (allVariaveisJogo.mouse_y > 600 - 100) &
+                             (allVariaveisJogo.mouse_y < 600)){
 
                                  allVariaveisJogo.enableSimularArvore = true;
+                                 allVariaveisJogo.score +=50;
                         }
 
                     }
-
+                    /*
                     else { //jogo pausado
 
                         if (allVariaveisJogo.mouse_x > LARGURA_TELA * 0.40 &&
@@ -541,7 +565,7 @@ int main ( int argc, char **argv ) {
                                 al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
                         }
 
-                    }
+                    } */
 
                  }
 
@@ -578,18 +602,18 @@ int main ( int argc, char **argv ) {
 
                 al_show_mouse_cursor(janela);
 
-                if (evento.mouse.x > LARGURA_TELA * 0.40 &&
-                    evento.mouse.x < LARGURA_TELA * 0.60 &&
-                    evento.mouse.y > ALTURA_TELA  * 0.20 &&
-                    evento.mouse.y < ALTURA_TELA  * 0.30){
+                if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                    (evento.mouse.x < LARGURA_TELA * 0.60) &
+                    (evento.mouse.y > ALTURA_TELA  * 0.20) &
+                    (evento.mouse.y < ALTURA_TELA  * 0.30)){
 
                     al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
                 }
 
-                else if (evento.mouse.x > LARGURA_TELA * 0.40 &&
-                         evento.mouse.x < LARGURA_TELA * 0.60 &&
-                         evento.mouse.y > ALTURA_TELA  * 0.60 &&
-                         evento.mouse.y < ALTURA_TELA  * 0.70){
+                else if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                         (evento.mouse.x < LARGURA_TELA * 0.60) &
+                         (evento.mouse.y > ALTURA_TELA  * 0.60) &
+                         (evento.mouse.y < ALTURA_TELA  * 0.70)){
 
                         al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
                 }
@@ -606,6 +630,44 @@ int main ( int argc, char **argv ) {
 
                 /* code */
             }
+
+//-----------TELA JOGO ------------
+
+            else if (telaAtual == telaJogo){
+
+                if (allVariaveisJogo.pausado){ //jogo pausado
+
+                    al_show_mouse_cursor(janela);
+
+                    if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                        (evento.mouse.x < LARGURA_TELA * 0.60) &
+                        (evento.mouse.y > ALTURA_TELA  * 0.20) &
+                        (evento.mouse.y < ALTURA_TELA  * 0.30)){
+
+                        al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
+                    }
+
+                    else if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                             (evento.mouse.x < LARGURA_TELA * 0.60) &
+                             (evento.mouse.y > ALTURA_TELA  * 0.40) &
+                             (evento.mouse.y < ALTURA_TELA  * 0.50)){
+
+                            al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
+                    }
+
+                    else if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                             (evento.mouse.x < LARGURA_TELA * 0.60) &
+                             (evento.mouse.y > ALTURA_TELA  * 0.60) &
+                             (evento.mouse.y < ALTURA_TELA  * 0.70)){
+
+                            al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_ALT_SELECT);
+                    }
+                    else {
+                            al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
+                    }
+                }
+            }
+
         }
 
 /* ----------------------------                 ------------------------------------------------- */
@@ -617,10 +679,10 @@ int main ( int argc, char **argv ) {
 //-----------TELA MENU INICIAL ------------
 
             if (telaAtual == telaMenu){
-                if (evento.mouse.x > LARGURA_TELA * 0.40 &&
-                    evento.mouse.x < LARGURA_TELA * 0.60 &&
-                    evento.mouse.y > ALTURA_TELA  * 0.20 &&
-                    evento.mouse.y < ALTURA_TELA  * 0.30){
+                if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                    (evento.mouse.x < LARGURA_TELA * 0.60) &
+                    (evento.mouse.y > ALTURA_TELA  * 0.20) &
+                    (evento.mouse.y < ALTURA_TELA  * 0.30)){
 
                     telaAtual = telaJogo;
                     if (allVariaveisJogo.pausado){
@@ -629,10 +691,10 @@ int main ( int argc, char **argv ) {
                     }
                 }
 
-                else if (evento.mouse.x > LARGURA_TELA * 0.40 &&
-                         evento.mouse.x < LARGURA_TELA * 0.60 &&
-                         evento.mouse.y > ALTURA_TELA  * 0.60 &&
-                         evento.mouse.y < ALTURA_TELA  * 0.70){
+                else if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                         (evento.mouse.x < LARGURA_TELA * 0.60) &
+                         (evento.mouse.y > ALTURA_TELA  * 0.60) &
+                         (evento.mouse.y < ALTURA_TELA  * 0.70)){
 
                         finalizarJogo = true;
                 }
@@ -642,54 +704,21 @@ int main ( int argc, char **argv ) {
 
             else if (telaAtual == telaJogo){
 
-                if (allVariaveisJogo.pausado == false){
+                if (allVariaveisJogo.pausado == true){
 
-                    if (evento.mouse.x > LARGURA_TELA * 0.90 &&
-                        evento.mouse.x < LARGURA_TELA * 1.00 &&
-                        evento.mouse.y > ALTURA_TELA  * 0.00 &&
-                        evento.mouse.y < ALTURA_TELA  * 0.10){
-
-                            allVariaveisJogo.pausado = true;
-
-                    }
-
-                    else if (evento.mouse.x > LARGURA_TELA * 0.20 &&
-                             evento.mouse.x < LARGURA_TELA * 0.30 &&
-                             evento.mouse.y > ALTURA_TELA  * 0.90 &&
-                             evento.mouse.y < ALTURA_TELA ){
-
-                    }
-
-                    else if (evento.mouse.x > LARGURA_TELA * 0.45 &&
-                             evento.mouse.x < LARGURA_TELA * 0.55 &&
-                             evento.mouse.y > ALTURA_TELA  * 0.90 &&
-                             evento.mouse.y < ALTURA_TELA ){
-
-                    }
-
-                    else if (evento.mouse.x > LARGURA_TELA * 0.70 &&
-                             evento.mouse.x < LARGURA_TELA * 0.80 &&
-                             evento.mouse.y > ALTURA_TELA  * 0.90 &&
-                             evento.mouse.y < ALTURA_TELA ){
-
-                    }
-                }
-
-                else { //jogo pausado
-
-                    if (evento.mouse.x > LARGURA_TELA * 0.40 &&
-                        evento.mouse.x < LARGURA_TELA * 0.60 &&
-                        evento.mouse.y > ALTURA_TELA  * 0.20 &&
-                        evento.mouse.y < ALTURA_TELA  * 0.30){
+                    if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                        (evento.mouse.x < LARGURA_TELA * 0.60) &
+                        (evento.mouse.y > ALTURA_TELA  * 0.20) &
+                        (evento.mouse.y < ALTURA_TELA  * 0.30)){
 
                             telaAtual = telaJogo;
                             allVariaveisJogo.pausado = false;
                     }
 
-                    else if (evento.mouse.x > LARGURA_TELA * 0.40 &&
-                             evento.mouse.x < LARGURA_TELA * 0.60 &&
-                             evento.mouse.y > ALTURA_TELA  * 0.40 &&
-                             evento.mouse.y < ALTURA_TELA  * 0.50){
+                    else if ((evento.mouse.x > LARGURA_TELA * 0.40) &
+                             (evento.mouse.x < LARGURA_TELA * 0.60) &
+                             (evento.mouse.y > ALTURA_TELA  * 0.40) &
+                             (evento.mouse.y < ALTURA_TELA  * 0.50)){
 
                                 telaAtual = telaMenu;
                     }
@@ -700,10 +729,10 @@ int main ( int argc, char **argv ) {
 
             else if (telaAtual == telaFeedback){
 
-                if ( evento.mouse.x > LARGURA_TELA * 0.20 &&
-                     evento.mouse.x < LARGURA_TELA * 0.30 &&
-                     evento.mouse.y > ALTURA_TELA  * 0.90 &&
-                     evento.mouse.y < ALTURA_TELA ){
+                if ( (evento.mouse.x > LARGURA_TELA * 0.20) &
+                     (evento.mouse.x < LARGURA_TELA * 0.30) &
+                     (evento.mouse.y > ALTURA_TELA  * 0.90) &
+                     (evento.mouse.y < ALTURA_TELA) ){
 
                     allVariaveisJogo.gameOver = false;
                     reiniciarParaNovoJogo(frutas, &posicaoFruto, &allVariaveisJogo);
@@ -711,14 +740,55 @@ int main ( int argc, char **argv ) {
 
                 }
 
-                else if (evento.mouse.x > LARGURA_TELA * 0.70 &&
-                         evento.mouse.x < LARGURA_TELA * 0.80 &&
-                         evento.mouse.y > ALTURA_TELA  * 0.90 &&
-                         evento.mouse.y < ALTURA_TELA ){
+                else if ((evento.mouse.x > LARGURA_TELA * 0.70) &
+                         (evento.mouse.x < LARGURA_TELA * 0.80) &
+                         (evento.mouse.y > ALTURA_TELA  * 0.90) &
+                         (evento.mouse.y < ALTURA_TELA) ){
 
                     reiniciarParaNovoJogo(frutas, &posicaoFruto, &allVariaveisJogo);
                     telaAtual = telaJogo;
                 }
+            }
+        }
+
+
+/* ----------------------------         ------------------------------------------------- */
+/* ---------------------------- TECLADO ------------------------------------------------- */
+/* ----------------------------         ------------------------------------------------- */
+
+        else if(evento.type == ALLEGRO_EVENT_KEY_DOWN){
+
+            switch(evento.keyboard.keycode){
+                case ALLEGRO_KEY_1:
+                    corAtualVarinha = AMARELO;
+                     break;
+                case ALLEGRO_KEY_2:
+                    corAtualVarinha = VERDE;
+                    break;
+                case ALLEGRO_KEY_3:
+                    corAtualVarinha = CIANO;
+                    break;
+                case ALLEGRO_KEY_4:
+                    corAtualVarinha = AZUL;
+                    break;
+                case ALLEGRO_KEY_5:
+                    corAtualVarinha = MAGENTA;
+                    break;
+                case ALLEGRO_KEY_6:
+                    corAtualVarinha = VERMELHO;
+                    break;
+                case ALLEGRO_KEY_ESCAPE:
+                    telaAtual = telaMenu;
+                    break;
+                case ALLEGRO_KEY_P:
+                    if (allVariaveisJogo.pausado)
+                        allVariaveisJogo.pausado = false;
+                    else
+                        allVariaveisJogo.pausado = true;
+                    break;
+                case ALLEGRO_KEY_Q:
+                    finalizarJogo = true;
+                    break;
             }
         }
 
@@ -743,6 +813,10 @@ int main ( int argc, char **argv ) {
 
                 //al_draw_filled_rectangle(LARGURA_TELA * 0.40, ALTURA_TELA  * 0.60 , LARGURA_TELA * 0.60 , ALTURA_TELA * 0.70 , al_map_rgb(255, 0  , 0));
                 al_draw_text(fonte_80, al_map_rgb(100, 100, 100), LARGURA_TELA/2, ALTURA_TELA * 0.6 , ALLEGRO_ALIGN_CENTRE , "Sair");
+
+                //al_draw_text(fonte_80, al_map_rgb(100, 100, 100), LARGURA_TELA/2, ALTURA_TELA * 0.8 , ALLEGRO_ALIGN_CENTRE , "Você pode mudar a cor do LED a qualquer momento do jogo!");
+                //al_draw_text(fonte_80, al_map_rgb(100, 100, 100), LARGURA_TELA/2, ALTURA_TELA * 0.85 , ALLEGRO_ALIGN_CENTRE , "Para isso tecle 1 para Amarelo, 2 para Verde, 3 para Ciano");
+                //al_draw_text(fonte_80, al_map_rgb(100, 100, 100), LARGURA_TELA/2, ALTURA_TELA * 0.9 , ALLEGRO_ALIGN_CENTRE , "4 para Azul, 5 para Magenta(rosa) e 6 para Vermelho");
             }
 
 //-----------TELA JOGO ------------
@@ -794,8 +868,13 @@ int main ( int argc, char **argv ) {
 
                     al_draw_filled_rectangle(0, 600 , LARGURA_TELA, ALTURA_TELA , al_map_rgb(20  , 80  , 10));
 
-                    al_draw_filled_rectangle(10, 10, 260, 40, al_map_rgb(0, 0  , 255));
-                    al_draw_filled_rectangle(10 + ( allVariaveisJogo.contadorRegacaoArvore * 50 ), 10, 260, 40, al_map_rgb(255, 0  , 0));
+                    al_draw_filled_rectangle(10, 10, 290, 40, al_map_rgb(255, 0  , 0));
+                    al_draw_filled_rectangle(10, 10, ( 10 + allVariaveisJogo.contadorRegacaoArvore * 70 ), 40, al_map_rgb(0, 0  , 255));
+
+                    if (allVariaveisJogo.contadorRegacaoArvore < 4)
+                        al_draw_text (fonte_80, al_map_rgb(222, 222, 222), 15, 0 , ALLEGRO_ALIGN_LEFT , "regue a árvore");
+                    else
+                        al_draw_text (fonte_80, al_map_rgb(222, 0, 0), 15, 0 , ALLEGRO_ALIGN_LEFT , "árvore regada");
 
 
                     //POSICAO COLICAO PODER
@@ -821,6 +900,36 @@ int main ( int argc, char **argv ) {
                     } else {
                         al_draw_textf(fonte_80, al_map_rgb(222, 0, 0), 10, 120, ALLEGRO_ALIGN_LEFT , "tempo: %d:%d",allVariaveisJogo.contadorJogoMinuto, allVariaveisJogo.contadorJogoSegundo);
                     }
+                    al_draw_text (fonte_80, al_map_rgb(222, 0, 0), LARGURA_TELA - 10, 1 , ALLEGRO_ALIGN_RIGHT , "pausar (p)");
+
+
+                    switch(corAtualVarinha){
+                        case VERMELHO:
+                            al_draw_filled_circle(50,  ALTURA_TELA - 50, 35, al_map_rgb(255, 0  , 0));
+                            break;
+                        case CIANO:
+                            al_draw_filled_circle(50,  ALTURA_TELA - 50, 35, al_map_rgb(0, 255  , 255));
+                            break;
+                        case AZUL:
+                            al_draw_filled_circle(50,  ALTURA_TELA - 50, 35, al_map_rgb(0, 0, 255));
+                            break;
+                        case AMARELO:
+                            al_draw_filled_circle(50,  ALTURA_TELA - 50, 35, al_map_rgb(255, 255 , 0));
+                            break;
+                        case VERDE:
+                            al_draw_filled_circle(50,  ALTURA_TELA - 50, 35, al_map_rgb(0, 255 , 0));
+                            break;
+                        case MAGENTA:
+                            al_draw_filled_circle(50,  ALTURA_TELA - 50, 35, al_map_rgb(255, 0  , (255/2)));
+                            break;
+                        case BRANCO:
+                            break;
+                        case PRETO:
+                            break;
+                    }
+
+                    al_draw_text (fonte_80, al_map_rgb(255, 255, 255), 50, ALTURA_TELA - 80 , ALLEGRO_ALIGN_CENTRE , "LED");
+
                 }
 
                 switch(funcaoVarinha){
@@ -881,17 +990,19 @@ int main ( int argc, char **argv ) {
             al_flip_display();
             al_clear_to_color(al_map_rgb(160, 230, 210));
 
-            // Calcula a posição do cursor do mouse
-            imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
-            x = allVariaveisJogo.mouse_x;
-            y = allVariaveisJogo.mouse_y;
-            //printf("x: %f --- y: %f\n\n", (x / 320) * LARGURA_TELA, (y / 240) * ALTURA_TELA);
+            if (!allVariaveisJogo.pausado){
+                // Calcula a posição do cursor do mouse
+                imageProc_atualizaXY( &allVariaveisJogo.mouse_x, &allVariaveisJogo.mouse_y, corAtualVarinha );
+                x = allVariaveisJogo.mouse_x;
+                y = allVariaveisJogo.mouse_y;
+                //printf("x: %f --- y: %f\n\n", (x / 320) * LARGURA_TELA, (y / 240) * ALTURA_TELA);
 
-            x = ((x / 320) * LARGURA_TELA);
-            y = ((y / 240) * ALTURA_TELA);
+                x = ((x / 320) * LARGURA_TELA);
+                y = ((y / 240) * ALTURA_TELA);
 
-            allVariaveisJogo.mouse_x = x;
-            allVariaveisJogo.mouse_y = y;
+                allVariaveisJogo.mouse_x = x;
+                allVariaveisJogo.mouse_y = y;
+            }
         }
     }
 
@@ -1033,6 +1144,11 @@ int inicializadores () {
         return -1;
     }
 
+    music = al_load_sample("img/music.ogg");
+    if (!music){
+        fprintf(stderr, "Falha ao carregar som menu.\n");
+    }
+
     al_register_event_source(fila_eventos, al_get_timer_event_source(timer));
     al_register_event_source(fila_eventos, al_get_timer_event_source(contador));
     al_register_event_source(fila_eventos, al_get_mouse_event_source());
@@ -1070,10 +1186,10 @@ void AtribuindoPosicaoFrutoNovo (Fruta frutas[], int i, PosicaoFruto *posicaoFru
 
                     for (j = 0; j < MAX; j++){
                         if (posicaoFruto->posicao[j].used == true &&
-                            frutas[i].posX + 100 > posicaoFruto->posicao[j].PosX &&
-                            frutas[i].posX - 100 < posicaoFruto->posicao[j].PosX &&
-                            frutas[i].posY + 100 > posicaoFruto->posicao[j].PosY &&
-                            frutas[i].posY - 100 < posicaoFruto->posicao[j].PosY ){
+                            (frutas[i].posX + 100 > posicaoFruto->posicao[j].PosX) &
+                            (frutas[i].posX - 100 < posicaoFruto->posicao[j].PosX) &
+                            (frutas[i].posY + 100 > posicaoFruto->posicao[j].PosY) &
+                            (frutas[i].posY - 100 < posicaoFruto->posicao[j].PosY) ){
 
                             aux = false;
                         }
@@ -1136,7 +1252,7 @@ void desenhandoNovoFruto (Fruta frutas[], AllVariaveisJogo *allVariaveisJogo, Po
                 tempPosicaoNovoNo(frutas, i, posicaoFruto);
             }
 
-            if (frutas[i].pronta == true && frutas[i].naTela == false){
+            if ((frutas[i].pronta == true) & (frutas[i].naTela == false)){
                 frutas[i].naTela = true;
                 return;
            }
@@ -1193,12 +1309,19 @@ void reiniciarParaNovoJogo(Fruta frutas[], PosicaoFruto *posicaoFruto, AllVariav
 }
 //----------------------------------------------------------------------------------------------
 void reiniciaTempoParaFrutoMudar(TempoFruto *tempoFruto){
-
+/*
     tempoFruto->paraRegar   = 15;
     tempoFruto->verde       = 20;
-    tempoFruto->maduro      = 40;
     tempoFruto->paraPraga   = 30;
+    tempoFruto->maduro      = 40;
     tempoFruto->estragado   = 50;
+*/
+
+    tempoFruto->paraRegar   = 20;
+    tempoFruto->verde       = 25;
+    tempoFruto->paraPraga   = 35;
+    tempoFruto->maduro      = 58;
+    tempoFruto->estragado   = 59;
 
 }
 //----------------------------------------------------------------------------------------------
@@ -1208,43 +1331,46 @@ void atualizandoPoderEstadoFruto (Fruta frutas[], AllVariaveisJogo *allVariaveis
         if (frutas[i].naTela == true){
             frutas[i].tempoMudanca ++;
 
-            if (frutas[i].poderAplicado == regar && frutas[i].estadoAtual == verde){
+            if ((frutas[i].poderAplicado == regar) & (frutas[i].estadoAtual == verde)){
                 frutas[i].regado = true;
                 frutas[i].tempoMudanca += 3;
             }
 
-            else if (frutas[i].poderAplicado == matar && frutas[i].estadoAtual == maduro){
+            else if ((frutas[i].poderAplicado == matar) & (frutas[i].estadoAtual == maduro)){
                 frutas[i].pragaFruto = false;
             }
 
-            else if (frutas[i].poderAplicado == colher && frutas[i].estadoAtual == verde){
+            else if ((frutas[i].poderAplicado == colher) & (frutas[i].estadoAtual == verde)){
                 frutas[i].naTela = false;
                 allVariaveisJogo->power -= 50;
             }
 
-            else if (frutas[i].poderAplicado == colher && frutas[i].estadoAtual == maduro){
+            else if ((frutas[i].poderAplicado == colher) & (frutas[i].estadoAtual == maduro)){
                 frutas[i].naTela = false;
-                if (frutas[i].pragaFruto)
-                    allVariaveisJogo->power -= 50;
-
-                if (frutas[i].raio > 14)
-                    allVariaveisJogo->score += 70;
-                else {
-                    allVariaveisJogo->score += 35;
+                if (frutas[i].pragaFruto){
                     allVariaveisJogo->power -= 50;
                 }
+
+                if (frutas[i].raio > 14){
+                    allVariaveisJogo->score += 70;
+                    allVariaveisJogo->contadorJogoSegundo +=15;
+                } else {
+                    allVariaveisJogo->score += 35;
+                    allVariaveisJogo->power -= 50;
+                    allVariaveisJogo->contadorJogoSegundo +=10;
+                }
             }
-            else if (frutas[i].poderAplicado == colher && frutas[i].estadoAtual == estragado){
+            else if ((frutas[i].poderAplicado == colher) & (frutas[i].estadoAtual == estragado)){
                 frutas[i].naTela = false;
                 allVariaveisJogo->power -= 100;
             }
 
-            if (frutas[i].estadoAtual == maduro && frutas[i].tempoMudanca == tempoFruto->paraPraga){
+            if ((frutas[i].estadoAtual == maduro) & (frutas[i].tempoMudanca == tempoFruto->paraPraga)){
                 if (rand()%2)
                     frutas[i].pragaFruto = true;
             }
 
-            if (!frutas[i].regado && frutas[i].estadoAtual == verde && frutas[i].tempoMudanca == tempoFruto->paraRegar){
+            if ((!frutas[i].regado) & (frutas[i].estadoAtual == verde) & (frutas[i].tempoMudanca == tempoFruto->paraRegar)){
                 if ((rand()%3) == 1){
                     frutas[i].estadoAtual = estragado;
                     frutas[i].tempoMudanca = 11;
@@ -1255,24 +1381,25 @@ void atualizandoPoderEstadoFruto (Fruta frutas[], AllVariaveisJogo *allVariaveis
                 }
             }
 
-            if (frutas[i].estadoAtual == verde && frutas[i].tempoMudanca >= tempoFruto->verde){
+            if ((frutas[i].estadoAtual == verde) & (frutas[i].tempoMudanca >= tempoFruto->verde)){
                 frutas[i].estadoAtual++;
                 //frutas[i].tempoMudanca = 0;
                 //  frutas[i].raio = 15;
             }
 
-            else if (frutas[i].estadoAtual == maduro && frutas[i].tempoMudanca >= tempoFruto->maduro){
+            else if ((frutas[i].estadoAtual == maduro) & (frutas[i].tempoMudanca >= tempoFruto->maduro)){
                 frutas[i].estadoAtual++;
                 frutas[i].tempoMudanca = 0;
                 //  frutas[i].raio = 13;
             }
 
-            else if (frutas[i].estadoAtual == estragado && frutas[i].tempoMudanca >= tempoFruto->estragado){
+            else if ((frutas[i].estadoAtual == estragado) & (frutas[i].tempoMudanca >= tempoFruto->estragado)){
                 allVariaveisJogo->power -= 50;
                 frutas[i].naTela = false;
                 frutas[i].tempoMudanca = 0;
 
             }
+        //    printf("e: %d m %d\n", frutas[1].tempoMudanca, tempoFruto->estragado);
         }
     }
 }
