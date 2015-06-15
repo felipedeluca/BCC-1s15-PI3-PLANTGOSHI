@@ -18,7 +18,7 @@ unsigned char ***matrizFrame6;
 unsigned char ***matriz;
 unsigned char ***matrizRGB;
 unsigned char ***matrizProcessada;
-unsigned char ***matrizMediana;
+unsigned char ***matrizMedia;
 
 camera *cam;
 Cor vermelho, azul, verde, amarelo, laranja, ciano, magenta, corAtual;
@@ -52,7 +52,7 @@ void imageProc_init( int calibrar ){
     matrizFrame6  = camera_aloca_matriz(cam);
     matriz        = camera_aloca_matriz(cam);
     matrizRGB     = camera_aloca_matriz(cam);
-    matrizMediana = camera_aloca_matriz(cam);
+    matrizMedia   = camera_aloca_matriz(cam);
     matrizProcessada = camera_aloca_matriz(cam);
 
     vermelho.h_a1 = 0;
@@ -622,7 +622,7 @@ int imageProc_getAltura( void ){
     return cam->altura;
 }
 //------------------------------------------------------------------------------
-void median( unsigned char ***m, unsigned char ***output, int y, int x, int altura, int largura ){
+void mean( unsigned char ***m, unsigned char ***output, int y, int x, int altura, int largura ){
     // tira a média dos pixels em volta e salva o valor na coordenada x e y do pixel
     int sumR = 0;
     int sumG = 0;
@@ -780,7 +780,7 @@ void processaMatriz( const unsigned char valorPixel, int y, int x ){
     matrizProcessada[y][x][0] = ( matrizFrame1[y][x][0] | matrizFrame2[y][x][0] | matrizFrame3[y][x][0] );// | matrizFrame4[y][x][0] | matrizFrame5[y][x][0] | matrizFrame6[y][x][0] );
     matrizProcessada[y][x][1] = ( matrizFrame1[y][x][1] | matrizFrame2[y][x][1] | matrizFrame3[y][x][1] );// | matrizFrame4[y][x][1] | matrizFrame5[y][x][1] | matrizFrame6[y][x][1] );
     matrizProcessada[y][x][2] = ( matrizFrame1[y][x][2] | matrizFrame2[y][x][2] | matrizFrame3[y][x][2] );// | matrizFrame4[y][x][2] | matrizFrame5[y][x][2] | matrizFrame6[y][x][2] );
-    // median( matriz, matrizPreProcessada, y, x, cam->altura, cam->largura );
+    // mean( matriz, matrizPreProcessada, y, x, cam->altura, cam->largura );
 
     //unsigned char e = erode( matriz, y, x, cam->altura, cam->largura );
     //unsigned char e = matriz[y][x][0];
@@ -982,9 +982,9 @@ void processaImagem( FaixaCor_t faixaCor ){
 
     camera_atualiza( cam );
 
-    unsigned char mR; // Mediana vermelho
-    unsigned char mG; // Mediana verde
-    unsigned char mB; // Mediana azul
+    unsigned char mR; // media vermelho
+    unsigned char mG; // media verde
+    unsigned char mB; // media azul
 
     unsigned char pR; // vermelho posterizado
     unsigned char pG; // verde posterizado
@@ -992,9 +992,9 @@ void processaImagem( FaixaCor_t faixaCor ){
 
     float luma;//
 
-    float mH = 0.0; // mediana matriz
-    float mS = 0.0; // mediana saturação
-    float mV = 0.0; // mediana valor
+    float mH = 0.0; // media matriz
+    float mS = 0.0; // media saturação
+    float mV = 0.0; // media valor
     float pH = 0.0; // posterização matiz
     float pS = 0.0; // posterização saturação
     float pV = 0.0; // posterização valor
@@ -1008,10 +1008,10 @@ void processaImagem( FaixaCor_t faixaCor ){
         arduinoCorAtual = faixaCor;
     }
 
-    // Pré-processamento: calcula a mediana dos pixels
+    // Pré-processamento: calcula a media dos pixels
     for ( int y = 0; y < cam->altura; y++ ){
         for ( int x = 0; x < cam->largura; x++ ) {
-            median( cam->quadro, matrizMediana, y, x, cam->altura, cam->largura );
+            mean( cam->quadro, matrizMedia, y, x, cam->altura, cam->largura );
         }
     }
 
@@ -1022,9 +1022,9 @@ void processaImagem( FaixaCor_t faixaCor ){
     for ( int y = 0; y < cam->altura; y++ ){
         for ( int x = 0; x < cam->largura; x++ ) {
 
-            mR = matrizMediana[y][x][0] * brilhoR;
-            mG = matrizMediana[y][x][1] * brilhoG;
-            mB = matrizMediana[y][x][2] * brilhoB;
+            mR = matrizMedia[y][x][0] * brilhoR;
+            mG = matrizMedia[y][x][1] * brilhoG;
+            mB = matrizMedia[y][x][2] * brilhoB;
 
             pR = (mR / corAtual.posterizeRatio ) * corAtual.posterizeRatio;
             pG = (mG / corAtual.posterizeRatio ) * corAtual.posterizeRatio;
@@ -1102,7 +1102,7 @@ void imageProc_finaliza( void ){
     camera_libera_matriz(cam, matriz);
     camera_libera_matriz(cam, matrizRGB);
     camera_libera_matriz(cam, matrizProcessada);
-    camera_libera_matriz(cam, matrizMediana);
+    camera_libera_matriz(cam, matrizMedia);
 
     camera_finaliza(cam);
 }
