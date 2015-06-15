@@ -186,20 +186,19 @@ Al\'em disso, foram desenvolvidas fun\c c\~oes complementares de m\'aximo e m\'i
 	\end{center}
 	\end{figure}	
 
-\subsubsection{Escala de cinza}
+\subsubsection{Escala de cinza / lumin\^ancia}
 Os valores RGB de um pixel podem ser convertidos em escala de cinza por uma s\'erie de m\'etodos.
-Com esse fim, foi escolhido o m\'etodo de escalas fixas correspondendo a cada um dos canais RGB.
+Com esse fim, foi escolhido o m\'etodo de extra\c c\~ao de lumin\^ancia Y dos canais RGB.
 \'E efetuada a seguinte opera\c c\~ao sobre cada pixel:
 
-\texttt{\small \textbf{R} x 0,3 + \textbf{G} x 0,51 + \textbf{B} x 0,18}
+\texttt{\small \textbf{Y} = \textbf{R} x 0.299 + \textbf{G} x 0.587 + \textbf{B} x 0.114}
 
-\noindent Dessa maneira, cada pixel assume apenas um valor e, ao mesmo tempo, \'e mantida uma escala para cada valor RGB,
-levando em considera\c c\~ao a sua maior tonalidade.
+\noindent Dessa maneira, \'e obtida a lumin\^ancia da imagem separada das cores.
 
 	\begin{figure}[ht!]
 	\begin{center}
 		\includegraphics[scale=0.8]{img/1200px-Beyoglu_4671_tricolor.png}
-		\footnotesize \caption{Convers\~ao de canais de cores para escala de cinza. Cr\'editos: Nevit Dilmen. http://en.wikipedia.org/wiki/Grayscale }
+		\footnotesize \caption{Convers\~ao de cada canal de cor para sua respectiva escala de cinza. Cr\'editos: Nevit Dilmen. http://en.wikipedia.org/wiki/Grayscale }
 	\end{center}
 	\end{figure}	
 
@@ -208,9 +207,14 @@ A redu\c c\~ao de cores \'e uma t\'ecnica que tem por objetivo facilitar o recon
 diminuindo as cores vis\'iveis e tornando uma regi\~ao mais destacada e isolada que as demais.
 Para tal, \'e usada a seguinte opera\c c\~ao sobre cada canal RGB:
 
-\texttt{\small Canal = Canal x Fator + Fator / 2}
+\texttt{\small canal.vermelho = (vermelho / Fator ) * Fator}
 
-\noindent sendo o fator um valor inteiro que define a propor\c c\~ao da quantidade cores que se quer diminuir na imagem.
+\texttt{\small canal.verde = (verde / Fator ) * Fator}
+
+\texttt{\small canal.azul = (azul / Fator ) * Fator}
+\vspace{0.5cm}
+
+\noindent Considerando que o fator \'e um valor inteiro que define a propor\c c\~ao da quantidade cores que se quer diminuir na imagem.
 Exemplos de Fatores: 2, 16, 64, 128. Quanto maior o fator, menor a quantidade de cores vis\'iveis.
 
 	\begin{figure}[ht!]
@@ -220,18 +224,44 @@ Exemplos de Fatores: 2, 16, 64, 128. Quanto maior o fator, menor a quantidade de
 	\end{center}
 	\end{figure}	
 
-\subsubsection{Controle de massas}
+\subsubsection{Centro de massas}
 Visando uma defini\c c\~ao exata e correta do ponto central que deve ser devolvido pela fun\c c\~ao da vis\~ao computacional,
-foi necess\'ario a implementa\c c\~ao de um mecanismo para ter ideia caso outras massas brancas al\'em da principal (o LED)
-est\'a sendo retornada e, com isso, comprometendo a jogabilidade do jogo.
+foi necess\'ario a implementa\c c\~ao de um mecanismo para obter o centro de massa do maior aglomerado de pixels (clusters) presentes
+na imagem. Com o valor do centro de massa obtido, \'e poss\'ivel retornar as coordenadas \texttt{x} e \texttt{y} desse centro e utilizar como
+coordenadas de um dispositivo mouse.
 
-Essa fun\c c\~ao analisa a vizinhan\c ca de cada um dos pixels da imagem contabilizando as massas brancas presentes em tela.
+Para calcular o centro de massa, \'e necess\'ario fornecer uma matriz onde os valores dos pixels s\~ao 0 ou maior.
+Quando o pixel for maior do que 0, \'e somado +1 ao valor presente em cada uma das vari\'aveis que contabilizam a
+soma total de pixels nos eixos \texttt{x} e \texttt{y}. Paralelamente existe outra vari\'avel que contabiliza o total de pixels
+encontrados com valor maior do que 0:
 
-Para isso, \'e criada uma estrutura bidimensional chamada Matriz de V\'ertices, onde cada v\'ertice armazena informa\c c\~oes
-relevantes sobre cada pixel: valor definindo se o pixel está aceso (1 - branco) ou apagado (0 - preto) e o numero de massa
-definido por uma vari\'avel contadora.
 
-Ao final, o algoritmo retorna um n\'umero inteiro compreendendo a quantidade de massas brancas encontradas.
+\noindent \texttt{\footnotesize{ \textbf{REPETIR ENQUANTO} i \textbf{<} imagem.altura; i = i + 1} }
+
+\hspace{0.2cm} \texttt{\footnotesize{ \textbf{REPETIR ENQUANTO} j \textbf{<} imagem.largura; j = j + 1}}
+
+\hspace{0.4cm} \texttt{\footnotesize{ \textbf{SE O VALOR} matriz[ i ][ j ] > 0 \textbf{ENT\~AO} }}
+
+\hspace{0.6cm} \texttt{\footnotesize{ centroMassa.y = centroMassa.x + i}}
+
+\hspace{0.6cm} \texttt{\footnotesize{ centroMassa.x = centroMassa.y + j}}
+
+\hspace{0.6cm} \texttt{\footnotesize{ centroMassa.total = centroMassa.total + 1}}
+
+
+O c\'alculo final das coordenadas \texttt{x} e \texttt{y} do centro de massa \'e realizado da seguinte forma:
+
+\hspace{0.4cm} \texttt{\footnotesize{ \textbf{SE O VALOR} centroMassa.total \textbf{ENT\~AO} }}
+
+\hspace{0.6cm} \texttt{\footnotesize{ y = centroMassa.y / centroMassa.total}}
+
+\hspace{0.6cm} \texttt{\footnotesize{ x = centroMassa.x / centroMassa.total}}
+
+\hspace{0.4cm} \texttt{\footnotesize{ \textbf{SEN\~AO}}}
+
+\hspace{0.6cm} \texttt{\footnotesize{ y = -1}}
+
+\hspace{0.6cm} \texttt{\footnotesize{ x = -1}}
 
 \subsubsection{Eros\~ao e dilata\c c\~ao}
 A Eros\~ao e a Dilata\c c\~ao s\~ao t\'ecnicas de filtragem com o objetivo de reduzir ru\'idos presentes na imagem,
@@ -329,22 +359,26 @@ Adotou-se como padr\~ao a dimens\~ao 320 x 240 que proporciona duas vantagens: m
 Utilizando os algoritmos descritos em \textbf{~\ref{sec:alg}}, foi criada uma biblioteca de vis\~ao computacional que aplica cada um desses
 algoritmos para retirar informa\c c\~oes sobre os pixels da imagem.
 
-Primeiro, o canal RGB \'e convertido em HSV antes e ap\'os a aplica\c c\~ao do efeito de redu\c c~ao de cor para
-cruzar as informa\c c\~oes de luminosidade com a cor espec\'ifica do LED a ser detectado pelo algoritmo, respectivamente.
+Primeiro, \'e reduzido o tamanho da imagem capturada pela c\^amera de video para as dimens\~oes 320 x 240.
+Em seguida \'e aplicado o filtro de m\'edia, que reduz ru\'idos na imagem e as informa\c c\~oes salvas na matriz \texttt{matrizMedia}.
 
-Ap\'os isso feito, \'e armazenado numa Matriz Bin\'aria a regi\~ao do LED, definindo o valor 1 para pixel com
-a cor e luminosidade detectada e 0 para n\~ao detectada.
+A partir da matriz \texttt{matrizMedia}, cada um dos pixels presentes nesta matriz s\~ao são submetidos a dois processos paralelos: 
+redu\c c\~ao de cor e o c\'alculo de lumin\^ancia.
 
-Essa matriz passa por uma sequ\^encia de Eros\~oes e Dilata\c c\~oes at\'e que a regi\~ao principal seja destacada
-e os ru\'idos eliminados. Essas opera\c c\~oes ocorrem por interm\'edio de uma matriz chamada de M\'ascara.
+As cores s\~ao s\~ao filtradas utilizando cruzamento de informa\c c\~oes obtidas a respeito dos pixels de cada uma das duas matrizes.
+%Ap\'os isso feito, \'e armazenado numa Matriz Bin\'aria a regi\~ao do LED, definindo o valor 1 para pixel com
+%a cor e luminosidade detectada e 0 para n\~ao detectada.
 
-Posteriormente, na matriz bin\'aria \'e verificada a quantidade de massas brancas presentes e, caso haja mais de uma,
-o LED \'e simplesmente ignorado.
+%Essa matriz passa por uma sequ\^encia de Eros\~oes e Dilata\c c\~oes at\'e que a regi\~ao principal seja destacada
+%e os ru\'idos eliminados. Essas opera\c c\~oes ocorrem por interm\'edio de uma matriz chamada de M\'ascara.
 
-Caso haja apenas uma massa, \'e calculada a m\'edia das posi\c c\~oes x e y onde os pixels est\~ao acesos e \'e devolvida
-uma coordenada (x, y) central. Para isso, \'e foi criada uma estrutura chamada Vis\~ao Computacional que armazena
-o par ordenado da regi\~ao central do LED, a cor detectada pelo mesmo e faixa de luminosidade que \'e testada no momento
-da calibra\c c\~ao da c\^amera pelo algoritmo.
+%Posteriormente, na matriz bin\'aria \'e verificada a quantidade de massas brancas presentes e, caso haja mais de uma,
+%o LED \'e simplesmente ignorado.
+
+%Caso haja apenas uma massa, \'e calculada a m\'edia das posi\c c\~oes x e y onde os pixels est\~ao acesos e \'e devolvida
+%uma coordenada (x, y) central. Para isso, \'e foi criada uma estrutura chamada Vis\~ao Computacional que armazena
+%o par ordenado da regi\~ao central do LED, a cor detectada pelo mesmo e faixa de luminosidade que \'e testada no momento
+%da calibra\c c\~ao da c\^amera pelo algoritmo.
 
 \section{Simula\c c\~ao da \'arvore}
 
