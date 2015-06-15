@@ -355,30 +355,71 @@ Adotou-se como padr\~ao a dimens\~ao 320 x 240 que proporciona duas vantagens: m
 \hspace{0.4cm} \texttt{\footnotesize{ imagem[ escala.y ][ escala.x ] = pixel.valor}}
 \vspace{0.5cm}
 
+\subsubsection{Calibra\c c\~ao de cores}
+Com o intuito de promover mais op\c c\~oes de cores para interagirem com o jogo, foi implementado um
+algoritmo para calibrar as cores de acordo com o ambiente em que o jogador est\'a. Ele utiliza as t\'ecnicas
+descritas para ajustar as cores a cada \emph{frame}.
+
+Para calibrar o jogador deve centralizar dentro do quadrado vermelho o objeto com a cor. O algoritmo detecta a cor
+e inicia uma compara\c c\~ao entre a quantidade de pixels dentro do quadrado e fora. S\~ao realizados ajustes autom\'aticos
+de lumin\^ancia, matiz e satura\c c\~ao, at\'e que a quantidade de pixels internos seja >= 300 pixels e externos < 150.
+
+A lumin\^ancia \'e ajustada de uma forma particular: calcula os m\'inimos e m\'aximos do objeto situado dentro do quadrado.
+
+	\begin{figure}[ht!]
+		\begin{center}
+			\includegraphics[scale=0.3]{img/calibracor.png}
+			\footnotesize \caption{Processo de calibra\c c\~ao da cor }
+		\end{center}
+	\end{figure}	
+
+A configura\c c\~ao da cor \'e salva e marquivo no disco r\'igido ap\'os terminado o processo e \'e utilizada durante a partida do jogo.
+
 \subsection{Aplica\c c\~ao dos algoritmos}
 Utilizando os algoritmos descritos em \textbf{~\ref{sec:alg}}, foi criada uma biblioteca de vis\~ao computacional que aplica cada um desses
-algoritmos para retirar informa\c c\~oes sobre os pixels da imagem.
+algoritmos para retirar informa\c c\~oes sobre os pixels da imagem a cada \emph{frame} de video.
+
+Inicialmente o jogador tem a op\c c\~ao de calibrar as cores amarelo, verde, vermelho, azul e magenta antes de iniciar o jogo.
 
 Primeiro, \'e reduzido o tamanho da imagem capturada pela c\^amera de video para as dimens\~oes 320 x 240.
 Em seguida \'e aplicado o filtro de m\'edia, que reduz ru\'idos na imagem e as informa\c c\~oes salvas na matriz \texttt{matrizMedia}.
+Cada canal de cor de cada pixel dessa matriz \'e armazenado em dois tipos distintos de vari\'aveis sendo uma para cor reduzida
+e a outra para a cor atual do pixel:
 
-A partir da matriz \texttt{matrizMedia}, cada um dos pixels presentes nesta matriz s\~ao são submetidos a dois processos paralelos: 
-redu\c c\~ao de cor e o c\'alculo de lumin\^ancia.
+\texttt{\footnotesize{pR = \textbf{redu\c c\~ao}( matrizMedia[ y ][ x ].vermelho )}}
 
-As cores s\~ao s\~ao filtradas utilizando cruzamento de informa\c c\~oes obtidas a respeito dos pixels de cada uma das duas matrizes.
-%Ap\'os isso feito, \'e armazenado numa Matriz Bin\'aria a regi\~ao do LED, definindo o valor 1 para pixel com
-%a cor e luminosidade detectada e 0 para n\~ao detectada.
+\texttt{\footnotesize{pG = \textbf{redu\c c\~ao}( matrizMedia[ y ][ x ].verde )}}
 
-%Essa matriz passa por uma sequ\^encia de Eros\~oes e Dilata\c c\~oes at\'e que a regi\~ao principal seja destacada
-%e os ru\'idos eliminados. Essas opera\c c\~oes ocorrem por interm\'edio de uma matriz chamada de M\'ascara.
+\texttt{\footnotesize{pB = \textbf{redu\c c\~ao}( matrizMedia[ y ][ x ].azul )}}
 
-%Posteriormente, na matriz bin\'aria \'e verificada a quantidade de massas brancas presentes e, caso haja mais de uma,
-%o LED \'e simplesmente ignorado.
+\vspace{0.5cm}
 
-%Caso haja apenas uma massa, \'e calculada a m\'edia das posi\c c\~oes x e y onde os pixels est\~ao acesos e \'e devolvida
-%uma coordenada (x, y) central. Para isso, \'e foi criada uma estrutura chamada Vis\~ao Computacional que armazena
-%o par ordenado da regi\~ao central do LED, a cor detectada pelo mesmo e faixa de luminosidade que \'e testada no momento
-%da calibra\c c\~ao da c\^amera pelo algoritmo.
+\texttt{\footnotesize{mR = matrizMedia[ y ][ x ].vermelho}}
+
+\texttt{\footnotesize{mG = matrizMedia[ y ][ x ].verde}}
+
+\texttt{\footnotesize{mB = matrizMedia[ y ][ x ].azul}}
+
+
+A lumin\^ancia \emph{Y} \'e extra\'ida a partir das vari\'aveis \texttt{mR, mG} e \texttt{mB}.
+
+Ambos os conjuntos \texttt{mR, mG, mB} e \texttt{pR, pG, pB} s\~ao submetidos ao processo de convers\~ao HSV que retornar\'a
+para o conjunto \texttt{pR, pG, pB} os valores \texttt{pH, pS, pV} e para o conjunto {pR, pG, pB} os valores \texttt{mH, mS, mV}.
+
+Ap\'os o processo de convers\~ao HSV, essas vari\'aveis s\~ao comparadas com a cor calibrada e, caso haja equival\^encia,
+o valor 255 \'e salvo na \texttt{matrizProcessada} e 0, caso contr\'ario:
+
+\noindent \texttt{\footnotesize{ \textbf{SE OS VALORES}} {pH >= corCalibrada.hInicio} \footnotesize{\textbf{E}} \footnotesize{pH <= corCalibrada.hFim} \footnotesize{\textbf{OU}} \footnotesize{mS >= corCalibrada.sInicio} \footnotesize{\textbf{E}} \footnotesize{mS <= corCalibrada.sFim} \footnotesize{\textbf{E}} \footnotesize{Y >= corCalibrada.yInicio} \footnotesize{\textbf{E}} \footnotesize{Y <= corCalibrada.yFim} \\{\textbf{ENT\~AO}}}
+
+\hspace{0.3cm} \texttt{\footnotesize{ matrizProcessada[ y ][ x ] = 255}}
+
+\hspace{0.1cm} \texttt{\footnotesize{ \textbf{SEN\~AO}}}
+
+\hspace{0.3cm} \texttt{\footnotesize{ matrizProcessada[ y ][ x ] = 0}}
+
+
+Em seguida \'e calculado o centro de massa na \texttt{matrizProcessada} e s\~ao retornadas as coordenadas \texttt{x} e \texttt{y}
+que ser\~ao utilizadas para mover o cursor do mouse dentro do jogo.
 
 \section{Simula\c c\~ao da \'arvore}
 

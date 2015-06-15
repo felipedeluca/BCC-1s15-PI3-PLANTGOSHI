@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.8)  15 JUN 2015 16:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.8)  15 JUN 2015 18:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -418,85 +418,102 @@ ao do fil-tro. Fonte:
  []
 
 [8 <./img/exemplo_meanfilter.png>]
-LaTeX Font Info:    Font shape `OT1/ptm/m/ui' in size <12> not available
-(Font)              Font shape `OT1/ptm/m/it' tried instead on input line 365.
+<img/calibracor.png, id=59, 1284.8pt x 803.0pt>
+File: img/calibracor.png Graphic file (type png)
+ <use img/calibracor.png>
+Package pdftex.def Info: img/calibracor.png used on input line 372.
+(pdftex.def)             Requested size: 385.44298pt x 240.90186pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 390--395
+[9 <./img/calibracor.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 413--414
+ \OT1/pcr/b/n/10 SE OS VALORES \OT1/pcr/m/n/10 pH >= corCalibrada.hInicio \OT1/
+pcr/b/n/10 E \OT1/pcr/m/n/10 pH <= corCalibrada.hFim
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 413--414
+\OT1/pcr/b/n/10 OU \OT1/pcr/m/n/10 mS >= corCalibrada.sInicio \OT1/pcr/b/n/10 E
+ \OT1/pcr/m/n/10 mS <= corCalibrada.sFim \OT1/pcr/b/n/10 E \OT1/pcr/m/n/10 Y >=
+
+ []
+
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 432--437
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 397--398
+Underfull \hbox (badness 10000) in paragraph at lines 439--440
 []\OT1/pcr/b/n/10 SE \OT1/pcr/m/n/10 galho.energiaConsumida == ((galho.energiaL
 imite * 50) / 100) \OT1/pcr/b/n/10 E
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 397--398
+Underfull \hbox (badness 10000) in paragraph at lines 439--440
 
  []
 
-<img/PI3_Ponto_Crescimento.png, id=59, 642.4pt x 742.775pt>
+<img/PI3_Ponto_Crescimento.png, id=67, 642.4pt x 742.775pt>
 File: img/PI3_Ponto_Crescimento.png Graphic file (type png)
 
 <use img/PI3_Ponto_Crescimento.png>
-Package pdftex.def Info: img/PI3_Ponto_Crescimento.png used on input line 406.
+Package pdftex.def Info: img/PI3_Ponto_Crescimento.png used on input line 448.
 (pdftex.def)             Requested size: 128.47772pt x 148.55237pt.
- [9]
-Underfull \hbox (badness 10000) in paragraph at lines 418--419
+
+Underfull \hbox (badness 10000) in paragraph at lines 460--461
 []\OT1/pcr/m/n/10 galho.energiaLimite = (energiaRecebida * (arvore.energiaLimit
 e -
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 430--431
+[11 <./img/PI3_Ponto_Crescimento.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 472--473
 []\OT1/pcr/b/n/10 SE \OT1/pcr/m/n/10 galho.energiaConsumida < galho.energiaLimi
 te \OT1/pcr/b/n/10 E
  []
 
-<img/PI3_Arvore.png, id=63, 1608.0075pt x 1188.44pt>
+<img/PI3_Arvore.png, id=72, 1608.0075pt x 1188.44pt>
 File: img/PI3_Arvore.png Graphic file (type png)
  <use img/PI3_Arvore.png>
-Package pdftex.def Info: img/PI3_Arvore.png used on input line 440.
+Package pdftex.def Info: img/PI3_Arvore.png used on input line 482.
 (pdftex.def)             Requested size: 241.19072pt x 178.2583pt.
 
-[10 <./img/PI3_Ponto_Crescimento.png>]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 473.
+[12 <./img/PI3_Arvore.png>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 515.
 
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 473.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 515.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/ui' in size <13> not available
-(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 479.
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 521.
 
 No file artigo_rev4.bbl.
-[11 <./img/PI3_Arvore.png>] (./artigo_rev4.aux) ) 
+[13] (./artigo_rev4.aux) ) 
 Here is how much of TeX's memory you used:
- 3393 strings out of 493117
- 51904 string characters out of 6135434
+ 3397 strings out of 493117
+ 51994 string characters out of 6135434
  118174 words of memory out of 5000000
- 6777 multiletter control sequences out of 15000+600000
+ 6780 multiletter control sequences out of 15000+600000
  25107 words of font info for 54 fonts, out of 8000000 for 9000
  1144 hyphenation exceptions out of 8191
  43i,12n,40p,599b,351s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014/texmf
--dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2014/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw
-/courier/ucrb8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier
-/ucrr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvb8a
-.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr
-/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/te
-xlive/2014/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014
-/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on artigo_rev4.pdf (11 pages, 2764310 bytes).
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/b
+ase/8r.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8
+.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></u
+sr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local
+/texlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texliv
+e/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2014/tex
+mf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-dist/f
+onts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1
+/urw/times/utmri8a.pfb>
+Output written on artigo_rev4.pdf (13 pages, 4911359 bytes).
 PDF statistics:
- 106 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
+ 115 PDF objects out of 1000 (max. 8388607)
+ 63 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 66 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 71 words of extra memory for PDF output out of 10000 (max. 10000000)
 
