@@ -58,6 +58,19 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
  diferente no jogo e devem ser utilizadas com cautela, pois quando acionado um desses poderes, os restantes ficar\~ao
  indispon\'iveis por alguns segundos. N\~ao \'e poss\'ivel utilizar mais de um poder por vez.
  
+ O jogador tem a op\c c\~ao de mudar manualmente a cor reconhecida do objeto usado para interagir com o jogo.
+ Basta selecionar os n\'umeros de 1-6 e o jogo ir\'a reconhecer a nova cor. As op\c c\~oes poss\'iveis de cor s\~ao as
+ seguintes:
+ 
+ \begin{enumerate}
+ 	\item Amarelo
+ 	\item Verde
+ 	\item Ciano
+ 	\item Azul
+ 	\item Magenta
+ 	\item Vermelho
+ \end{enumerate}
+ 
  \subsection{Poderes}
  \subsubsection{Poder de Regar} 
  Com Poder de Regar o jogador garante que a \'arvore ir\'a crescer mais e consequentemente ir\'a
@@ -128,7 +141,7 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
 
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=0.3]{img/tela_jogo.png}
+		\includegraphics[scale=0.3]{img/tela2_jogo.png}
 		\footnotesize \caption{Primeira vers\~ao da tela do jogo. Os gr\'aficos ser\~ao alterados para a vers\~ao final do jogo.}
 	\end{center}
 	\end{figure}	
@@ -263,6 +276,14 @@ O c\'alculo final das coordenadas \texttt{x} e \texttt{y} do centro de massa \'e
 
 \hspace{0.6cm} \texttt{\footnotesize{ x = -1}}
 
+	\begin{figure}[ht!]
+		\begin{center}
+			\includegraphics[scale=0.7]{img/centromassa.png}
+			\footnotesize \caption{Centro de massa representado pelo c\'irculo}
+		\end{center}
+	\end{figure}	
+
+
 \subsubsection{Eros\~ao e dilata\c c\~ao}
 A Eros\~ao e a Dilata\c c\~ao s\~ao t\'ecnicas de filtragem com o objetivo de reduzir ru\'idos presentes na imagem,
 que possam dificultar a detec\c c\~ao de pontos principais na tela.
@@ -288,7 +309,7 @@ ao mesmo passo que a regi\~ao que deve ser destacada \'e mantida em seu tamanho 
 O filtro que processa a m\'edia entre os pixels \'e conhecido como filtro do tipo espacial,
 ou seja, uma regi\~ao de pixels \'e avaliada e processada.
 
-A principal utiliza\c c\~ao do filtro de m\'e de pixels \'e suavizar a imagem e reduzir
+A principal utiliza\c c\~ao do filtro de m\'edia de pixels \'e suavizar a imagem e reduzir
 ru\'idos provocados pela compress\~ao da imagem e tamb\'em por outros fatores, entre
 eles a qualidade da c\^amera.
 
@@ -362,7 +383,7 @@ descritas para ajustar as cores a cada \emph{frame}.
 
 Para calibrar o jogador deve centralizar dentro do quadrado vermelho o objeto com a cor. O algoritmo detecta a cor
 e inicia uma compara\c c\~ao entre a quantidade de pixels dentro do quadrado e fora. S\~ao realizados ajustes autom\'aticos
-de lumin\^ancia, matiz e satura\c c\~ao, at\'e que a quantidade de pixels internos seja >= 300 pixels e externos < 150.
+de lumin\^ancia, matiz e satura\c c\~ao, at\'e que a quantidade de pixels internos seja pelo menos 300 pixels e externos menos do que 150.
 
 A lumin\^ancia \'e ajustada de uma forma particular: calcula os m\'inimos e m\'aximos do objeto situado dentro do quadrado.
 
@@ -518,6 +539,15 @@ O projeto inteiro foi desenvolvido em linguagem C padr\~ao c99.
 \end{itemize}
 
 \section{Resultados e conclusão}
+O estudo de t\'ecnicas em vis\~ao computacional proporciona novas alternativas em usabilidade e interface usu\'ario/m\'aquina. Al\'em de contribuir muito ao aprendizado em desenvolver novas solu\c \~oes tecnol\'ogicas e fortalecendo a habilidade em criar algoritmos cada vez mais sofisticados e robustos.
+
+Uma das principais dificuldade para a realiza\c \~ao desse projeto foi a integra\c \~ao da vis\~ao computacional com o processamento gr\'afico do jogo, de modo que, fosse poss\'ivel obter efici\^encia e uma jogabilidade razo\'avel para o jogador, ao mesmo tempo que, deve haver o processamento gr\'afico do jogo e da vis\~ao.
+
+Outra dificuldade que deve ser observada foi a criação de um algortimo que simulasse o crescimento da \'arvore de forma aleat\'oria e que recebesse devidamente as intera\c \~oes do usu\'ario.
+
+Como melhorias para o projeto, \'e poss\'vel desenvolver mecanismos de calibra\c \~ao e detec\c \~ao para outras cores e uma intera\c \~ao maior do arduino com o jogo, atribuindo uma cor luminosa, pr\'e-determinada pelo usu\'ario, para cada \'icone ou poder espec\'ifico.
+
+Analisando os resultados obtidos com o uso de um arquivo de configura\c \~ao para a calibra\c \~ao das cores, \'e poss\'ivel afirmar que o mesmo m\'etodo pode ser aplicado em outros projetos relacionados \`a vis\~ao computacional, tornando a implementa\c \~ao do programa mais modularizada e organizada.
 
 
 \nocite{*}

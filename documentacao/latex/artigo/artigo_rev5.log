@@ -1,0 +1,540 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.8)  16 JUN 2015 01:23
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**artigo_rev5.tex
+(./artigo_rev5.tex
+LaTeX2e <2014/05/01>
+Babel <3.9k> and hyphenation patterns for 78 languages loaded.
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(./sbc-template.sty
+Package: sbc-template 2001/06/09
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count87
+\Gm@cntv=\count88
+\c@Gm@tempcnt=\count89
+\Gm@bindingoffset=\dimen103
+\Gm@wd@mp=\dimen104
+\Gm@odd@mp=\dimen105
+\Gm@even@mp=\dimen106
+\Gm@layoutwidth=\dimen107
+\Gm@layoutheight=\dimen108
+\Gm@layouthoffset=\dimen109
+\Gm@layoutvoffset=\dimen110
+\Gm@dimlist=\toks15
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/caption/caption2.sty
+Package: caption2 2013/02/03 v2.2-62 Customising captions (AR)
+
+
+Package caption2 Warning: ****************************************************
+(caption2)                THIS PACKAGE IS OBSOLETE:
+(caption2)                This package attempts to provide an `caption2'
+(caption2)                package v2.0/2.1 author environment so that OLD
+(caption2)                documents can be successfully processed. It should
+(caption2)                NOT be used for NEW documents! New documents should
+(caption2)                use the regular `caption' package v3.x instead.
+(caption2)                ****************************************************
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen111
+\captionmargin@=\dimen112
+\captionwidth=\dimen113
+\caption@tempdima=\dimen114
+\caption@indent=\dimen115
+\caption@parindent=\dimen116
+\caption@hangindent=\dimen117
+)
+Package caption2 Info: Running in caption2 v2.0 compatibility mode on input lin
+e 215.
+\captionlinewidth=\dimen118
+\realcaptionwidth=\dimen119
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+)
+\c@instn=\count90
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
+\ttl@box=\box26
+\beforetitleunit=\skip43
+\aftertitleunit=\skip44
+\ttl@plus=\dimen120
+\ttl@minus=\dimen121
+\ttl@toksa=\toks16
+\titlewidth=\dimen122
+\titlewidthlast=\dimen123
+\titlewidthfirst=\dimen124
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count91
+))
+\Gin@req@height=\dimen125
+\Gin@req@width=\dimen126
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip10
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/was/gensymb.sty
+Package: gensymb 2003/07/02 v1.0 (WaS)
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2014/04/30 v1.2b Input encoding file
+\inpenc@prehook=\toks17
+\inpenc@posthook=\toks18
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/latin1.def
+File: latin1.def 2014/04/30 v1.2b Input encoding file
+))
+(./artigo_rev5.aux)
+\openout1 = `artigo_rev5.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
+LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 22.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(85.35826pt, 426.79135pt, 85.35826pt)
+* v-part:(T,H,B)=(99.58464pt, 674.33032pt, 71.13188pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=426.79135pt
+* \textheight=674.33032pt
+* \oddsidemargin=13.08827pt
+* \evensidemargin=13.08827pt
+* \topmargin=-9.68535pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=44.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+(/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count92
+\scratchdimen=\dimen127
+\scratchbox=\box27
+\nofMPsegments=\count93
+\nofMParguments=\count94
+\everyMPshowfont=\toks19
+\MPscratchCnt=\count95
+\MPscratchDim=\dimen128
+\MPnumerator=\count96
+\makeMPintoPDFobject=\count97
+\everyMPtoPDFconversion=\toks20
+) (/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Info: Redefining \celsius on input line 22.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 22.
+
+
+
+Package gensymb Warning: Not defining \perthousand.
+
+LaTeX Info: Redefining \ohm on input line 22.
+Package gensymb Info: Using \Omega for \ohm on input line 22.
+
+Package gensymb Warning: Not defining \micro.
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <16> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 24.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 24.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 24.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 24.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 24.
+
+Overfull \hbox (1.06267pt too wide) in paragraph at lines 24--24
+ [][] 
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 26.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <13> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 40.
+[1
+
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<img/icone_gota.png, id=11, 35.13126pt x 35.13126pt>
+File: img/icone_gota.png Graphic file (type png)
+ <use img/icone_gota.png>
+Package pdftex.def Info: img/icone_gota.png used on input line 82.
+(pdftex.def)             Requested size: 38.64447pt x 38.64447pt.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 83.
+LaTeX Font Info:    Try loading font information for OT1+phv on input line 83.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1phv.fd
+File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
+)
+LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10> not available
+(Font)              Font shape `OT1/phv/b/n' tried instead on input line 83.
+
+<img/icone_luva.png, id=13, 35.13126pt x 35.13126pt>
+File: img/icone_luva.png Graphic file (type png)
+ <use img/icone_luva.png>
+Package pdftex.def Info: img/icone_luva.png used on input line 94.
+(pdftex.def)             Requested size: 38.64447pt x 38.64447pt.
+
+<img/icone_nota_musical.png, id=14, 35.13126pt x 35.13126pt>
+File: img/icone_nota_musical.png Graphic file (type png)
+
+<use img/icone_nota_musical.png>
+Package pdftex.def Info: img/icone_nota_musical.png used on input line 105.
+(pdftex.def)             Requested size: 38.64447pt x 38.64447pt.
+ [2 <./img/icone_gota.png> <./img/icone_luva.png> <./img/icone_nota_musical.png
+>]
+<img/icone_cesta.png, id=22, 35.13126pt x 35.13126pt>
+File: img/icone_cesta.png Graphic file (type png)
+
+<use img/icone_cesta.png>
+Package pdftex.def Info: img/icone_cesta.png used on input line 118.
+(pdftex.def)             Requested size: 38.64447pt x 38.64447pt.
+ <img/varinha.png, id=23, 501.875pt x 60.225pt>
+File: img/varinha.png Graphic file (type png)
+
+<use img/varinha.png>
+Package pdftex.def Info: img/varinha.png used on input line 135.
+(pdftex.def)             Requested size: 225.84166pt x 27.10098pt.
+ <img/tela2_jogo.png, id=24, 1286.8075pt x 725.71124pt>
+File: img/tela2_jogo.png Graphic file (type png)
+
+<use img/tela2_jogo.png>
+Package pdftex.def Info: img/tela2_jogo.png used on input line 144.
+(pdftex.def)             Requested size: 386.04523pt x 217.71504pt.
+ [3 <./img/icone_cesta.png> <./img/varinha.png>]
+[4 <./img/tela2_jogo.png>]
+Underfull \hbox (badness 1997) in paragraph at lines 195--198
+[]\OT1/ptm/m/n/12 A fim de padronizar, foram im-ple-men-tadas tamb[]em al-gu-ma
+s fun[][]oes de
+ []
+
+<img/HSV_color_solid_cylinder_alpha_lowgamma.png, id=35, 1606.0pt x 1204.5pt>
+File: img/HSV_color_solid_cylinder_alpha_lowgamma.png Graphic file (type png)
+
+<use img/HSV_color_solid_cylinder_alpha_lowgamma.png>
+Package pdftex.def Info: img/HSV_color_solid_cylinder_alpha_lowgamma.png used o
+n input line 203.
+(pdftex.def)             Requested size: 192.71169pt x 144.53375pt.
+
+Underfull \hbox (badness 1590) in paragraph at lines 204--204
+[]|\OT1/phv/b/n/10 Figure 7. \OT1/ptm/m/n/10 Representa[][]ao tridi-men-sional 
+do espa[]o de cor HSV. Cr[]editos: SharkD.
+ []
+
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 213.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 213.
+
+<img/1200px-Beyoglu_4671_tricolor.png, id=36, 289.08pt x 190.311pt>
+File: img/1200px-Beyoglu_4671_tricolor.png Graphic file (type png)
+
+<use img/1200px-Beyoglu_4671_tricolor.png>
+Package pdftex.def Info: img/1200px-Beyoglu_4671_tricolor.png used on input lin
+e 219.
+(pdftex.def)             Requested size: 202.35461pt x 133.21677pt.
+ [5 <./img/HSV_color_solid_cylinder_alpha_lowgamma.png> <./img/1200px-Beyoglu_4
+671_tricolor.png>]
+LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10> not available
+(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 236.
+
+Underfull \hbox (badness 10000) in paragraph at lines 246--247
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 249--250
+
+ []
+
+<img/centromassa.png, id=43, 112.92188pt x 96.36pt>
+File: img/centromassa.png Graphic file (type png)
+ <use img/centromassa.png>
+Package pdftex.def Info: img/centromassa.png used on input line 265.
+(pdftex.def)             Requested size: 79.04475pt x 67.45152pt.
+
+[6 <./img/centromassa.png>]
+<img/kmeansout.png, id=48, 775.39688pt x 581.17125pt>
+File: img/kmeansout.png Graphic file (type png)
+ <use img/kmeansout.png>
+Package pdftex.def Info: img/kmeansout.png used on input line 288.
+(pdftex.def)             Requested size: 232.62085pt x 174.35272pt.
+
+Underfull \hbox (badness 2556) in paragraph at lines 289--289
+[]|\OT1/phv/b/n/10 Figure 10. \OT1/ptm/m/n/10 Redu[][]ao da quan-ti-dade de cor
+es de acordo com valor do par[]ametro
+ []
+
+<img/erodeDilate.png, id=49, 1008.76875pt x 525.965pt>
+File: img/erodeDilate.png Graphic file (type png)
+
+<use img/erodeDilate.png>
+Package pdftex.def Info: img/erodeDilate.png used on input line 309.
+(pdftex.def)             Requested size: 302.63297pt x 157.79071pt.
+ [7 <./img/kmeansout.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 322--326
+
+ []
+
+<img/exemplo_meanfilter.png, id=55, 687.56876pt x 259.97125pt>
+File: img/exemplo_meanfilter.png Graphic file (type png)
+
+<use img/exemplo_meanfilter.png>
+Package pdftex.def Info: img/exemplo_meanfilter.png used on input line 359.
+(pdftex.def)             Requested size: 412.54443pt x 155.98395pt.
+ [8 <./img/erodeDilate.png>]
+<img/calibracor.png, id=60, 1284.8pt x 803.0pt>
+File: img/calibracor.png Graphic file (type png)
+ <use img/calibracor.png>
+Package pdftex.def Info: img/calibracor.png used on input line 399.
+(pdftex.def)             Requested size: 385.44298pt x 240.90186pt.
+
+[9 <./img/exemplo_meanfilter.png>] [10 <./img/calibracor.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 449--454
+ \OT1/pcr/b/n/10 SE OS VALORES \OT1/pcr/m/n/10 pH >= corCalibrada.hInicio \OT1/
+pcr/b/n/10 E \OT1/pcr/m/n/10 pH <= corCalibrada.hFim
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 449--454
+\OT1/pcr/b/n/10 OU \OT1/pcr/m/n/10 mS >= corCalibrada.sInicio \OT1/pcr/b/n/10 E
+ \OT1/pcr/m/n/10 mS <= corCalibrada.sFim \OT1/pcr/b/n/10 E \OT1/pcr/m/n/10 Y >=
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 472--477
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 479--480
+[]\OT1/pcr/b/n/10 SE \OT1/pcr/m/n/10 galho.energiaConsumida == ((galho.energiaL
+imite * 50) / 100) \OT1/pcr/b/n/10 E
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 479--480
+
+ []
+
+[11] <img/PI3_Ponto_Crescimento.png, id=72, 642.4pt x 742.775pt>
+File: img/PI3_Ponto_Crescimento.png Graphic file (type png)
+
+<use img/PI3_Ponto_Crescimento.png>
+Package pdftex.def Info: img/PI3_Ponto_Crescimento.png used on input line 488.
+(pdftex.def)             Requested size: 128.47772pt x 148.55237pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 500--501
+[]\OT1/pcr/m/n/10 galho.energiaLimite = (energiaRecebida * (arvore.energiaLimit
+e -
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 512--513
+[]\OT1/pcr/b/n/10 SE \OT1/pcr/m/n/10 galho.energiaConsumida < galho.energiaLimi
+te \OT1/pcr/b/n/10 E
+ []
+
+<img/PI3_Arvore.png, id=73, 1608.0075pt x 1188.44pt>
+File: img/PI3_Arvore.png Graphic file (type png)
+ <use img/PI3_Arvore.png>
+Package pdftex.def Info: img/PI3_Arvore.png used on input line 522.
+(pdftex.def)             Requested size: 241.19072pt x 178.2583pt.
+
+[12 <./img/PI3_Ponto_Crescimento.png>]
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 546.
+
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 546.
+ [13 <./img/PI3_Arvore.png>] (./artigo_rev5.bbl
+Underfull \hbox (badness 2393) in paragraph at lines 10--13
+[]\OT1/ptm/m/n/12 Conci, A., Azevedo, E., and Leta, F. R.  Computa[][]ao gr[]af
+ica.  $\OT1/pcr/m/n/12 http : / /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--19
+[]\OT1/ptm/m/n/12 Cook, J. D. (2009).  Three al-go-rithms for con-vert-ing colo
+r to
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--19
+\OT1/ptm/m/n/12 grayscale.  $\OT1/pcr/m/n/12 http : / / www . johndcook . com /
+ blog / 2009 / 08 / 24 /
+ []
+
+) [14] (./artigo_rev5.aux) ) 
+Here is how much of TeX's memory you used:
+ 3414 strings out of 493117
+ 52276 string characters out of 6135434
+ 118331 words of memory out of 5000000
+ 6793 multiletter control sequences out of 15000+600000
+ 23478 words of font info for 52 fonts, out of 8000000 for 9000
+ 1146 hyphenation exceptions out of 8191
+ 43i,12n,40p,599b,351s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips
+/base/8r.enc}</usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb><
+/usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/loc
+al/texlive/2014/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texl
+ive/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2014/t
+exmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-dist
+/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
+e1/urw/times/utmri8a.pfb>
+Output written on artigo_rev5.pdf (14 pages, 4933607 bytes).
+PDF statistics:
+ 120 PDF objects out of 1000 (max. 8388607)
+ 65 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 76 words of extra memory for PDF output out of 10000 (max. 10000000)
+

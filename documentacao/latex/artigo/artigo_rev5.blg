@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2014)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: artigo_rev5.aux
+The style file: sbc.bst
+Database file #1: plantgoshi.bib
+Warning--empty year in bib:cavalcanti
+Warning--empty year in bib:compgrafica
+Warning--empty year in bib:opencv
+Warning--empty year in bib:marengoni
+Warning--empty year in bib:rapidtables
+Warning--empty year in bib:allegro
+You've used 11 entries,
+            1935 wiz_defined-function locations,
+            522 strings with 5017 characters,
+and the built_in function-call counts, 2994 in all, are:
+= -- 303
+> -- 105
+< -- 10
++ -- 32
+- -- 32
+* -- 193
+:= -- 580
+add.period$ -- 33
+call.type$ -- 11
+change.case$ -- 70
+chr.to.int$ -- 11
+cite$ -- 17
+duplicate$ -- 122
+empty$ -- 190
+format.name$ -- 45
+if$ -- 560
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 6
+newline$ -- 58
+num.names$ -- 33
+pop$ -- 63
+preamble$ -- 1
+purify$ -- 71
+quote$ -- 0
+skip$ -- 90
+stack$ -- 0
+substring$ -- 132
+swap$ -- 4
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 60
+warning$ -- 6
+while$ -- 22
+width$ -- 0
+write$ -- 132
+(There were 6 warnings)
