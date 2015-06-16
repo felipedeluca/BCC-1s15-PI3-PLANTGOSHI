@@ -79,7 +79,7 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
  
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=1.1]{img/icone_gota.png}
+		\includegraphics[scale=1]{img/icone_gota.png}
 		\footnotesize \caption{Poder de Regar }
 	\end{center}
 	\end{figure}	
@@ -91,7 +91,7 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
 
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=1.1]{img/icone_luva.png}
+		\includegraphics[scale=1]{img/icone_luva.png}
 		\footnotesize \caption{Poder de Remover Pragas }
 	\end{center}
 	\end{figure}	
@@ -102,7 +102,7 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
  
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=1.1]{img/icone_nota_musical.png}
+		\includegraphics[scale=1]{img/icone_nota_musical.png}
 		\footnotesize \caption{Poder da M\'usica}
 	\end{center}
 	\end{figure}	
@@ -115,7 +115,7 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
  
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=1.1]{img/icone_cesta.png}
+		\includegraphics[scale=1]{img/icone_cesta.png}
 		\footnotesize \caption{Poder de Colher}
 	\end{center}
 	\end{figure}	
@@ -132,7 +132,7 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
 
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=0.45]{img/varinha.png}
+		\includegraphics[scale=0.3]{img/varinha.png}
 		\footnotesize \caption{Varinha m\'agica com LED na ponta.}
 	\end{center}
 	\end{figure}	
@@ -141,7 +141,7 @@ instalada no computador, processadas por algoritmos baseados em levantamento bib
 
 	\begin{figure}[ht!]
 	\begin{center}
-		\includegraphics[scale=0.3]{img/tela2_jogo.png}
+		\includegraphics[scale=0.22]{img/tela2_jogo.png}
 		\footnotesize \caption{Primeira vers\~ao da tela do jogo. Os gr\'aficos ser\~ao alterados para a vers\~ao final do jogo.}
 	\end{center}
 	\end{figure}	
@@ -388,7 +388,7 @@ Com o intuito de promover mais op\c c\~oes de cores para interagirem com o jogo,
 algoritmo para calibrar as cores de acordo com o ambiente em que o jogador est\'a. Ele utiliza as t\'ecnicas
 descritas para ajustar as cores a cada \emph{frame}.
 
-Para calibrar o jogador deve centralizar dentro do quadrado vermelho o objeto com a cor. O algoritmo detecta a cor
+Para calibrar, o jogador deve centralizar dentro do quadrado vermelho o objeto com a cor. O algoritmo detecta a cor
 e inicia uma compara\c c\~ao entre a quantidade de pixels dentro do quadrado e fora. S\~ao realizados ajustes autom\'aticos
 de lumin\^ancia, matiz e satura\c c\~ao, at\'e que a quantidade de pixels internos seja pelo menos 300 pixels e externos menos do que 150.
 
@@ -405,8 +405,7 @@ A configura\c c\~ao da cor \'e salva em arquivo no disco r\'igido ap\'os termina
 
 \subsection{Primeiros experimentos}
 Para o reconhecimento de uma cor emitida por um LED do Arduino, fizemos uma otimiza\c c\~ao f\'isica
-com um peda\c co de papel que reduzisse o brilho da luz, por\'em ainda n\~ao \'e suficiente para
-o reconhecimento total.
+com um peda\c co de papel para deixar a cor e luz mais difusa e homog\^enea. 
 
 Como experimentos necess\'arios, temos o reconhecimento da luminosidade para verificar
 a proximidade da luz com a c\^amera e uma otimiza\c c\~ao afim de isolar a cor do LED,
@@ -416,7 +415,9 @@ ignorando as outras cores similares e aparentes na c\^amera.
 Utilizando os algoritmos descritos em \textbf{~\ref{sec:alg}}, foi criada uma biblioteca de vis\~ao computacional que aplica cada um desses
 algoritmos para retirar informa\c c\~oes sobre os pixels da imagem a cada \emph{frame} de video.
 
-Inicialmente o jogador tem a op\c c\~ao de calibrar as cores amarelo, verde, vermelho, azul e magenta antes de iniciar o jogo.
+
+
+Inicialmente, o jogador tem a op\c c\~ao de calibrar as cores amarelo, verde, ciano, azul, magenta e vermelho antes de iniciar o jogo.
 
 Primeiro, \'e reduzido o tamanho da imagem capturada pela c\^amera de video para as dimens\~oes 320 x 240.
 Em seguida \'e aplicado o filtro de m\'edia, que reduz ru\'idos na imagem e as informa\c c\~oes salvas na matriz \texttt{matrizMedia}.
@@ -459,17 +460,17 @@ o valor 255 \'e salvo na \texttt{matrizProcessada} e 0, caso contr\'ario:
 \hspace{0.3cm} \texttt{\footnotesize{ matrizProcessada[ y ][ x ] = 0}}
 
 
-Em seguida \'e calculado o centro de massa na \texttt{matrizProcessada} e s\~ao retornadas as coordenadas \texttt{x} e \texttt{y}
+Em seguida, \'e calculado o centro de massa na \texttt{matrizProcessada} e s\~ao retornadas as coordenadas \texttt{x} e \texttt{y}
 que ser\~ao utilizadas para mover o cursor do mouse dentro do jogo.
 
 \section{Simula\c c\~ao da \'arvore}
 
-Adotamos a estrutura de dados de \'arvore tern\'aria para construir a \'arvore do jogo. Essa estrutura \'e basicamente constituida
+Adotamos a estrutura de dados de \'arvore tern\'aria para construir a \'arvore do jogo. Essa estrutura \'e basicamente constitu\'ida
 em pontos de crescimento que se dividem no m\'aximo em tr\^es partes cada um. Essas partes d\~ao origem aos galhos que crescem at\'e
-determinado tamanho, decidido aleat\'oriamente. As pontas de cada galho s\~ao novos pontos de crescimento,
-que se dividem de novo e d\~ao origem a novos galhos
+determinado tamanho, decidido aleatoriamente. As pontas de cada galho s\~ao novos pontos de crescimento,
+que se dividem de novo e d\~ao origem a novos galhos.
 
-Para que simula\c c\~ao tenha um aspecto e comportamento mais pr\'oximo de uma \'arvore, elaboramos uma solu\c c\~ao que inclui
+Para que a simula\c c\~ao tenha um aspecto e comportamento mais pr\'oximo de uma \'arvore, elaboramos uma solu\c c\~ao que inclui
 a mat\'eria estudada na disciplina de Estrutura de Dados e elaboramos algoritmos para simular o crescimento da \'arvore,
 dos galhos e dos frutos. Basicamente a \'arvore cresce de acordo com um valor de energia de crescimento fornecida
 a ela logo no in\'icio do jogo. Uma parte dessa energia \'e consumida pelo tronco e o restante \'e distribuido
@@ -501,7 +502,7 @@ limite da \'arvore:
 
 O valor da energia limite pode
 ser alterado de acordo com a intera\c c\~ao do usu\'ario ao longo do jogo, o que pode proporcionar uma \'arvore mais
-mais ou menos desenvolvida.
+ou menos desenvolvida.
 
 Enquanto os galhos crescem eles podem dar origem a novos galhos. Isso \'e determinado ap\'os ser consumida uma determinada
 quantidade de energia de crescimento fornecida ao galho, o que permite que a simula\c c\~ao de crescimento da \'arvore
@@ -515,7 +516,7 @@ mais controlado:
 Os pontos de crescimento de frutos e folhas s\~ao determinados de acordo com o m\'inimo de energia que o galho
 tem para crescer. Caso esse valor seja igual ou abaixo de determinado crit\'erio, o algoritmo de simula\c c\~ao assume
 que n\~ao ir\~ao surgir novos galhos a partir do galho atual, ainda durante a fase de crescimento. Com isso determinado,
-o galho passa a produzir folhas e frutos ao inv\'es de novas ramifica\c c\~ao de galhos.
+o galho passa a produzir folhas e frutos ao inv\'es de novas ramifica\c c\~oes de galhos.
 
 	\begin{figure}[ht!]
 	\begin{center}
