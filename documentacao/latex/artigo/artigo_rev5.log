@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.8)  16 JUN 2015 02:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.8)  16 JUN 2015 02:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -333,7 +333,7 @@ File: img/varinha.png Graphic file (type png)
 
 <use img/varinha.png>
 Package pdftex.def Info: img/varinha.png used on input line 135.
-(pdftex.def)             Requested size: 150.56366pt x 18.06763pt.
+(pdftex.def)             Requested size: 225.84166pt x 27.10098pt.
  <img/tela2_jogo.png, id=24, 1286.8075pt x 725.71124pt>
 File: img/tela2_jogo.png Graphic file (type png)
 
@@ -531,7 +531,7 @@ ive/2014/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2014/t
 exmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2014/texmf-dist
 /fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2014/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on artigo_rev5.pdf (14 pages, 4937994 bytes).
+Output written on artigo_rev5.pdf (14 pages, 4936329 bytes).
 PDF statistics:
  120 PDF objects out of 1000 (max. 8388607)
  65 compressed objects within 1 object stream
